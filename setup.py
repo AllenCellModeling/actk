@@ -51,7 +51,8 @@ aics_data_requirements = [
 requirements = [
     # stepworkflow requires
     "bokeh",
-    "datastep>=0.1.5",
+    "dask[bag]",
+    "datastep>=0.1.6",
     "distributed",
     "docutils<0.16",  # needed for botocore (quilt dependency)
     "fire",
