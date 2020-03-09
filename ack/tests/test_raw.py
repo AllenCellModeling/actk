@@ -21,5 +21,6 @@ def test_raw_run(n=3):
     assert len(raw.manifest) == n
     assert len(images) == n
 
+
 # For more thorough testing examples, see:
 # https://github.com/AllenCellModeling/cookiecutter-pypackage/blob/master/%7B%7Bcookiecutter.project_slug%7D%7D/%7B%7Bcookiecutter.project_slug%7D%7D/tests/test_function.py

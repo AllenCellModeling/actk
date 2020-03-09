@@ -44,17 +44,23 @@ interactive_requirements = [
     "matplotlib",
 ]
 
+aics_data_requirements = [
+    "lkaccess",
+]
+
 requirements = [
+    # stepworkflow requires
     "bokeh",
     "datastep>=0.1.5",
     "distributed",
     "docutils<0.16",  # needed for botocore (quilt dependency)
     "fire",
+    "prefect",
+    "python-dateutil<=2.8.0",  # need <=2.8.0 for quilt3 in step
+    # project requires
     "numpy",
     "pandas",
     "Pillow",
-    "prefect",
-    "python-dateutil<=2.8.0",  # need <=2.8.0 for quilt3 in step
 ]
 
 extra_requirements = {
@@ -62,6 +68,7 @@ extra_requirements = {
     "setup": setup_requirements,
     "dev": dev_requirements,
     "interactive": interactive_requirements,
+    "aics": aics_data_requirements,
     "all": [
         *requirements,
         *test_requirements,
