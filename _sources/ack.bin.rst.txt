@@ -1,0 +1,30 @@
+ack.bin package
+===============
+
+Submodules
+----------
+
+ack.bin.all module
+------------------
+
+.. automodule:: ack.bin.all
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+ack.bin.cli module
+------------------
+
+.. automodule:: ack.bin.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: ack.bin
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,18 @@
+ack package
+===========
+
+Subpackages
+-----------
+
+.. toctree::
+
+   ack.bin
+   ack.steps
+
+Module contents
+---------------
+
+.. automodule:: ack
+   :members:
+   :undoc-members:
+   :show-inheritance:
