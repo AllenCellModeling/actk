@@ -14,7 +14,7 @@ from lkaccess import LabKey, contexts
 
 logging.basicConfig(
     level=logging.INFO,
-    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s"
+    format="[%(levelname)4s: %(module)s:%(lineno)4s %(asctime)s] %(message)s",
 )
 log = logging.getLogger(__name__)
 
@@ -23,7 +23,6 @@ log = logging.getLogger(__name__)
 
 
 class Args(argparse.Namespace):
-
     def __init__(self):
         self.__parse()
 
@@ -34,7 +33,7 @@ class Args(argparse.Namespace):
             description=(
                 "Retrieve a dataset ready for processing from the internal "
                 "AICS database."
-            )
+            ),
         )
 
         # Arguments
@@ -46,23 +45,23 @@ class Args(argparse.Namespace):
                 "Percent how much data to download. Will be split across cell lines. "
                 "Ex: 1.0 = 100 percent of each cell line, "
                 "0.05 = 5 percent of each cell line."
-            )
+            ),
         )
         p.add_argument(
             "--instance",
             default="PROD",
-            help="Which database instance to use for data retrieval. (PROD or STAGING)"
+            help="Which database instance to use for data retrieval. (PROD or STAGING)",
         )
         p.add_argument(
             "--save_path",
             type=Path,
             default=Path("aics_ic_data.csv"),
-            help="Path to save the dataset to."
+            help="Path to save the dataset to.",
         )
         p.add_argument(
             "--debug",
             action="store_true",
-            help="Show traceback if the script were to fail."
+            help="Show traceback if the script were to fail.",
         )
 
         # Parse
@@ -89,16 +88,18 @@ def download_aics_dataset(args: Args):
 
         # Get cell line data
         log.info("Retrieving cell line data...")
-        cell_line_data = pd.DataFrame(lk.select_rows_as_list(
-            schema_name="celllines",
-            query_name="CellLineDefinition",
-            columns=[
-                "CellLineId",
-                "CellLineId/Name",
-                "StructureId/Name",
-                "ProteinId/Name",
-            ],
-        ))
+        cell_line_data = pd.DataFrame(
+            lk.select_rows_as_list(
+                schema_name="celllines",
+                query_name="CellLineDefinition",
+                columns=[
+                    "CellLineId",
+                    "CellLineId/Name",
+                    "StructureId/Name",
+                    "ProteinId/Name",
+                ],
+            )
+        )
 
         # Merge the data
         data = data.merge(cell_line_data, how="left", on="CellLineId")
@@ -129,6 +130,7 @@ def download_aics_dataset(args: Args):
         log.error("\n\n" + str(e) + "\n")
         log.error("=============================================")
         sys.exit(1)
+
 
 ###############################################################################
 # Runner
