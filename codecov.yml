@@ -1,0 +1,8 @@
+ignore:
+    - "**/__init__.py"
+    - "ack/bin/.*"
+    - "ack/vendor/.*"
+
+coverage:
+  status:
+    patch: off
