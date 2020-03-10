@@ -59,9 +59,10 @@ requirements = [
     "prefect",
     "python-dateutil<=2.8.0",  # need <=2.8.0 for quilt3 in step
     # project requires
+    "aicsimageio>=3.1.2",
+    "aicsimageprocessing>=0.7.2",
     "numpy",
     "pandas",
-    "Pillow",
 ]
 
 extra_requirements = {
