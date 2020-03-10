@@ -9,6 +9,8 @@ import pandas as pd
 from datastep import Step, log_run_params
 
 from ... import exceptions
+from ...utils import image_utils
+from ...utils.dask_utils import DistributedHandler
 
 ###############################################################################
 
@@ -18,6 +20,18 @@ log = logging.getLogger(__name__)
 
 
 class CellFeatures(Step):
+    def __init__(self, filepath_columns=["features"]):
+        super().__init__(filepath_columns=filepath_columns)
+
+    @staticmethod
+    def _process_cell(
+        row_index: int,
+        row: pd.Series,
+        desired_pixel_sizes: Tuple[float],
+        save_dir: Path
+    ) -> Path:
+        return
+
     @log_run_params
     def run(
         self,
@@ -65,4 +79,30 @@ class CellFeatures(Step):
         if not isinstance(dataset, pd.DataFrame):
             raise exceptions.ParameterTypeError("dataset", [str, Path, pd.DataFrame])
 
-        return self.step_local_staging_dir
+        # Create features directory
+        features_dir = self.step_local_staging_dir / "features"
+        features_dir.mkdir(exist_ok=True)
+
+        # Process each row
+        with DistributedHandler(distributed_executor_address) as handler:
+            # Start processing
+            futures = handler.client.map(
+                self._process_cell(
+                    # Convert dataframe iterrows into two lists of items to iterate over
+                    # One list will be row index
+                    # One list will be the pandas series of every row
+                    *zip(*list(dataset.iterrows())),
+                    # Pass the other parameters as list of the same thing for each
+                    # mapped function call
+                    [desired_pixel_sizes for i in range(len(dataset))],
+                    [features_dir for i in range(len(dataset))]
+                )
+            )
+
+            # Block until all complete
+            results = handler.gather(futures)
+
+        # Set the manifest
+        self.manifest = pd.DataFrame({"features": results})
+
+        return features_dir
