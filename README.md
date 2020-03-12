@@ -18,7 +18,13 @@ Automated Cell Kit
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information related to developing the code.
 
 ### Developer Installation
-`pip install -e .[dev]`
+The following two commands will install the package with dev dependencies in editable
+mode and download all resources required for testing.
+
+```bash
+pip install -e .[dev]
+python scripts/download_test_data.py
+```
 
 ### AICS Developer Instructions
 If you want to run this pipeline with the Pipeline Integrated Cell dataset (`pipeline 4.*`) run the following commands:

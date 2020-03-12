@@ -15,6 +15,7 @@ test_requirements = [
     "pytest",
     "pytest-cov",
     "pytest-raises",
+    "quilt3",
 ]
 
 setup_requirements = [
@@ -31,6 +32,7 @@ dev_requirements = [
     "pytest-cov==2.6.1",
     "pytest-raises>=0.10",
     "pytest-runner>=4.4",
+    "quilt3>=3.1.12",
     "Sphinx>=2.0.0b1",
     "sphinx_rtd_theme>=0.1.2",
     "tox>=3.5.2",
