@@ -95,13 +95,26 @@ def upload_test_data(args: Args):
 
         # Upload
         else:
-            pushed = package.push(
-                "ack/test_data",
-                "s3://aics-modeling-packages-test-resources",
-                message=f"Test resources for `ack` version: {get_module_version()}."
-            )
+            # Get upload confirmation
+            confirmation = None
+            while confirmation not in ["y", "n"]:
+                # Get user input
+                confirmation = input("Upload [y]/n? ")
 
-            log.info(f"Completed package push. Result hash: {pushed.top_hash}")
+                # Get first character and lowercase
+                confirmation = confirmation[0].lower()
+
+            # Check confirmation
+            if confirmation == "y":
+                pushed = package.push(
+                    "ack/test_data",
+                    "s3://aics-modeling-packages-test-resources",
+                    message=f"Test resources for `ack` version: {get_module_version()}."
+                )
+
+                log.info(f"Completed package push. Result hash: {pushed.top_hash}")
+            else:
+                log.info(f"Upload canceled.")
 
     # Catch any exception
     except Exception as e:
