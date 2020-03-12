@@ -12,9 +12,9 @@ from aicsimageio import AICSImage, types
 
 
 def get_normed_image_array(
-    raw_image_path: types.ImageLike,
-    nucleus_seg_image_path: types.ImageLike,
-    membrane_seg_image_path: types.ImageLike,
+    raw_image: types.ImageLike,
+    nucleus_seg_image: types.ImageLike,
+    membrane_seg_image: types.ImageLike,
     dna_channel_index: int,
     membrane_channel_index: int,
     structure_channel_index: int,
@@ -29,9 +29,9 @@ def get_normed_image_array(
     """
 
     # Read images
-    raw = AICSImage(raw_image_path)
-    nuc_seg = AICSImage(nucleus_seg_image_path)
-    memb_seg = AICSImage(membrane_seg_image_path)
+    raw = AICSImage(raw_image)
+    nuc_seg = AICSImage(nucleus_seg_image)
+    memb_seg = AICSImage(membrane_seg_image)
 
     # Get default current and desired pixel sizes
     if current_pixel_sizes is None:
