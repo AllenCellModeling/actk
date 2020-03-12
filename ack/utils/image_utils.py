@@ -21,7 +21,7 @@ def get_normed_image_array(
     transmitted_light_channel_index: int,
     current_pixel_sizes: Optional[Tuple[float]] = None,
     desired_pixel_sizes: Optional[Tuple[float]] = None,
-) -> Tuple[np.ndarray, List[str]]:
+) -> Tuple[np.ndarray, List[str], Tuple[float]]:
     """
     Take a pandas row (dictionary), and preferences file (dictionary) from pipeline
     spreadsheet and returns image as a CYXZ numpy array channel ordering of [seg_cell,
@@ -99,4 +99,4 @@ def get_normed_image_array(
     img = np.stack([nuc_seg, memb_seg, *normalized_images])
     channel_names = ["nuc_seg", "cell_seg", "dna", "memb", "struct", "trans"]
 
-    return img, channel_names, desired_pixel_sizes
+    return img, channel_names, tuple(desired_pixel_sizes)
