@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from .cell_features import CellFeatures
+from .single_cell_features import SingleCellFeatures
 
-__all__ = ["CellFeatures"]
+__all__ = ["SingleCellFeatures"]

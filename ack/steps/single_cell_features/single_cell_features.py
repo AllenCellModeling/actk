@@ -19,7 +19,7 @@ log = logging.getLogger(__name__)
 ###############################################################################
 
 
-class CellFeatures(Step):
+class SingleCellFeatures(Step):
     def __init__(self, filepath_columns=["features"]):
         super().__init__(filepath_columns=filepath_columns)
 
