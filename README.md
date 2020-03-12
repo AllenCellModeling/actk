@@ -8,10 +8,11 @@ Automated Cell Kit
 
 ---
 
-*Edit this README and make it relevant to your project*
-
 ## Installation
-`pip install git+https://github.com/AllenCellModeling/ack.git`
+**Install Requires:** `numpy` must be installed prior to the installation of this package: `pip install numpy`
+
+**Stable Release:** `pip install ack`<br>
+**Development Head:** `pip install git+https://github.com/AllenCellModeling/ack.git`
 
 ## Development
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information related to developing the code.
