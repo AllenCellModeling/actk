@@ -60,7 +60,7 @@ requirements = [
     "python-dateutil<=2.8.0",  # need <=2.8.0 for quilt3 in step
     # project requires
     "aicsimageio>=3.1.2",
-    "aicsimageprocessing>=0.7.2",
+    "aicsimageprocessing>=0.7.3",
     "numpy",
     "pandas",
 ]
@@ -90,7 +90,6 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
     ],
     description="Automated Cell Kit",
     entry_points={

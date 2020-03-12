@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7]
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
@@ -48,4 +48,4 @@ jobs:
         pip install .[test]
     - name: Lint with flake8
       run: |
-        flake8 ack --count --verbose --max-line-length=127 --show-source --statistics
+        flake8 ack --count --verbose --show-source --statistics
