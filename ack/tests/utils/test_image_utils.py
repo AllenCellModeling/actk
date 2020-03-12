@@ -23,9 +23,9 @@ from ack.utils import image_utils
     "expected_image",
     [
         (
-            "example_raw.ome.tiff",
-            "example_nuc_seg.tiff",
-            "example_cell_seg.tiff",
+            "example_raw_0.ome.tiff",
+            "example_nuc_seg_0.tiff",
+            "example_cell_seg_0.tiff",
             3,
             2,
             1,
@@ -33,6 +33,18 @@ from ack.utils import image_utils
             None,
             None,
             "example_normed_image_array_0.ome.tiff",
+        ),
+        (
+            "example_raw_1.ome.tiff",
+            "example_nuc_seg_1.tiff",
+            "example_cell_seg_1.tiff",
+            2,
+            0,
+            1,
+            3,
+            None,
+            None,
+            "example_normed_image_array_1.ome.tiff",
         ),
     ],
 )
