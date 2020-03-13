@@ -8,6 +8,7 @@ import traceback
 from pathlib import Path
 
 from quilt3 import Package
+
 from ack import get_module_version
 
 ###############################################################################
@@ -99,7 +100,7 @@ def upload_test_data(args: Args):
             confirmation = None
             while confirmation not in ["y", "n"]:
                 # Get user input
-                confirmation = input("Upload [y]/n? ")
+                confirmation = input("Upload y/n? ")
 
                 # Get first character and lowercase
                 confirmation = confirmation[0].lower()

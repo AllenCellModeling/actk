@@ -64,7 +64,8 @@ def download_test_data(args: Args):
         # Get test data dir
         data_dir = (
             Path(__file__).parent.parent / "ack" / "tests" / "data"
-        ).resolve(strict=True)
+        ).resolve()
+        data_dir.mkdir(exist_ok=True)
 
         # Get quilt package
         package = Package.browse(
@@ -74,7 +75,7 @@ def download_test_data(args: Args):
         )
 
         # Download
-        package["models"].fetch(
+        package["data"].fetch(
             data_dir
         )
 
