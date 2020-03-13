@@ -14,7 +14,7 @@ from aicsimageio import AICSImage, types
 def get_normed_image_array(
     raw_image: types.ImageLike,
     nucleus_seg_image: types.ImageLike,
-    membrane_seg_image: types.ImageLike,
+    cell_seg_image: types.ImageLike,
     dna_channel_index: int,
     membrane_channel_index: int,
     structure_channel_index: int,
@@ -31,7 +31,7 @@ def get_normed_image_array(
     # Read images
     raw = AICSImage(raw_image)
     nuc_seg = AICSImage(nucleus_seg_image)
-    memb_seg = AICSImage(membrane_seg_image)
+    cell_seg = AICSImage(cell_seg_image)
 
     # Get default current and desired pixel sizes
     if current_pixel_sizes is None:
@@ -69,20 +69,20 @@ def get_normed_image_array(
 
     # Prep segmentations
     nuc_seg = nuc_seg.get_image_data("ZYX", S=0, T=0, C=0)
-    memb_seg = memb_seg.get_image_data("ZYX", S=0, T=0, C=0)
+    cell_seg = cell_seg.get_image_data("ZYX", S=0, T=0, C=0)
 
     # We do not assume that the segementations are the same size as the raw
     # Resize the segmentations to match the raw
     # Drop the first dimension of the raw image as it is the channel dimension
     raw_size = np.array(raw.shape[1:]).astype(float)
     nuc_size = np.array(nuc_seg.shape).astype(float)
-    memb_size = np.array(memb_seg.shape).astype(float)
+    cell_size = np.array(cell_seg.shape).astype(float)
     scale_nuc = raw_size / nuc_size
-    scale_memb = raw_size / memb_size
+    scale_cell = raw_size / cell_size
 
     # Actual resize
     nuc_seg = proc.resize(nuc_seg, scale_nuc, method="nearest")
-    memb_seg = proc.resize(memb_seg, scale_memb, method="nearest")
+    cell_seg = proc.resize(cell_seg, scale_cell, method="nearest")
 
     # Normalize images
     normalized_images = []
@@ -96,7 +96,7 @@ def get_normed_image_array(
         normalized_images.append(proc.normalize_img(raw[i], method=norm_method))
 
     # Stack all together
-    img = np.stack([nuc_seg, memb_seg, *normalized_images])
+    img = np.stack([nuc_seg, cell_seg, *normalized_images])
     channel_names = ["nuc_seg", "cell_seg", "dna", "memb", "struct", "trans"]
 
     return img, channel_names, tuple(desired_pixel_sizes)

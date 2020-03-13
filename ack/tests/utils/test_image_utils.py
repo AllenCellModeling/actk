@@ -12,8 +12,8 @@ from ack.utils import image_utils
 
 @pytest.mark.parametrize(
     "raw_image, "
-    "dna_seg_image, "
-    "memb_seg_image, "
+    "nuc_seg_image, "
+    "cell_seg_image, "
     "dna_channel_index, "
     "membrane_channel_index, "
     "structure_channel_index, "
@@ -51,8 +51,8 @@ from ack.utils import image_utils
 def test_get_normed_image_array(
     data_dir,
     raw_image,
-    dna_seg_image,
-    memb_seg_image,
+    nuc_seg_image,
+    cell_seg_image,
     dna_channel_index,
     membrane_channel_index,
     structure_channel_index,
@@ -64,8 +64,8 @@ def test_get_normed_image_array(
     # Get actual
     actual_image, actual_channels, actual_px_sizes = image_utils.get_normed_image_array(
         data_dir / raw_image,
-        data_dir / dna_seg_image,
-        data_dir / memb_seg_image,
+        data_dir / nuc_seg_image,
+        data_dir / cell_seg_image,
         dna_channel_index,
         membrane_channel_index,
         structure_channel_index,
