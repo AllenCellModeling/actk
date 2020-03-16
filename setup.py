@@ -10,12 +10,12 @@ with open("README.md") as readme_file:
 
 test_requirements = [
     "codecov",
-    "flake8",
+    "flake8>=3.7.7",
     "black",
-    "pytest",
-    "pytest-cov",
-    "pytest-raises",
-    "quilt3",
+    "pytest>=4.3.0",
+    "pytest-cov==2.6.1",
+    "pytest-raises>=0.10",
+    "quilt3==3.1.10",
 ]
 
 setup_requirements = [
@@ -32,7 +32,7 @@ dev_requirements = [
     "pytest-cov==2.6.1",
     "pytest-raises>=0.10",
     "pytest-runner>=4.4",
-    "quilt3>=3.1.12",
+    "quilt3==3.1.10",
     "Sphinx>=2.0.0b1",
     "sphinx_rtd_theme>=0.1.2",
     "tox>=3.5.2",
