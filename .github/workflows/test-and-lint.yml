@@ -22,7 +22,7 @@ jobs:
         pip install .[test]
     - name: Download Test Data
       run: |
-        python scripts/download_test_data.py
+        python scripts/download_test_data.py --debug
     - name: Test with pytest
       run: |
         pytest ack/tests/
