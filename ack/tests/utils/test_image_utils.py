@@ -50,6 +50,7 @@ from ack.utils import image_utils
 )
 def test_get_normed_image_array(
     data_dir,
+    cluster_address,
     raw_image,
     nuc_seg_image,
     cell_seg_image,
@@ -81,3 +82,68 @@ def test_get_normed_image_array(
     assert np.array_equiv(actual_image, expected_image.get_image_data("CZYX", S=0, T=0))
     assert actual_channels == expected_image.get_channel_names()
     assert tuple(actual_px_sizes) == expected_image.get_physical_pixel_size()
+
+
+@pytest.mark.parametrize(
+    "image, cell_id, expected_image",
+    [
+        (
+            "example_normed_image_array_0.ome.tiff",
+            1,
+            "example_selected_and_adjusted_array_0_1.ome.tiff",
+        ),
+        (
+            "example_normed_image_array_0.ome.tiff",
+            2,
+            "example_selected_and_adjusted_array_0_2.ome.tiff",
+        ),
+        (
+            "example_normed_image_array_0.ome.tiff",
+            3,
+            "example_selected_and_adjusted_array_0_3.ome.tiff",
+        ),
+    ],
+)
+def test_select_and_adjust_segmentation_ceiling(
+    data_dir, image, cell_id, expected_image,
+):
+    # Get actual
+    image = AICSImage(data_dir / image).get_image_data("CZYX", S=0, T=0)
+    actual_image = image_utils.select_and_adjust_segmentation_ceiling(image, cell_id)
+
+    # Read expected
+    expected_image = AICSImage(data_dir / expected_image)
+
+    # Assert actual equals expected
+    assert np.array_equiv(actual_image, expected_image.get_image_data("CZYX", S=0, T=0))
+
+
+@pytest.mark.parametrize(
+    "image, expected_image",
+    [
+        (
+            "example_selected_and_adjusted_array_0_1.ome.tiff",
+            "example_cropped_with_segs_array_0_1.ome.tiff",
+        ),
+        (
+            "example_selected_and_adjusted_array_0_2.ome.tiff",
+            "example_cropped_with_segs_array_0_2.ome.tiff",
+        ),
+        (
+            "example_selected_and_adjusted_array_0_3.ome.tiff",
+            "example_cropped_with_segs_array_0_3.ome.tiff",
+        ),
+    ],
+)
+def test_crop_raw_channels_with_segmentation(data_dir, image, expected_image):
+    # Get actual
+    image = AICSImage(data_dir / image)
+    data = image.get_image_data("CZYX", S=0, T=0)
+    channels = image.get_channel_names()
+    actual_image = image_utils.crop_raw_channels_with_segmentation(data, channels)
+
+    # Read expected
+    expected_image = AICSImage(data_dir / expected_image)
+
+    # Assert actual equals expected
+    assert np.array_equiv(actual_image, expected_image.get_image_data("CZYX", S=0, T=0))
