@@ -28,9 +28,19 @@ class SingleCellFeatures(Step):
         row_index: int,
         row: pd.Series,
         desired_pixel_sizes: Tuple[float],
-        save_dir: Path
+        save_dir: Path,
     ) -> Path:
-        return
+        # Get normalized image array
+        normalized_img, channels, pixel_sizes = image_utils.get_normed_image_array(
+            raw_image=row.SourceReadPath,
+            nucleus_seg_image=row.NucleusSegmentationReadPath,
+            cell_seg_image=row.CellSegmentationReadPath,
+            dna_channel_index=row.ChannelIndexDNA,
+            membrane_channel_index=row.ChannelIndexMembrane,
+            structure_channel_index=row.ChannelIndexStructure,
+            transmitted_light_channel_index=row.ChannelIndexTransmittedLight,
+            desired_pixel_sizes=desired_pixel_sizes,
+        )
 
     @log_run_params
     def run(

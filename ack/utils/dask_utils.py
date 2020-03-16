@@ -24,8 +24,7 @@ class DistributedHandler:
         return self._client
 
     def gather(
-        self,
-        futures: Iterable[Union[ThreadFuture, DaskFuture]]
+        self, futures: Iterable[Union[ThreadFuture, DaskFuture]]
     ) -> Iterable[Any]:
         if isinstance(self.client, ThreadClient):
             return list(futures)
