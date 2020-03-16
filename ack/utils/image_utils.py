@@ -23,9 +23,52 @@ def get_normed_image_array(
     desired_pixel_sizes: Optional[Tuple[float]] = None,
 ) -> Tuple[np.ndarray, List[str], Tuple[float]]:
     """
-    Take a pandas row (dictionary), and preferences file (dictionary) from pipeline
-    spreadsheet and returns image as a CYXZ numpy array channel ordering of [seg_cell,
-    seg_nuc, nuc, mem, struct, transmitted].
+    Generate a single numpy array of related images.
+
+    Parameters
+    ----------
+    raw_image: types.ImageLike
+        A filepath to the raw imaging data. The image should be 4D and include
+        channels for DNA, Membrane, Structure, and Transmitted Light.
+
+    nucleus_seg_image: types.ImageLike
+        A filepath to the nucleus segmentation for the provided raw image.
+
+    cell_seg_image: types.ImageLike
+        A filepath to the cell segmentation for the provided raw image.
+
+    dna_channel_index: int
+        The index in channel dimension in the raw image that stores DNA data.
+
+    membrane_channel_index: int
+        The index in the channel dimension in the raw image that stores membrane data.
+
+    structure_channel_index: int
+        The index in the channel dimension in the raw image that stores structure data.
+
+    transmitted_light_channel_index: int
+        The index in the channel dimension in the raw image that stores the transmitted
+        light data.
+
+    current_pixel_sizes: Optioal[Tuple[float]]
+        The current physical pixel sizes as a tuple of the raw image.
+        Default: None (`aicsimageio.AICSImage.get_physical_pixel_size` on the raw image)
+
+    desired_pixel_sizes: Optional[Tuple[float]]
+        The desired physical pixel sizes as a tuple to scale all images to.
+        Default: None (scale all images to current_pixel_sizes if different)
+
+    Returns
+    -------
+    normed: np.ndarray
+        The normalized images stacked into a single CZYX numpy ndarray.
+
+    channels: List[str]
+        The standardized channel names for the returned array.
+        In order: ["nuc_seg", "cell_seg", "dna", "memb", "struct", "trans"]
+
+    pixel_sizes: Tuple[float]
+        The physical pixel sizes of the returned image in XYZ order.
     """
 
     # Read images
