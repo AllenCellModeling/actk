@@ -25,7 +25,7 @@ jobs:
         python scripts/download_test_data.py --debug
     - name: Test with pytest
       run: |
-        pytest ack/tests/
+        pytest --cov-report xml --cov=ack ack/tests/
     - name: Upload codecov
       uses: codecov/codecov-action@v1
 
