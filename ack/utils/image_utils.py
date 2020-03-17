@@ -189,7 +189,7 @@ def select_and_adjust_segmentation_ceiling(
         start = int(np.floor((nuc_com + cell_top) / 2))
 
         # Get the shape of the cell from the cell segmentation
-        cell_shape = image[1][:, :, start:]
+        cell_shape = image[1, :, :, start:]
 
         # Adjust cell shape "ceiling" using the adjustment integer provided
         start_ind = int(np.floor(image_ceiling_adjustment)) - 1
@@ -198,7 +198,7 @@ def select_and_adjust_segmentation_ceiling(
         cell_shape = convolve(cell_shape, imf, mode="same") > 1e-8
 
         # Set the image data with the new cell shape data
-        image[1][:, :, start:] = cell_shape
+        image[1, :, :, start:] = cell_shape
 
     return image
 
