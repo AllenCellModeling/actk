@@ -50,7 +50,6 @@ from ack.utils import image_utils
 )
 def test_get_normed_image_array(
     data_dir,
-    cluster_address,
     raw_image,
     nuc_seg_image,
     cell_seg_image,
