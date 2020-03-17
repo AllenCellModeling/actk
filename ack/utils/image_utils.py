@@ -25,7 +25,7 @@ def get_normed_image_array(
     current_pixel_sizes: Optional[Tuple[float]] = None,
     desired_pixel_sizes: Optional[Tuple[float]] = None,
 ) -> Tuple[np.ndarray, List[str], Tuple[float]]:
-    f"""
+    """
     Generate a single numpy array of related images.
 
     Parameters
@@ -68,7 +68,14 @@ def get_normed_image_array(
 
     channels: List[str]
         The standardized channel names for the returned array.
-        In order: {Channels.DefaultOrderList}
+        In order: [
+            "nucleus_segmentation",
+            "membrane_segmentation",
+            "dna",
+            "membrane",
+            "structure",
+            "brightfield",
+        ]
 
     pixel_sizes: Tuple[float]
         The physical pixel sizes of the returned image in XYZ order.

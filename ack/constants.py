@@ -28,7 +28,8 @@ class DatasetFields:
     ChannelIndexMembrane = "ChannelIndexMembrane"
     ChannelIndexStructure = "ChannelIndexStructure"
     ChannelIndexBrightfield = "ChannelIndexBrightfield"
-    All = [
+    StandardizedFOVPath = "StandardizedFOVPath"
+    AllExpectedInputs = [
         FOVId,
         SourceReadPath,
         NucleusSegmentationReadPath,
