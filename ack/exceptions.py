@@ -1,20 +1,31 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from typing import List
+from typing import List, Union
+
+import dask.dataframe as dd
+import pandas as pd
+
+###############################################################################
 
 
-class ParameterTypeError(Exception):
-    def __init__(self, parameter_name: str, allowed_types: List[type]):
+class MissingDataError(Exception):
+    def __init__(
+        self,
+        dataset: Union[pd.DataFrame, dd.DataFrame],
+        required_columns: List[str]
+    ):
         # Run base exception init
         super().__init__()
 
-        # Store parameter name and allowed types
-        self.parameter_name = parameter_name
-        self.allowed_types = allowed_types
+        # Store params for display
+        self.dataset = dataset
+        self.required_columns = required_columns
 
     def __str__(self):
         return (
-            f"Parameter: `{self.parameter_name}` must be provided as one of the "
-            f"following types: {self.allowed_types}"
+            f"Dataset provided does not have the required columns for this operation. "
+            f"Dataset columns: {self.dataset.columns} "
+            f"Required columns: {self.required_columns} "
+            f"Dataset head: {self.dataset.head()}"
         )
