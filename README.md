@@ -9,7 +9,8 @@ Automated Cell Kit
 ---
 
 ## Installation
-**Install Requires:** `numpy` must be installed prior to the installation of this package: `pip install numpy`
+**Install Requires:** The python package, `numpy`, must be installed prior to the
+installation of this package: `pip install numpy`
 
 **Stable Release:** `pip install ack`<br>
 **Development Head:** `pip install git+https://github.com/AllenCellModeling/ack.git`
@@ -27,13 +28,15 @@ python scripts/download_test_data.py
 ```
 
 ### AICS Developer Instructions
-If you want to run this pipeline with the Pipeline Integrated Cell dataset (`pipeline 4.*`) run the following commands:
+If you want to run this pipeline with the Pipeline Integrated Cell dataset
+(`pipeline 4.*`) run the following commands:
 
 ```bash
 pip install -e .[aics]
 python scripts/download_aics_dataset.py
 ```
 
-Options for this script are available and can be viewed with: `python scripts/download_aics_dataset.py --help`
+Options for this script are available and can be viewed with:
+`python scripts/download_aics_dataset.py --help`
 
 ***Free software: Allen Institute Software License***
