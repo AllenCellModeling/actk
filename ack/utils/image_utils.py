@@ -17,15 +17,15 @@ from ..constants import Channels
 def get_normed_image_array(
     raw_image: types.ImageLike,
     nucleus_seg_image: types.ImageLike,
-    cell_seg_image: types.ImageLike,
+    membrane_seg_image: types.ImageLike,
     dna_channel_index: int,
     membrane_channel_index: int,
     structure_channel_index: int,
-    transmitted_light_channel_index: int,
+    brightfield_channel_index: int,
     current_pixel_sizes: Optional[Tuple[float]] = None,
     desired_pixel_sizes: Optional[Tuple[float]] = None,
 ) -> Tuple[np.ndarray, List[str], Tuple[float]]:
-    """
+    f"""
     Generate a single numpy array of related images.
 
     Parameters
@@ -37,8 +37,8 @@ def get_normed_image_array(
     nucleus_seg_image: types.ImageLike
         A filepath to the nucleus segmentation for the provided raw image.
 
-    cell_seg_image: types.ImageLike
-        A filepath to the cell segmentation for the provided raw image.
+    membrane_seg_image: types.ImageLike
+        A filepath to the membrane segmentation for the provided raw image.
 
     dna_channel_index: int
         The index in channel dimension in the raw image that stores DNA data.
@@ -49,9 +49,9 @@ def get_normed_image_array(
     structure_channel_index: int
         The index in the channel dimension in the raw image that stores structure data.
 
-    transmitted_light_channel_index: int
-        The index in the channel dimension in the raw image that stores the transmitted
-        light data.
+    brightfield_channel_index: int
+        The index in the channel dimension in the raw image that stores the brightfield
+        data.
 
     current_pixel_sizes: Optioal[Tuple[float]]
         The current physical pixel sizes as a tuple of the raw image.
@@ -68,16 +68,15 @@ def get_normed_image_array(
 
     channels: List[str]
         The standardized channel names for the returned array.
-        In order: ["nuc_seg", "cell_seg", "dna", "memb", "struct", "trans"]
+        In order: {Channels.DefaultOrderList}
 
     pixel_sizes: Tuple[float]
         The physical pixel sizes of the returned image in XYZ order.
     """
-
     # Read images
     raw = AICSImage(raw_image)
     nuc_seg = AICSImage(nucleus_seg_image)
-    cell_seg = AICSImage(cell_seg_image)
+    memb_seg = AICSImage(membrane_seg_image)
 
     # Get default current and desired pixel sizes
     if current_pixel_sizes is None:
@@ -92,7 +91,7 @@ def get_normed_image_array(
         dna_channel_index,
         membrane_channel_index,
         structure_channel_index,
-        transmitted_light_channel_index,
+        brightfield_channel_index,
     ]
     selected_channels = [
         raw.get_image_dask_data("ZYX", S=0, T=0, C=index) for index in channel_indices
@@ -113,25 +112,25 @@ def get_normed_image_array(
 
     # Prep segmentations
     nuc_seg = nuc_seg.get_image_data("ZYX", S=0, T=0, C=0)
-    cell_seg = cell_seg.get_image_data("ZYX", S=0, T=0, C=0)
+    memb_seg = memb_seg.get_image_data("ZYX", S=0, T=0, C=0)
 
     # We do not assume that the segementations are the same size as the raw
     # Resize the segmentations to match the raw
     # Drop the first dimension of the raw image as it is the channel dimension
     raw_size = np.array(raw.shape[1:]).astype(float)
     nuc_size = np.array(nuc_seg.shape).astype(float)
-    cell_size = np.array(cell_seg.shape).astype(float)
+    memb_size = np.array(memb_seg.shape).astype(float)
     scale_nuc = raw_size / nuc_size
-    scale_cell = raw_size / cell_size
+    scale_memb = raw_size / memb_size
 
     # Actual resize
     nuc_seg = proc.resize(nuc_seg, scale_nuc, method="nearest")
-    cell_seg = proc.resize(cell_seg, scale_cell, method="nearest")
+    memb_seg = proc.resize(memb_seg, scale_memb, method="nearest")
 
     # Normalize images
     normalized_images = []
     for i, index in enumerate(channel_indices):
-        if index == transmitted_light_channel_index:
+        if index == brightfield_channel_index:
             norm_method = "trans"
         else:
             norm_method = "img_bg_sub"
@@ -140,14 +139,14 @@ def get_normed_image_array(
         normalized_images.append(proc.normalize_img(raw[i], method=norm_method))
 
     # Stack all together
-    img = np.stack([nuc_seg, cell_seg, *normalized_images])
+    img = np.stack([nuc_seg, memb_seg, *normalized_images])
     channel_names = Channels.DefaultOrderList
 
     return img, channel_names, tuple(desired_pixel_sizes)
 
 
 def select_and_adjust_segmentation_ceiling(
-    image: np.ndarray, cell_id: int, image_ceiling_adjustment: int = 7
+    image: np.ndarray, cell_index: int, image_ceiling_adjustment: int = 7
 ) -> np.ndarray:
     """
     Select and adjust the cell shape "ceiling" for a specific cell in the provided
@@ -158,7 +157,7 @@ def select_and_adjust_segmentation_ceiling(
     image: np.ndarray
         The image numpy ndarray output from `get_normed_image_array`.
 
-    cell_id: int
+    cell_index: int
         The integer index for the target cell.
 
     image_ceiling_adjustment: int
@@ -169,11 +168,11 @@ def select_and_adjust_segmentation_ceiling(
     Returns
     -------
     adjusted: np.ndarray
-        The image with the cell segmentation adjusted for ceiling shape correction.
+        The image with the membrane segmentation adjusted for ceiling shape correction.
     """
     # Select only the data in the first two channels (the segmentation channels)
-    # where the data matches the provided cell id
-    image[0:2] = image[0:2] == cell_id
+    # where the data matches the provided cell index
+    image[0:2] = image[0:2] == cell_index
 
     # Adjust image ceiling if adjustment is greater than zero
     if image_ceiling_adjustment > 0:
@@ -224,22 +223,22 @@ def crop_raw_channels_with_segmentation(
     cropped: np.ndarray
         A 4D numpy ndarray with CZYX dimensions in the same order as provided.
         The raw DNA channel has been cropped using the nucleus segmentation.
-        All other raw channels have been cropped using the cell segmentation.
+        All other raw channels have been cropped using the membrane segmentation.
     """
     # Select segementation indicies
     nuc_ind = np.array(channels) == Channels.NucleusSegmentation
-    cell_ind = np.array(channels) == Channels.CellSegmentation
+    memb_ind = np.array(channels) == Channels.MembraneSegmentation
 
     # Select DNA and all other indicies
     dna_ind = np.array(channels) == Channels.DNA
     other_channel_inds = np.ones(len(channels))
-    other_channel_inds[nuc_ind | cell_ind | dna_ind] = 0
+    other_channel_inds[nuc_ind | memb_ind | dna_ind] = 0
 
     # Crop DNA channel with the nucleus segmentation
     image[dna_ind] = image[dna_ind] * image[nuc_ind]
 
-    # All other channels are cropped using cell segmentation
+    # All other channels are cropped using membrane segmentation
     for i in np.where(other_channel_inds)[0]:
-        image[i] = image[i] * image[cell_ind]
+        image[i] = image[i] * image[memb_ind]
 
     return image

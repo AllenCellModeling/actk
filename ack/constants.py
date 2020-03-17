@@ -4,16 +4,37 @@
 
 class Channels:
     NucleusSegmentation = "nucleus_segmentation"
-    CellSegmentation = "cell_segmentation"
+    MembraneSegmentation = "membrane_segmentation"
     DNA = "dna"
     Membrane = "membrane"
     Structure = "structure"
-    TransmittedLight = "transmitted_light"
+    Brightfield = "brightfield"
     DefaultOrderList = [
         NucleusSegmentation,
-        CellSegmentation,
+        MembraneSegmentation,
         DNA,
         Membrane,
         Structure,
-        TransmittedLight,
+        Brightfield,
+    ]
+
+
+class DatasetFields:
+    FOVId = "FOVId"
+    SourceReadPath = "SourceReadPath"
+    NucleusSegmentationReadPath = "NucleusSegmentationReadPath"
+    MembraneSegmentationReadPath = "MembraneSegmentationReadPath"
+    ChannelIndexDNA = "ChannelIndexDNA"
+    ChannelIndexMembrane = "ChannelIndexMembrane"
+    ChannelIndexStructure = "ChannelIndexStructure"
+    ChannelIndexBrightfield = "ChannelIndexBrightfield"
+    All = [
+        FOVId,
+        SourceReadPath,
+        NucleusSegmentationReadPath,
+        MembraneSegmentationReadPath,
+        ChannelIndexDNA,
+        ChannelIndexMembrane,
+        ChannelIndexStructure,
+        ChannelIndexBrightfield,
     ]
