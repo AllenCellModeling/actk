@@ -164,7 +164,7 @@ class StandardizeFOVArray(Step):
                 # Pass the other parameters as list of the same thing for each
                 # mapped function call
                 [desired_pixel_sizes for i in range(len(dataset))],
-                [arr_dir for i in range(len(dataset))]
+                [arr_dir for i in range(len(dataset))],
             )
 
             # Block until all complete
