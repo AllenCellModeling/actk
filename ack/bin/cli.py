@@ -9,6 +9,7 @@ You should not edit this script.
 
 import inspect
 import logging
+from unittest import mock
 
 import fire
 
@@ -32,4 +33,10 @@ def cli():
         if inspect.isclass(step)
     }
 
-    fire.Fire({**step_map, "all": All})
+    # Interrupt fire print return
+    with mock.patch("fire.core._PrintResult"):
+        fire.Fire({**step_map, "all": All})
+
+
+if __name__ == "__main__":
+    cli()
