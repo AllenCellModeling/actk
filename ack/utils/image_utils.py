@@ -162,7 +162,7 @@ def select_and_adjust_segmentation_ceiling(
     Parameters
     ----------
     image: np.ndarray
-        The image numpy ndarray output from `get_normed_image_array`.
+        The 4D, CZYX, image numpy ndarray output from `get_normed_image_array.
 
     cell_index: int
         The integer index for the target cell.
@@ -219,7 +219,8 @@ def crop_raw_channels_with_segmentation(
     Parameters
     ----------
     image: np.ndarray
-        The image numpy ndarray output from `select_and_adjust_segmentation_ceiling`.
+        The 4D, CZYX, image numpy ndarray output from
+        `select_and_adjust_segmentation_ceiling`.
 
     channels: List[str]
         The channel names for the provided image.
