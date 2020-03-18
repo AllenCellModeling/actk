@@ -24,7 +24,7 @@ EXAMPLE_DD_DATAFRAME = dd.from_pandas(EXAMPLE_PD_DATAFRAME, npartitions=1)
 
 
 @pytest.mark.parametrize(
-    "dataset, required_columns",
+    "dataset, required_fields",
     [
         (EXAMPLE_PD_DATAFRAME, ["name", "job"]),
         (EXAMPLE_DD_DATAFRAME, ["name", "job"]),
@@ -50,6 +50,6 @@ EXAMPLE_DD_DATAFRAME = dd.from_pandas(EXAMPLE_PD_DATAFRAME, npartitions=1)
         ),
     ],
 )
-def test_check_required_columns(dataset, required_columns):
+def test_check_required_fields(dataset, required_fields):
     # Run check
-    dataset_utils.check_required_columns(dataset, required_columns)
+    dataset_utils.check_required_fields(dataset, required_fields)

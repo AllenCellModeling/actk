@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 
 ###############################################################################
 
-REQUIRED_DATASET_COLUMNS = [
+REQUIRED_DATASET_FIELDS = [
     DatasetFields.FOVId,
     DatasetFields.SourceReadPath,
     DatasetFields.NucleusSegmentationReadPath,
@@ -122,8 +122,8 @@ class StandardizeFOVArray(Step):
 
         Returns
         -------
-        save_dir: Path
-            Path to the directory where all the image arrays are stored.
+        manifest_save_path: Path
+            Path to the produced standardized FOV manifest.
         """
         # Handle dataset provided as string or path
         if isinstance(dataset, (str, Path)):
@@ -133,7 +133,10 @@ class StandardizeFOVArray(Step):
             dataset = dd.read_csv(dataset)
 
         # Check the dataset for the required columns
-        dataset_utils.check_required_columns(dataset, REQUIRED_DATASET_COLUMNS)
+        dataset_utils.check_required_fields(
+            dataset=dataset,
+            required_fields=REQUIRED_DATASET_FIELDS,
+        )
 
         # Log original length of cell dataset
         log.info(f"Original cell dataset length: {len(dataset)}")

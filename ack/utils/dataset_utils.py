@@ -12,8 +12,8 @@ from .. import exceptions
 #######################################################################################
 
 
-def check_required_columns(
-    dataset: Union[str, Path, pd.DataFrame, dd.DataFrame], required_columns: List[str],
+def check_required_fields(
+    dataset: Union[str, Path, pd.DataFrame, dd.DataFrame], required_fields: List[str],
 ) -> Optional[exceptions.MissingDataError]:
     # Handle dataset provided as string or path
     if isinstance(dataset, (str, Path)):
@@ -23,5 +23,5 @@ def check_required_columns(
         dataset = dd.read_csv(dataset)
 
     # Check that all columns provided as required are in the dataset
-    if not all(required_col in dataset.columns for required_col in required_columns):
-        raise exceptions.MissingDataError(dataset, required_columns)
+    if not all(required_col in dataset.columns for required_col in required_fields):
+        raise exceptions.MissingDataError(dataset, required_fields)
