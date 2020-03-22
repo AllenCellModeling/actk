@@ -149,9 +149,16 @@ def test_select_and_adjust_segmentation_ceiling(
     ],
 )
 def test_crop_raw_channels_with_segmentation(data_dir, image, expected_image):
+    """
+    The example data used to test this function was generated with the original function
+    and then stored with `aicsimageio.writers.OmeTiffWriter` after doing an
+    `aicsimageio.transforms.transpose_to_dims` to transpose to "CZYX" as `OmeTiffWriter`
+    requires data have the "YX" dimensions last. Additionally, metadata has been updated
+    to the Channel name standards in the constants.py file.
+    """
     # Get actual
     image = AICSImage(data_dir / image)
-    data = image.get_image_data("CZYX", S=0, T=0)
+    data = image.get_image_data("CYXZ", S=0, T=0)
     channels = image.get_channel_names()
     actual_image = image_utils.crop_raw_channels_with_segmentation(data, channels)
 
@@ -159,4 +166,4 @@ def test_crop_raw_channels_with_segmentation(data_dir, image, expected_image):
     expected_image = AICSImage(data_dir / expected_image)
 
     # Assert actual equals expected
-    assert np.array_equiv(actual_image, expected_image.get_image_data("CZYX", S=0, T=0))
+    assert np.array_equiv(actual_image, expected_image.get_image_data("CYXZ", S=0, T=0))

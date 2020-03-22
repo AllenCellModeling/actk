@@ -241,9 +241,14 @@ def crop_raw_channels_with_segmentation(
     Returns
     -------
     cropped: np.ndarray
-        A 4D numpy ndarray with CZYX dimensions in the same order as provided.
+        A 4D numpy ndarray with CYXZ dimensions in the same order as provided.
         The raw DNA channel has been cropped using the nucleus segmentation.
         All other raw channels have been cropped using the membrane segmentation.
+
+    Notes
+    -----
+    The original version of this function can be found at:
+    https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#114
     """
     # Select segementation indicies
     nuc_ind = np.array(channels) == Channels.NucleusSegmentation
