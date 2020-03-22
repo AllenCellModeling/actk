@@ -67,7 +67,8 @@ def test_get_normed_image_array(
     The example data used to test this function was generated with the original function
     and then stored with `aicsimageio.writers.OmeTiffWriter` after doing an
     `aicsimageio.transforms.transpose_to_dims` to transpose to "CZYX" as `OmeTiffWriter`
-    requires data have the "YX" dimensions last.
+    requires data have the "YX" dimensions last. Additionally, metadata has been updated
+    to the Channel name standards in the constants.py file.
     """
     # Get actual
     actual_image, actual_channels, actual_px_sizes = image_utils.get_normed_image_array(
@@ -118,7 +119,8 @@ def test_select_and_adjust_segmentation_ceiling(
     The example data used to test this function was generated with the original function
     and then stored with `aicsimageio.writers.OmeTiffWriter` after doing an
     `aicsimageio.transforms.transpose_to_dims` to transpose to "CZYX" as `OmeTiffWriter`
-    requires data have the "YX" dimensions last.
+    requires data have the "YX" dimensions last. Additionally, metadata has been updated
+    to the Channel name standards in the constants.py file.
     """
     # Get actual
     image = AICSImage(data_dir / image).get_image_data("CYXZ", S=0, T=0)
