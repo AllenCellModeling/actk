@@ -114,15 +114,21 @@ def test_get_normed_image_array(
 def test_select_and_adjust_segmentation_ceiling(
     data_dir, image, cell_index, expected_image,
 ):
+    """
+    The example data used to test this function was generated with the original function
+    and then stored with `aicsimageio.writers.OmeTiffWriter` after doing an
+    `aicsimageio.transforms.transpose_to_dims` to transpose to "CZYX" as `OmeTiffWriter`
+    requires data have the "YX" dimensions last.
+    """
     # Get actual
-    image = AICSImage(data_dir / image).get_image_data("CZYX", S=0, T=0)
+    image = AICSImage(data_dir / image).get_image_data("CYXZ", S=0, T=0)
     actual_image = image_utils.select_and_adjust_segmentation_ceiling(image, cell_index)
 
     # Read expected
     expected_image = AICSImage(data_dir / expected_image)
 
     # Assert actual equals expected
-    assert np.array_equiv(actual_image, expected_image.get_image_data("CZYX", S=0, T=0))
+    assert np.array_equiv(actual_image, expected_image.get_image_data("CYXZ", S=0, T=0))
 
 
 @pytest.mark.parametrize(

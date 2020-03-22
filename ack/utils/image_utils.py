@@ -159,7 +159,7 @@ def get_normed_image_array(
 
 
 def select_and_adjust_segmentation_ceiling(
-    image: np.ndarray, cell_index: int, image_ceiling_adjustment: int = 7
+    image: np.ndarray, cell_index: int, cell_ceiling_adjustment: int = 7
 ) -> np.ndarray:
     """
     Select and adjust the cell shape "ceiling" for a specific cell in the provided
@@ -168,12 +168,12 @@ def select_and_adjust_segmentation_ceiling(
     Parameters
     ----------
     image: np.ndarray
-        The 4D, CZYX, image numpy ndarray output from `get_normed_image_array.
+        The 4D, CYXZ, image numpy ndarray output from `get_normed_image_array.
 
     cell_index: int
         The integer index for the target cell.
 
-    image_ceiling_adjustment: int
+    cell_ceiling_adjustment: int
         The adjust to use for raising the cell shape ceiling. If <= 0, this will be
         ignored and cell data will be selected but not adjusted.
         Default: 7
@@ -182,6 +182,11 @@ def select_and_adjust_segmentation_ceiling(
     -------
     adjusted: np.ndarray
         The image with the membrane segmentation adjusted for ceiling shape correction.
+
+    Notes
+    -----
+    The original version of this function can be found at:
+    https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#83
     """
     # Select only the data in the first two channels (the segmentation channels)
     # where the data matches the provided cell index
@@ -191,7 +196,7 @@ def select_and_adjust_segmentation_ceiling(
     # we raise the "ceiling" of the cell shape
 
     # Adjust image ceiling if adjustment is greater than zero
-    if image_ceiling_adjustment > 0:
+    if cell_ceiling_adjustment > 0:
         # Get the center of mass of the nucleus
         nuc_com = proc.get_center_of_mass(image[0])[-1]
 
@@ -205,8 +210,8 @@ def select_and_adjust_segmentation_ceiling(
         cell_shape = image[1, :, :, start:]
 
         # Adjust cell shape "ceiling" using the adjustment integer provided
-        start_ind = int(np.floor(image_ceiling_adjustment)) - 1
-        imf = np.zeros([1, 1, image_ceiling_adjustment * 2 - 1])
+        start_ind = int(np.floor(cell_ceiling_adjustment)) - 1
+        imf = np.zeros([1, 1, cell_ceiling_adjustment * 2 - 1])
         imf[:, :, start_ind:] = 1
         cell_shape = convolve(cell_shape, imf, mode="same") > 1e-8
 
@@ -226,7 +231,7 @@ def crop_raw_channels_with_segmentation(
     Parameters
     ----------
     image: np.ndarray
-        The 4D, CZYX, image numpy ndarray output from
+        The 4D, CYXZ, image numpy ndarray output from
         `select_and_adjust_segmentation_ceiling`.
 
     channels: List[str]
