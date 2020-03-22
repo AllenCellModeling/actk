@@ -124,8 +124,8 @@ def get_normed_image_array(
         raw = np.stack([proc.resize(channel, scale, "bilinear") for channel in raw])
 
     # Prep segmentations
-    nuc_seg = nuc_seg.get_image_data("YXZ", S=0, T=0, C=0)
-    memb_seg = memb_seg.get_image_data("YXZ", S=0, T=0, C=0)
+    nuc_seg = nuc_seg.get_image_data("ZYX", S=0, T=0, C=0)
+    memb_seg = memb_seg.get_image_data("ZYX", S=0, T=0, C=0)
 
     # We do not assume that the segementations are the same size as the raw
     # Resize the segmentations to match the raw
@@ -200,13 +200,13 @@ def select_and_adjust_segmentation_ceiling(
         # Get the center of mass of the nucleus
         nuc_com = proc.get_center_of_mass(image[0])[-1]
 
-        # Get the top of the cell
-        cell_top = np.where(np.sum(np.sum(image[1], axis=0), axis=0))[0][-1]
+        # Get the top of the membrane
+        memb_top = np.where(np.sum(np.sum(image[1], axis=0), axis=0))[0][-1]
 
         # Get the halfway point between the two
-        start = int(np.floor((nuc_com + cell_top) / 2))
+        start = int(np.floor((nuc_com + memb_top) / 2))
 
-        # Get the shape of the cell from the cell segmentation
+        # Get the shape of the cell from the membrane segmentation
         cell_shape = image[1, :, :, start:]
 
         # Adjust cell shape "ceiling" using the adjustment integer provided
