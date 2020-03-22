@@ -117,15 +117,14 @@ def get_normed_image_array(
     current_pixel_sizes = np.array(current_pixel_sizes)
     desired_pixel_sizes = np.array(desired_pixel_sizes)
 
-    # Only resize image if desired is different from current
+    # Only resize raw image if desired pixel sizes is different from current
     if not np.array_equal(current_pixel_sizes, desired_pixel_sizes):
-        # Resize images
-        scale = current_pixel_sizes / desired_pixel_sizes
-        raw = np.stack([proc.resize(channel, scale, "bilinear") for channel in raw])
+        scale_raw = current_pixel_sizes / desired_pixel_sizes
+        raw = np.stack([proc.resize(channel, scale_raw, "bilinear") for channel in raw])
 
     # Prep segmentations
-    nuc_seg = nuc_seg.get_image_data("ZYX", S=0, T=0, C=0)
-    memb_seg = memb_seg.get_image_data("ZYX", S=0, T=0, C=0)
+    nuc_seg = nuc_seg.get_image_data("YXZ", S=0, T=0, C=0)
+    memb_seg = memb_seg.get_image_data("YXZ", S=0, T=0, C=0)
 
     # We do not assume that the segementations are the same size as the raw
     # Resize the segmentations to match the raw
