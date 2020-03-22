@@ -31,7 +31,7 @@ from ack.utils import image_utils
             1,
             0,
             None,
-            None,
+            (0.29, 0.29, 0.29),
             "example_normed_image_array_0.ome.tiff",
         ),
         (
@@ -43,7 +43,7 @@ from ack.utils import image_utils
             1,
             3,
             None,
-            None,
+            (0.29, 0.29, 0.29),
             "example_normed_image_array_1.ome.tiff",
         ),
     ],
@@ -61,6 +61,12 @@ def test_get_normed_image_array(
     desired_pixel_sizes,
     expected_image,
 ):
+    """
+    The example data used to test this function was generated with the original function
+    and then stored with `aicsimageio.writers.OmeTiffWriter` after doing an
+    `aicsimageio.transforms.transpose_to_dims` to transpose to "CZYX" as `OmeTiffWriter`
+    requires data have the "YX" dimensions last.
+    """
     # Get actual
     actual_image, actual_channels, actual_px_sizes = image_utils.get_normed_image_array(
         data_dir / raw_image,
@@ -78,7 +84,7 @@ def test_get_normed_image_array(
     expected_image = AICSImage(data_dir / expected_image)
 
     # Assert actual equals expected
-    assert np.array_equiv(actual_image, expected_image.get_image_data("CZYX", S=0, T=0))
+    assert np.array_equiv(actual_image, expected_image.get_image_data("CYXZ", S=0, T=0))
     assert actual_channels == expected_image.get_channel_names()
     assert tuple(actual_px_sizes) == expected_image.get_physical_pixel_size()
 

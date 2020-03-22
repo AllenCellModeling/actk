@@ -26,7 +26,8 @@ def get_normed_image_array(
     desired_pixel_sizes: Optional[Tuple[float]] = None,
 ) -> Tuple[np.ndarray, List[str], Tuple[float]]:
     """
-    Generate a single numpy array of related images.
+    Provided the original raw image, and a nucleus and membrane segmentation, construct
+    a standardized, ordered, and normalized array of the images.
 
     Parameters
     ----------
@@ -64,7 +65,7 @@ def get_normed_image_array(
     Returns
     -------
     normed: np.ndarray
-        The normalized images stacked into a single CZYX numpy ndarray.
+        The normalized images stacked into a single CYXZ numpy ndarray.
 
     channels: List[str]
         The standardized channel names for the returned array.
@@ -79,8 +80,13 @@ def get_normed_image_array(
 
     pixel_sizes: Tuple[float]
         The physical pixel sizes of the returned image in XYZ order.
+
+    Notes
+    -----
+    The original version of this function can be found at:
+    https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#9
     """
-    # Read images
+    # Construct image objects
     raw = AICSImage(raw_image)
     nuc_seg = AICSImage(nucleus_seg_image)
     memb_seg = AICSImage(membrane_seg_image)
@@ -101,7 +107,7 @@ def get_normed_image_array(
         brightfield_channel_index,
     ]
     selected_channels = [
-        raw.get_image_dask_data("ZYX", S=0, T=0, C=index) for index in channel_indices
+        raw.get_image_dask_data("YXZ", S=0, T=0, C=index) for index in channel_indices
     ]
 
     # Combine selections and get numpy array
@@ -118,12 +124,12 @@ def get_normed_image_array(
         raw = np.stack([proc.resize(channel, scale, "bilinear") for channel in raw])
 
     # Prep segmentations
-    nuc_seg = nuc_seg.get_image_data("ZYX", S=0, T=0, C=0)
-    memb_seg = memb_seg.get_image_data("ZYX", S=0, T=0, C=0)
+    nuc_seg = nuc_seg.get_image_data("YXZ", S=0, T=0, C=0)
+    memb_seg = memb_seg.get_image_data("YXZ", S=0, T=0, C=0)
 
     # We do not assume that the segementations are the same size as the raw
     # Resize the segmentations to match the raw
-    # Drop the first dimension of the raw image as it is the channel dimension
+    # We drop the channel dimension from the raw size retrieval
     raw_size = np.array(raw.shape[1:]).astype(float)
     nuc_size = np.array(nuc_seg.shape).astype(float)
     memb_size = np.array(memb_seg.shape).astype(float)
@@ -181,10 +187,11 @@ def select_and_adjust_segmentation_ceiling(
     # where the data matches the provided cell index
     image[0:2] = image[0:2] == cell_index
 
+    # Because they are conservatively segmented,
+    # we raise the "ceiling" of the cell shape
+
     # Adjust image ceiling if adjustment is greater than zero
     if image_ceiling_adjustment > 0:
-        # Because they are conservatively segmented,
-        # we raise the "ceiling" of the cell shape
         # Get the center of mass of the nucleus
         nuc_com = proc.get_center_of_mass(image[0])[-1]
 
