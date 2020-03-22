@@ -31,6 +31,7 @@ from ack.utils import image_utils
             1,
             0,
             None,
+            # The most recently used desired pixel size from original repo
             (0.29, 0.29, 0.29),
             "example_normed_image_array_0.ome.tiff",
         ),
@@ -43,6 +44,7 @@ from ack.utils import image_utils
             1,
             3,
             None,
+            # The most recently used desired pixel size from original repo
             (0.29, 0.29, 0.29),
             "example_normed_image_array_1.ome.tiff",
         ),
