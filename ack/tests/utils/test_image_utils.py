@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
+
 import numpy as np
 import pytest
 from aicsimageio import AICSImage
@@ -169,3 +171,59 @@ def test_crop_raw_channels_with_segmentation(data_dir, image, expected_image):
 
     # Assert actual equals expected
     assert np.array_equiv(actual_image, expected_image.get_image_data("CYXZ", S=0, T=0))
+
+
+@pytest.mark.parametrize(
+    "image, expected_image, expected_params",
+    [
+        (
+            "example_cropped_with_segs_array_0_1.ome.tiff",
+            "example_prepared_image_for_feature_extraction_0_1.ome.tiff",
+            "example_prepared_params_for_feature_extraction_0_1.json",
+        ),
+        (
+            "example_cropped_with_segs_array_0_2.ome.tiff",
+            "example_prepared_image_for_feature_extraction_0_2.ome.tiff",
+            "example_prepared_params_for_feature_extraction_0_2.json",
+        ),
+        (
+            "example_cropped_with_segs_array_0_3.ome.tiff",
+            "example_prepared_image_for_feature_extraction_0_3.ome.tiff",
+            "example_prepared_params_for_feature_extraction_0_3.json",
+        ),
+    ],
+)
+def test_prepare_image_for_feature_extraction(
+    data_dir,
+    image,
+    expected_image,
+    expected_params
+):
+    """
+    The example data used to test this function was generated with the original function
+    and then stored with `aicsimageio.writers.OmeTiffWriter` after doing an
+    `aicsimageio.transforms.transpose_to_dims` to transpose to "CZYX" as `OmeTiffWriter`
+    requires data have the "YX" dimensions last. Additionally, metadata has been updated
+    to the Channel name standards in the constants.py file.
+    """
+    # Get actual
+    image = AICSImage(data_dir / image).get_image_data("CYXZ", S=0, T=0)
+    actual_image, actual_memb_com, actual_angle, actual_flipdim = (
+        image_utils.prepare_image_for_feature_extraction(image)
+    )
+
+    # Read expected
+    expected_image = AICSImage(data_dir / expected_image)
+    with open(data_dir / expected_params, "r") as read_params:
+        expected_params = json.load(read_params)
+
+    # Unpack expected params and reformat
+    expected_memb_com = np.array(expected_params["memb_com"])
+    expected_angle = expected_params["angle"]
+    expected_flipdim = np.array(expected_params["flipdim"])
+
+    # Assert actual equals expected
+    assert np.array_equiv(actual_image, expected_image.get_image_data("CYXZ", S=0, T=0))
+    assert np.array_equiv(actual_memb_com, expected_memb_com)
+    assert actual_angle == expected_angle
+    assert np.array_equiv(actual_flipdim, expected_flipdim)

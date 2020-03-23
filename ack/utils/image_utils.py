@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import aicsimageprocessing as proc
 import dask.array as da
@@ -266,3 +266,49 @@ def crop_raw_channels_with_segmentation(
         image[i] = image[i] * image[memb_ind]
 
     return image
+
+
+def prepare_image_for_feature_extraction(
+    image: np.ndarray
+) -> Tuple[np.ndarray, np.ndarray, List[List[float]], np.ndarray]:
+    """
+    Prep an image and return any parameters required for feature extraction.
+
+    Parameters
+    ----------
+    image: np.ndarray
+        The 4D, CYXZ, image numpy ndarray output from
+        `crop_raw_channels_with_segmentation`.
+
+    Returns
+    -------
+    prepped_image: np.ndarray
+        The prepared image after cell rigid registration and binarizing the
+        segmentations.
+    center_of_mass: np.ndarray
+        The index of the center of mass of the membrane segmentation for the provided
+        image.
+    angle: List[List[float]]
+        The major angle of the membrane segmentation for the provided image.
+    flipdim: np.ndarry
+        Boolean array informing if the dimensions of the image should be flipped.
+
+    Notes
+    -----
+    The original version of this function can be found at:
+    https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/alignment_tools.py#5
+
+    The docstring for the original version of this function is incorrect.
+    It states that it takes a CXYZ image but it takes in a CYXZ.
+    See `get_features_from_image` for reasoning.
+    """
+    # Get center of mass for the membrane
+    memb_com = proc.get_center_of_mass(proc.get_channel(image, 1))
+
+    # Perform a rigid registration on the image
+    prepped, angle, flipdim = proc.cell_rigid_registration(image)
+
+    # Make sure the nuc and cell channels are binary
+    prepped[0:2] = prepped[0:2] > 0.5
+
+    return prepped, memb_com, angle, flipdim
