@@ -275,12 +275,24 @@ def test_get_features_from_image(
 
     # Assert each key value pair
     assert all(feat in actual_features for feat in expected_features)
-    for feat in actual_features:
-        # These values may be a tiny bit different depending on
-        # machine, environment, randomness, who knows. :shrug:
+    # These values may be a tiny bit different depending on
+    # machine, environment, randomness, who knows. :shrug:
+    # We will test a few specific representative features instead
+    for feat in [
+        "imsize_orig",
+        "com",
+        "angle",
+        "flipdim",
+        "imsize_registered",
+        "dna_intensity_mean",
+        "cell_intensity_mean",
+        "dna_cell_struct_cyto_distal_ratio",
+        "dna_shape_sphericity",
+        "cell_shape_sphericity",
+    ]:
         if isinstance(actual_features[feat], int):
             assert np.isclose(actual_features[feat], expected_features[feat])
         else:
             nptest.assert_almost_equal(
-                actual_features[feat], expected_features[feat], decimal=1
+                actual_features[feat], expected_features[feat], decimal=2
             )
