@@ -282,5 +282,5 @@ def test_get_features_from_image(
             assert np.isclose(actual_features[feat], expected_features[feat])
         else:
             nptest.assert_almost_equal(
-                actual_features[feat], expected_features[feat], decimal=4
+                actual_features[feat], expected_features[feat], decimal=1
             )
