@@ -130,7 +130,7 @@ class StandardizeFOVArray(Step):
             dataset = Path(dataset).expanduser().resolve(strict=True)
 
             # Read dataset
-            dataset = dd.read_csv(dataset)
+            dataset = pd.read_csv(dataset)
 
         # Check the dataset for the required columns
         dataset_utils.check_required_fields(
@@ -143,10 +143,10 @@ class StandardizeFOVArray(Step):
 
         # As there is an assumption that this dataset is for cells,
         # generate the FOV dataset by selecting unique FOV Ids
-        dataset = dataset.drop_duplicates(DatasetFields.FOVId)
+        fov_dataset = dataset.drop_duplicates(DatasetFields.FOVId)
 
         # Log produced FOV dataset length
-        log.info(f"Unique FOV's found in dataset: {len(dataset)}")
+        log.info(f"Unique FOV's found in dataset: {len(fov_dataset)}")
 
         # Create standardized array directory
         arr_dir = self.step_local_staging_dir / "standardized_fovs"
@@ -160,29 +160,32 @@ class StandardizeFOVArray(Step):
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
                 # One list will be the pandas series of every row
-                *zip(*list(dataset.iterrows())),
+                *zip(*list(fov_dataset.iterrows())),
                 # Pass the other parameters as list of the same thing for each
                 # mapped function call
-                [desired_pixel_sizes for i in range(len(dataset))],
-                [arr_dir for i in range(len(dataset))],
+                [desired_pixel_sizes for i in range(len(fov_dataset))],
+                [arr_dir for i in range(len(fov_dataset))],
             )
 
             # Block until all complete
             results = handler.gather(futures)
 
-        # Generate manifest rows
-        self.manifest = []
+        # Generate fov paths rows
+        standardized_fov_paths_dataset = []
         for result in results:
-            self.manifest.append({
+            standardized_fov_paths_dataset.append({
                 DatasetFields.FOVId: result.fov_id,
                 DatasetFields.StandardizedFOVPath: result.path
             })
 
-        # Convert manifest to dataframe
-        self.manifest = dd.from_pandas(pd.DataFrame(self.manifest), npartitions=1)
+        # Convert fov paths to dataframe
+        standardized_fov_paths_dataset = pd.DataFrame(standardized_fov_paths_dataset)
 
-        # (Fully) Join original dataset to the result manifest
-        self.manifest = self.manifest.merge(dataset, on=DatasetFields.FOVId).compute()
+        # Join original dataset to the fov paths
+        self.manifest = dataset.merge(
+            standardized_fov_paths_dataset,
+            on=DatasetFields.FOVId
+        )
 
         # Save manifest to CSV
         manifest_save_path = self.step_local_staging_dir / f"manifest.csv"

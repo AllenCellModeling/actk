@@ -31,7 +31,7 @@ def test_run(data_dir):
         ]
     )
     # Check output length
-    assert len(output_manifest) == 2
+    assert len(output_manifest) == len(input_dataset)
     # Check all expected files exist
     assert all(
         Path(f).resolve(strict=True) for f in output_manifest[
