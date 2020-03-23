@@ -146,16 +146,15 @@ class SingleCellFeatures(Step):
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
             futures = handler.client.map(
-                self._generate_single_cell_features(
-                    # Convert dataframe iterrows into two lists of items to iterate over
-                    # One list will be row index
-                    # One list will be the pandas series of every row
-                    *zip(*list(dataset.iterrows())),
-                    # Pass the other parameters as list of the same thing for each
-                    # mapped function call
-                    [cell_ceiling_adjustment for i in range(len(dataset))],
-                    [features_dir for i in range(len(dataset))],
-                )
+                self._generate_single_cell_features,
+                # Convert dataframe iterrows into two lists of items to iterate over
+                # One list will be row index
+                # One list will be the pandas series of every row
+                *zip(*list(dataset.iterrows())),
+                # Pass the other parameters as list of the same thing for each
+                # mapped function call
+                [cell_ceiling_adjustment for i in range(len(dataset))],
+                [features_dir for i in range(len(dataset))],
             )
 
             # Block until all complete
