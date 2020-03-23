@@ -146,7 +146,7 @@ class SingleCellFeatures(Step):
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
             futures = handler.client.map(
-                self._process_cell(
+                self._generate_single_cell_features(
                     # Convert dataframe iterrows into two lists of items to iterate over
                     # One list will be row index
                     # One list will be the pandas series of every row
