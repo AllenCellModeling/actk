@@ -300,8 +300,8 @@ def prepare_image_for_feature_extraction(
     The original version of this function can be found at:
     https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/alignment_tools.py#5
 
-    The docstring for the original version of this function is incorrect.
-    It states that it takes a CXYZ image but it takes in a CYXZ.
+    The docstring for the original version of this function was incorrect.
+    It stated that it took in a CXYZ image but it took in a CYXZ.
     See `get_features_from_image` for reasoning.
     """
     # Get center of mass for the membrane
@@ -338,7 +338,7 @@ def get_features_from_image(image: np.ndarray) -> Dict:
     https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/features.py#8
 
     The docstring for the original version of this function was incorrect.
-    It states that it took in a CXYZ image but it took in a CYXZ. This can be seen from
+    It stated that it took in a CXYZ image but it took in a CYXZ. This can be seen from
     line #17 where a transpose to CZYX is done with `img.transpose(0, 3, 1, 2)`.
     A transpose of (0, 3, 1, 2) on a CXYZ image would result in a CZXY not CZYX.
     Additionally, simply following the original processing chain shows that the original
