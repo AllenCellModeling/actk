@@ -25,16 +25,13 @@ def test_run(data_dir):
     # Run asserts
     # Check expected columns
     assert all(
-        expected_col in output_manifest.columns for expected_col in [
-            *input_dataset.columns,
-            DatasetFields.CellFeaturesPath,
-        ]
+        expected_col in output_manifest.columns
+        for expected_col in [*input_dataset.columns, DatasetFields.CellFeaturesPath,]
     )
     # Check output length
     assert len(output_manifest) == len(input_dataset)
     # Check all expected files exist
     assert all(
-        Path(f).resolve(strict=True) for f in output_manifest[
-            DatasetFields.CellFeaturesPath
-        ]
+        Path(f).resolve(strict=True)
+        for f in output_manifest[DatasetFields.CellFeaturesPath]
     )

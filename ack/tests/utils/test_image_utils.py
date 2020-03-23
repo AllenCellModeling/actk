@@ -194,10 +194,7 @@ def test_crop_raw_channels_with_segmentation(data_dir, image, expected_image):
     ],
 )
 def test_prepare_image_for_feature_extraction(
-    data_dir,
-    image,
-    expected_image,
-    expected_params
+    data_dir, image, expected_image, expected_params
 ):
     """
     The example image data used to test this function was generated with the original
@@ -209,9 +206,12 @@ def test_prepare_image_for_feature_extraction(
     """
     # Get actual
     image = AICSImage(data_dir / image).get_image_data("CYXZ", S=0, T=0)
-    actual_image, actual_memb_com, actual_angle, actual_flipdim = (
-        image_utils.prepare_image_for_feature_extraction(image)
-    )
+    (
+        actual_image,
+        actual_memb_com,
+        actual_angle,
+        actual_flipdim,
+    ) = image_utils.prepare_image_for_feature_extraction(image)
 
     # Read expected
     expected_image = AICSImage(data_dir / expected_image)
@@ -235,22 +235,20 @@ def test_prepare_image_for_feature_extraction(
     [
         (
             "example_cropped_with_segs_array_0_1.ome.tiff",
-            "example_generated_features_0_1.json"
+            "example_generated_features_0_1.json",
         ),
         (
             "example_cropped_with_segs_array_0_2.ome.tiff",
-            "example_generated_features_0_2.json"
+            "example_generated_features_0_2.json",
         ),
         (
             "example_cropped_with_segs_array_0_3.ome.tiff",
-            "example_generated_features_0_3.json"
+            "example_generated_features_0_3.json",
         ),
     ],
 )
 def test_get_features_from_image(
-    data_dir,
-    image,
-    expected_features,
+    data_dir, image, expected_features,
 ):
     """
     The example data used to test this function was generated with the original function

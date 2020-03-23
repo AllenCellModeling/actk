@@ -11,9 +11,7 @@ import pandas as pd
 
 class MissingDataError(Exception):
     def __init__(
-        self,
-        dataset: Union[pd.DataFrame, dd.DataFrame],
-        required_columns: List[str]
+        self, dataset: Union[pd.DataFrame, dd.DataFrame], required_columns: List[str]
     ):
         # Run base exception init
         super().__init__()

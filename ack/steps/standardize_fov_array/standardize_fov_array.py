@@ -37,6 +37,7 @@ class StandardizeFOVArrayResult(NamedTuple):
     fov_id: int
     path: Path
 
+
 ###############################################################################
 
 
@@ -75,7 +76,7 @@ class StandardizeFOVArray(Step):
                 data=reshaped,
                 dimension_order="CZYX",
                 channel_names=channels,
-                pixels_physical_size=pixel_sizes
+                pixels_physical_size=pixel_sizes,
             )
 
         log.info(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
@@ -90,7 +91,7 @@ class StandardizeFOVArray(Step):
         distributed_executor_address: Optional[str] = None,
         clean: bool = False,
         debug: bool = False,
-        **kwargs
+        **kwargs,
     ) -> Path:
         """
         Convert a dataset of raw FOV images and their nucleus and membrane
@@ -142,8 +143,7 @@ class StandardizeFOVArray(Step):
 
         # Check the dataset for the required columns
         dataset_utils.check_required_fields(
-            dataset=dataset,
-            required_fields=REQUIRED_DATASET_FIELDS,
+            dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
         )
 
         # Log original length of cell dataset
@@ -181,18 +181,19 @@ class StandardizeFOVArray(Step):
         # Generate fov paths rows
         standardized_fov_paths_dataset = []
         for result in results:
-            standardized_fov_paths_dataset.append({
-                DatasetFields.FOVId: result.fov_id,
-                DatasetFields.StandardizedFOVPath: result.path
-            })
+            standardized_fov_paths_dataset.append(
+                {
+                    DatasetFields.FOVId: result.fov_id,
+                    DatasetFields.StandardizedFOVPath: result.path,
+                }
+            )
 
         # Convert fov paths to dataframe
         standardized_fov_paths_dataset = pd.DataFrame(standardized_fov_paths_dataset)
 
         # Join original dataset to the fov paths
         self.manifest = dataset.merge(
-            standardized_fov_paths_dataset,
-            on=DatasetFields.FOVId
+            standardized_fov_paths_dataset, on=DatasetFields.FOVId
         )
 
         # Save manifest to CSV

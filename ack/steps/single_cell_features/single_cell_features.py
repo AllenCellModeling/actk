@@ -23,14 +23,17 @@ log = logging.getLogger(__name__)
 ###############################################################################
 
 REQUIRED_DATASET_FIELDS = [
-    DatasetFields.CellId, DatasetFields.CellIndex,
-    DatasetFields.FOVId, DatasetFields.StandardizedFOVPath,
+    DatasetFields.CellId,
+    DatasetFields.CellIndex,
+    DatasetFields.FOVId,
+    DatasetFields.StandardizedFOVPath,
 ]
 
 
 class SingleCellFeaturesResult(NamedTuple):
     cell_id: int
     path: Path
+
 
 ###############################################################################
 
@@ -48,10 +51,7 @@ class SingleCellFeatures(Step):
 
     @staticmethod
     def _generate_single_cell_features(
-        row_index: int,
-        row: pd.Series,
-        cell_ceiling_adjustment: int,
-        save_dir: Path,
+        row_index: int, row: pd.Series, cell_ceiling_adjustment: int, save_dir: Path,
     ) -> SingleCellFeaturesResult:
         log.info(f"Beginning Cell Feature Generation for CellId: {row.CellId}")
 
@@ -90,7 +90,7 @@ class SingleCellFeatures(Step):
         distributed_executor_address: Optional[str] = None,
         clean: bool = False,
         debug: bool = False,
-        **kwargs
+        **kwargs,
     ):
         """
         Provided a dataset generate a features JSON file for each cell.
@@ -138,8 +138,7 @@ class SingleCellFeatures(Step):
 
         # Check dataset and manifest have required fields
         dataset_utils.check_required_fields(
-            dataset=dataset,
-            required_fields=REQUIRED_DATASET_FIELDS,
+            dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
         )
 
         # Create features directory
@@ -167,19 +166,18 @@ class SingleCellFeatures(Step):
         # Generate features paths rows
         cell_features_dataset = []
         for result in results:
-            cell_features_dataset.append({
-                DatasetFields.CellId: result.cell_id,
-                DatasetFields.CellFeaturesPath: result.path
-            })
+            cell_features_dataset.append(
+                {
+                    DatasetFields.CellId: result.cell_id,
+                    DatasetFields.CellFeaturesPath: result.path,
+                }
+            )
 
         # Convert features paths rows to dataframe
         cell_features_dataset = pd.DataFrame(cell_features_dataset)
 
         # Join original dataset to the fov paths
-        self.manifest = dataset.merge(
-            cell_features_dataset,
-            on=DatasetFields.CellId
-        )
+        self.manifest = dataset.merge(cell_features_dataset, on=DatasetFields.CellId)
 
         # Save manifest to CSV
         manifest_save_path = self.step_local_staging_dir / f"manifest.csv"

@@ -271,7 +271,7 @@ def crop_raw_channels_with_segmentation(
 
 
 def prepare_image_for_feature_extraction(
-    image: np.ndarray
+    image: np.ndarray,
 ) -> Tuple[np.ndarray, np.ndarray, List[List[float]], np.ndarray]:
     """
     Prep an image and return any parameters required for feature extraction.
@@ -385,21 +385,17 @@ def get_features_from_image(image: np.ndarray) -> Dict:
     ).to_dict("records")[0]
 
     # Get DNA and membrane image features
-    dna_feats = dna.get_features(
-        adjusted_dna_image,
-        seg=nuc_seg
-    ).to_dict("records")[0]
-    memb_feats = cell.get_features(
-        adjusted_memb_image,
-        seg=memb_seg
-    ).to_dict("records")[0]
+    dna_feats = dna.get_features(adjusted_dna_image, seg=nuc_seg).to_dict("records")[0]
+    memb_feats = cell.get_features(adjusted_memb_image, seg=memb_seg).to_dict(
+        "records"
+    )[0]
 
     # Combine all features
     features = {
         **regularization_params,
         **memb_nuc_struct_feats,
         **dna_feats,
-        **memb_feats
+        **memb_feats,
     }
 
     return features
