@@ -278,6 +278,9 @@ def test_get_features_from_image(
     for feat in actual_features:
         # These values may be a tiny bit different depending on
         # machine, environment, randomness, who knows. :shrug:
-        nptest.assert_almost_equal(
-            actual_features[feat], expected_features[feat], decimal=4
-        )
+        if isinstance(actual_features[feat], int):
+            assert np.isclose(actual_features[feat], expected_features[feat])
+        else:
+            nptest.assert_almost_equal(
+                actual_features[feat], expected_features[feat], decimal=4
+            )
