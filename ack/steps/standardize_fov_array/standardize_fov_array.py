@@ -148,9 +148,9 @@ class StandardizeFOVArray(Step):
         # Log produced FOV dataset length
         log.info(f"Unique FOV's found in dataset: {len(fov_dataset)}")
 
-        # Create standardized array directory
-        arr_dir = self.step_local_staging_dir / "standardized_fovs"
-        arr_dir.mkdir(exist_ok=True)
+        # Create standardized fovs directory
+        fovs_dir = self.step_local_staging_dir / "standardized_fovs"
+        fovs_dir.mkdir(exist_ok=True)
 
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
@@ -164,7 +164,7 @@ class StandardizeFOVArray(Step):
                 # Pass the other parameters as list of the same thing for each
                 # mapped function call
                 [desired_pixel_sizes for i in range(len(fov_dataset))],
-                [arr_dir for i in range(len(fov_dataset))],
+                [fovs_dir for i in range(len(fov_dataset))],
             )
 
             # Block until all complete
