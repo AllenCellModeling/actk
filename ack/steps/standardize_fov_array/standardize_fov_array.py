@@ -7,6 +7,7 @@ from typing import NamedTuple, Optional, Tuple, Union
 
 import dask.dataframe as dd
 import pandas as pd
+from aicsimageio import transforms
 from aicsimageio.writers import OmeTiffWriter
 from datastep import Step, log_run_params
 
@@ -64,11 +65,14 @@ class StandardizeFOVArray(Step):
             desired_pixel_sizes=desired_pixel_sizes,
         )
 
+        # Reshape data for serialization
+        reshaped = transforms.transpose_to_dims(normalized_img, "CYXZ", "CZYX")
+
         # Save array as OME Tiff
         save_path = save_dir / f"{row.FOVId}.ome.tiff"
         with OmeTiffWriter(save_path, overwrite_file=True) as writer:
             writer.save(
-                data=normalized_img,
+                data=reshaped,
                 dimension_order="CZYX",
                 channel_names=channels,
                 pixels_physical_size=pixel_sizes
