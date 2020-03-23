@@ -8,6 +8,40 @@ Automated Cell Kit
 
 ---
 
+A pipeline and individual steps to process field-of-view (FOV) microscopy images and
+generate data for the cells in each field. Of note, the data produced by this pipeline
+is used for the [Cell Feature Explorer](https://cfe.allencell.org/).
+
+## Features
+All steps and functionality in this package can be run as single steps or all together
+by using the command line.
+
+In general, all commands for this package will follow the format: `ack {step} {command}`
+
+* `step` is the name of the step, such as "StandardizeFOVArray" or "SingleCellFeatures"
+* `command` is what you want that step to do, such as "run" or "push"
+
+### Pipeline
+To run the entire pipeline from start to finish you can simply run:
+
+```bash
+ack all run --dataset {path to dataset}
+```
+
+Step specific parameters can additionally be passed by simply appending them.
+The step `SingleCellFeatures` has a parameter for `cell_ceiling_adjustment` and this
+can be set on both the individual step run level but also for the entire pipeline with:
+
+```bash
+ack all run --dataset {path to dataset} --cell_celing_adjustment {(float,float,float)}
+```
+
+### Individual Steps
+* `ack standardizefovarray run --dataset {path to dataset}`, Generate standardized,
+ordered, and normalized FOV images
+* `ack singlecellfeatures run --dataset {path to dataset}`, Generate a features JSON
+file for each cell in the dataset
+
 ## Installation
 **Install Requires:** The python package, `numpy`, must be installed prior to the
 installation of this package: `pip install numpy`
@@ -32,7 +66,7 @@ If you want to run this pipeline with the Pipeline Integrated Cell dataset
 (`pipeline 4.*`) run the following commands:
 
 ```bash
-pip install -e .[aics]
+pip install -e .[all]
 python scripts/download_aics_dataset.py
 ```
 
