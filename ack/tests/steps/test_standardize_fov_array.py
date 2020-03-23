@@ -3,7 +3,7 @@
 
 from pathlib import Path
 
-import pandas as pd
+import dask.dataframe as dd
 
 from ack.constants import DatasetFields
 from ack.steps import StandardizeFOVArray
@@ -17,13 +17,16 @@ def test_run(data_dir):
 
     # Ensure that it still runs
     output_manifest = step.run(data_dir / "example_dataset.csv")
-    output_manifest = pd.read_csv(output_manifest)
+    output_manifest = dd.read_csv(output_manifest)
+
+    # Read input dataset
+    input_dataset = dd.read_csv(data_dir / "example_dataset.csv")
 
     # Run asserts
     # Check expected columns
     assert all(
         expected_col in output_manifest.columns for expected_col in [
-            DatasetFields.FOVId,
+            *input_dataset.columns,
             DatasetFields.StandardizedFOVPath,
         ]
     )

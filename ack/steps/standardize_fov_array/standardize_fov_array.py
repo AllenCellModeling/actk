@@ -123,7 +123,7 @@ class StandardizeFOVArray(Step):
         Returns
         -------
         manifest_save_path: Path
-            Path to the produced standardized FOV manifest.
+            Path to the produced manifest with the StandardizedFOVPath column added.
         """
         # Handle dataset provided as string or path
         if isinstance(dataset, (str, Path)):
@@ -139,14 +139,14 @@ class StandardizeFOVArray(Step):
         )
 
         # Log original length of cell dataset
-        log.info(f"Original cell dataset length: {len(dataset)}")
+        log.info(f"Original dataset length: {len(dataset)}")
 
         # As there is an assumption that this dataset is for cells,
         # generate the FOV dataset by selecting unique FOV Ids
-        dataset = dataset.drop_duplicates("FOVId")
+        dataset = dataset.drop_duplicates(DatasetFields.FOVId)
 
         # Log produced FOV dataset length
-        log.info(f"Unique FOV's found in cell dataset: {len(dataset)}")
+        log.info(f"Unique FOV's found in dataset: {len(dataset)}")
 
         # Create standardized array directory
         arr_dir = self.step_local_staging_dir / "standardized_fovs"
@@ -179,7 +179,10 @@ class StandardizeFOVArray(Step):
             })
 
         # Convert manifest to dataframe
-        self.manifest = pd.DataFrame(self.manifest)
+        self.manifest = dd.from_pandas(pd.DataFrame(self.manifest), npartitions=1)
+
+        # (Fully) Join original dataset to the result manifest
+        self.manifest = self.manifest.merge(dataset, on=DatasetFields.FOVId).compute()
 
         # Save manifest to CSV
         manifest_save_path = self.step_local_staging_dir / f"manifest.csv"
