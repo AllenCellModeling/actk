@@ -6,6 +6,7 @@ import json
 import numpy as np
 import pytest
 from aicsimageio import AICSImage
+from numpy import testing as nptest
 
 from ack.utils import image_utils
 
@@ -271,4 +272,14 @@ def test_get_features_from_image(
     # Assert each key value pair
     assert all(feat in actual_features for feat in expected_features)
     for feat in actual_features:
-        assert actual_features[feat] == expected_features[feat]
+        # These values may be a tiny bit different depending on
+        # machine, environment, randomness, who knows. :shrug:
+        # In the case of a float or list of floats,
+        # use numpy.testing.assert_almost_equal
+        if isinstance(actual_features[feat], float) or (
+            isinstance(actual_features[feat], list)
+            and isinstance(actual_features[feat][0], float)
+        ):
+            nptest.assert_almost_equal(actual_features[feat], expected_features[feat])
+        else:
+            assert actual_features[feat] == expected_features[feat]
