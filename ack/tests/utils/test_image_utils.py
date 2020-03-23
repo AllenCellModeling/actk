@@ -200,11 +200,12 @@ def test_prepare_image_for_feature_extraction(
     expected_params
 ):
     """
-    The example data used to test this function was generated with the original function
-    and then stored with `aicsimageio.writers.OmeTiffWriter` after doing an
+    The example image data used to test this function was generated with the original
+    function and then stored with `aicsimageio.writers.OmeTiffWriter` after doing an
     `aicsimageio.transforms.transpose_to_dims` to transpose to "CZYX" as `OmeTiffWriter`
     requires data have the "YX" dimensions last. Additionally, metadata has been updated
-    to the Channel name standards in the constants.py file.
+    to the Channel name standards in the constants.py file. Example parameter data was
+    stored in JSON after converting numpy arrays to lists.
     """
     # Get actual
     image = AICSImage(data_dir / image).get_image_data("CYXZ", S=0, T=0)
@@ -227,3 +228,49 @@ def test_prepare_image_for_feature_extraction(
     assert np.array_equiv(actual_memb_com, expected_memb_com)
     assert actual_angle == expected_angle
     assert np.array_equiv(actual_flipdim, expected_flipdim)
+
+
+@pytest.mark.parametrize(
+    "image, expected_features",
+    [
+        (
+            "example_cropped_with_segs_array_0_1.ome.tiff",
+            "example_generated_features_0_1.json"
+        ),
+        (
+            "example_cropped_with_segs_array_0_2.ome.tiff",
+            "example_generated_features_0_2.json"
+        ),
+        (
+            "example_cropped_with_segs_array_0_3.ome.tiff",
+            "example_generated_features_0_3.json"
+        ),
+    ],
+)
+def test_get_features_from_image(
+    data_dir,
+    image,
+    expected_features,
+):
+    """
+    The example data used to test this function was generated with the original function
+    and then stored with JSON.
+    """
+    # Get actual
+    image = AICSImage(data_dir / image).get_image_data("CYXZ", S=0, T=0)
+    actual_features = image_utils.get_features_from_image(image)
+
+    # Serialize and deserialize the actual features
+    # Things like tuples become lists during serialization
+    # which technically assert False, even when the contents are equal
+    actual_features = json.dumps(actual_features)
+    actual_features = json.loads(actual_features)
+
+    # Read expected
+    with open(data_dir / expected_features, "r") as read_feats:
+        expected_features = json.load(read_feats)
+
+    # Assert each key value pair
+    assert all(feat in actual_features for feat in expected_features)
+    for feat in actual_features:
+        assert actual_features[feat] == expected_features[feat]

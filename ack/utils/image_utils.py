@@ -6,7 +6,9 @@ from typing import Dict, List, Optional, Tuple
 import aicsimageprocessing as proc
 import dask.array as da
 import numpy as np
-from aicsimageio import AICSImage, types
+from aicsfeature.extractor import cell, cell_nuc, dna
+from aicsimageio import AICSImage, transforms, types
+from scipy.ndimage import gaussian_filter as ndf
 from scipy.signal import fftconvolve as convolve
 
 from ..constants import Channels
@@ -312,3 +314,92 @@ def prepare_image_for_feature_extraction(
     prepped[0:2] = prepped[0:2] > 0.5
 
     return prepped, memb_com, angle, flipdim
+
+
+def get_features_from_image(image: np.ndarray) -> Dict:
+    """
+    Generate all segementation, DNA, membrane, and structure features from the provided
+    image.
+
+    Parameters
+    ----------
+    image: np.ndarray
+        The 4D, CYXZ, image numpy ndarray output from
+        `crop_raw_channels_with_segmentation`.
+
+    Returns
+    -------
+    features: Dict
+        A single dictionary filled with features.
+
+    Notes
+    -----
+    The original version of this function can be found at:
+    https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/features.py#8
+
+    The docstring for the original version of this function was incorrect.
+    It states that it took in a CXYZ image but it took in a CYXZ. This can be seen from
+    line #17 where a transpose to CZYX is done with `img.transpose(0, 3, 1, 2)`.
+    A transpose of (0, 3, 1, 2) on a CXYZ image would result in a CZXY not CZYX.
+    Additionally, simply following the original processing chain shows that the original
+    function is simply handed the output from the original version of the function
+    `crop_raw_channels_with_segmentation` (crop_cell_nuc) which results in a `CYXZ`.
+    """
+    # Get prepared image and feature parameters
+    prepped, memb_com, angle, flipdim = prepare_image_for_feature_extraction(image)
+
+    # Transpose to CZYX
+    prepped = transforms.transpose_to_dims(prepped, "CYXZ", "CZYX")
+
+    # Construct dictionary of basic features
+    regularization_params = {
+        "imsize_orig": image.shape,
+        "com": memb_com.tolist(),
+        "angle": angle,
+        "flipdim": flipdim.tolist(),
+        "imsize_registered": prepped.shape,
+    }
+
+    # Unpack channels
+    nuc_seg = prepped[0]
+    memb_seg = prepped[1]
+    dna_image = prepped[2]
+    memb_image = prepped[3]
+    struct_image = prepped[4]
+
+    # Adjust the DNA and membrane images
+    adjusted_dna_image = ((nuc_seg * dna_image) * 2 ** 8).astype("uint16")
+    adjusted_memb_image = ((memb_seg * memb_image) * 2 ** 8).astype("uint16")
+
+    # Simple deblur for better structure localization detection
+    imf1 = ndf(struct_image, 5, mode="constant")
+    imf2 = ndf(struct_image, 1, mode="constant")
+
+    # Adjust structure image
+    adjusted_struct_image = imf2 - imf1
+    adjusted_struct_image[adjusted_struct_image < 0] = 0
+
+    # Get features for the image using the adjusted images
+    memb_nuc_struct_feats = cell_nuc.get_features(
+        nuc_seg, memb_seg, adjusted_struct_image
+    ).to_dict("records")[0]
+
+    # Get DNA and membrane image features
+    dna_feats = dna.get_features(
+        adjusted_dna_image,
+        seg=nuc_seg
+    ).to_dict("records")[0]
+    memb_feats = cell.get_features(
+        adjusted_memb_image,
+        seg=memb_seg
+    ).to_dict("records")[0]
+
+    # Combine all features
+    features = {
+        **regularization_params,
+        **memb_nuc_struct_feats,
+        **dna_feats,
+        **memb_feats
+    }
+
+    return features
