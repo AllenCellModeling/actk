@@ -214,8 +214,12 @@ def test_prepare_image_for_feature_extraction(
         actual_flipdim,
     ) = image_utils.prepare_image_for_feature_extraction(image)
 
-    # Read expected
-    expected_image = AICSImage(data_dir / expected_image)
+    # Read expected image
+    expected_image = AICSImage(data_dir / expected_image).get_image_data(
+        "CYXZ", S=0, T=0
+    )
+
+    # Read expected params
     with open(data_dir / expected_params, "r") as read_params:
         expected_params = json.load(read_params)
 
@@ -225,10 +229,10 @@ def test_prepare_image_for_feature_extraction(
     expected_flipdim = np.array(expected_params["flipdim"])
 
     # Assert actual equals expected
-    assert np.array_equiv(actual_image, expected_image.get_image_data("CYXZ", S=0, T=0))
-    assert np.array_equiv(actual_memb_com, expected_memb_com)
-    assert actual_angle == expected_angle
-    assert np.array_equiv(actual_flipdim, expected_flipdim)
+    nptest.assert_almost_equal(actual_image, expected_image)
+    nptest.assert_almost_equal(actual_memb_com, expected_memb_com)
+    nptest.assert_almost_equal(actual_angle, expected_angle)
+    nptest.assert_almost_equal(actual_flipdim, expected_flipdim)
 
 
 @pytest.mark.parametrize(
@@ -274,12 +278,6 @@ def test_get_features_from_image(
     for feat in actual_features:
         # These values may be a tiny bit different depending on
         # machine, environment, randomness, who knows. :shrug:
-        # In the case of a float or list of floats,
-        # use numpy.testing.assert_almost_equal
-        if isinstance(actual_features[feat], float) or (
-            isinstance(actual_features[feat], list)
-            and isinstance(actual_features[feat][0], float)
-        ):
-            nptest.assert_almost_equal(actual_features[feat], expected_features[feat])
-        else:
-            assert actual_features[feat] == expected_features[feat]
+        nptest.assert_almost_equal(
+            actual_features[feat], expected_features[feat], decimal=4
+        )
