@@ -20,6 +20,8 @@ class Channels:
 
 
 class DatasetFields:
+    CellId = "CellId"
+    CellIndex = "CellIndex"
     FOVId = "FOVId"
     SourceReadPath = "SourceReadPath"
     NucleusSegmentationReadPath = "NucleusSegmentationReadPath"
@@ -29,7 +31,10 @@ class DatasetFields:
     ChannelIndexStructure = "ChannelIndexStructure"
     ChannelIndexBrightfield = "ChannelIndexBrightfield"
     StandardizedFOVPath = "StandardizedFOVPath"
+    CellFeaturesPath = "CellFeaturesPath"
     AllExpectedInputs = [
+        CellId,
+        CellIndex,
         FOVId,
         SourceReadPath,
         NucleusSegmentationReadPath,
