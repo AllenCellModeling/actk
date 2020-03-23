@@ -52,6 +52,13 @@ installation of this package: `pip install numpy`
 ## Development
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information related to developing the code.
 
+For more details on how this pipeline is constructed please see
+[dataset](https://github.com/AllenCellModeling/datastep) and
+[cookiecutter-stepworkflow](https://github.com/AllenCellModeling/cookiecutter-stepworkflow).
+
+To add new steps to this pipeline, run `make_new_step` and follow the instructions in
+[CONTRIBUTING.md](CONTRIBUTING.md)
+
 ### Developer Installation
 The following two commands will install the package with dev dependencies in editable
 mode and download all resources required for testing.
