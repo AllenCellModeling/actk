@@ -26,7 +26,7 @@ def test_run(data_dir):
     # Check expected columns
     assert all(
         expected_col in output_manifest.columns
-        for expected_col in [*input_dataset.columns, DatasetFields.CellFeaturesPath,]
+        for expected_col in [*input_dataset.columns, DatasetFields.CellFeaturesPath]
     )
     # Check output length
     assert len(output_manifest) == len(input_dataset)
