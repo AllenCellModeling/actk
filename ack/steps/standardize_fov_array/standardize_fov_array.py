@@ -101,16 +101,11 @@ class StandardizeFOVArray(Step):
         ----------
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame]
             The dataset to use for generating standard order, normalized, image arrays.
-            Required dataset columns: [
-                "FOVId",
-                "SourceReadPath",
-                "NucleusSegmentationReadPath",
-                "MembraneSegmentationReadPath",
-                "ChannelIndexDNA",
-                "ChannelIndexMembrane",
-                "ChannelIndexStructure",
-                "ChannelIndexBrightfield",
-            ]
+
+            **Required dataset columns:** *["FOVId", "SourceReadPath",
+            "NucleusSegmentationReadPath", "MembraneSegmentationReadPath",
+            "ChannelIndexDNA", "ChannelIndexMembrane", "ChannelIndexStructure",
+            "ChannelIndexBrightfield"]*
 
         desired_pixel_sizes: Tuple[float]
             The desired pixel size for to resize each image to in XYZ order.

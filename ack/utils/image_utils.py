@@ -71,14 +71,6 @@ def get_normed_image_array(
 
     channels: List[str]
         The standardized channel names for the returned array.
-        In order: [
-            "nucleus_segmentation",
-            "membrane_segmentation",
-            "dna",
-            "membrane",
-            "structure",
-            "brightfield",
-        ]
 
     pixel_sizes: Tuple[float]
         The physical pixel sizes of the returned image in XYZ order.
@@ -169,7 +161,7 @@ def select_and_adjust_segmentation_ceiling(
     Parameters
     ----------
     image: np.ndarray
-        The 4D, CYXZ, image numpy ndarray output from `get_normed_image_array.
+        The 4D, CYXZ, image numpy ndarray output from `get_normed_image_array`.
 
     cell_index: int
         The integer index for the target cell.

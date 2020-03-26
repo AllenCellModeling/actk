@@ -8,9 +8,9 @@ Automated Cell Kit
 
 ---
 
-A pipeline and individual steps to process field-of-view (FOV) microscopy images and
-generate data for the cells in each field. Of note, the data produced by this pipeline
-is used for the [Cell Feature Explorer](https://cfe.allencell.org/).
+A pipeline to process field-of-view (FOV) microscopy images and generate data and
+render-ready products for the cells in each field. Of note, the data produced by this
+pipeline is used for the [Cell Feature Explorer](https://cfe.allencell.org/).
 
 ## Features
 All steps and functionality in this package can be run as single steps or all together
@@ -29,18 +29,21 @@ ack all run --dataset {path to dataset}
 ```
 
 Step specific parameters can additionally be passed by simply appending them.
-The step `SingleCellFeatures` has a parameter for `cell_ceiling_adjustment` and this
-can be set on both the individual step run level but also for the entire pipeline with:
+For example: the step `SingleCellFeatures` has a parameter for
+`cell_ceiling_adjustment` and this can be set on both the individual step run level and
+also for the entire pipeline with:
 
 ```bash
-ack all run --dataset {path to dataset} --cell_celing_adjustment {(float,float,float)}
+ack all run --dataset {path to dataset} --cell_ceiling_adjustment {integer}
 ```
+
+An example dataset can be seen [here](https://open.quiltdata.com/b/aics-modeling-packages-test-resources/tree/ack/test_data/data/example_dataset.csv).
 
 ### Individual Steps
 * `ack standardizefovarray run --dataset {path to dataset}`, Generate standardized,
-ordered, and normalized FOV images
+ordered, and normalized FOV images as OME-Tiffs.
 * `ack singlecellfeatures run --dataset {path to dataset}`, Generate a features JSON
-file for each cell in the dataset
+file for each cell in the dataset.
 
 ## Installation
 **Install Requires:** The python package, `numpy`, must be installed prior to the
@@ -49,15 +52,21 @@ installation of this package: `pip install numpy`
 **Stable Release:** `pip install ack`<br>
 **Development Head:** `pip install git+https://github.com/AllenCellModeling/ack.git`
 
+## Documentation
+For full package documentation please visit
+[allencellmodeling.github.io/ack](https://allencellmodeling.github.io/ack/index.html).
+
 ## Development
-See [CONTRIBUTING.md](CONTRIBUTING.md) for information related to developing the code.
+See
+[CONTRIBUTING.md](https://github.com/AllenCellModeling/ack/blob/master/CONTRIBUTING.md)
+for information related to developing the code.
 
 For more details on how this pipeline is constructed please see
-[dataset](https://github.com/AllenCellModeling/datastep) and
-[cookiecutter-stepworkflow](https://github.com/AllenCellModeling/cookiecutter-stepworkflow).
+[cookiecutter-stepworkflow](https://github.com/AllenCellModeling/cookiecutter-stepworkflow)
+and [datastep](https://github.com/AllenCellModeling/datastep).
 
 To add new steps to this pipeline, run `make_new_step` and follow the instructions in
-[CONTRIBUTING.md](CONTRIBUTING.md)
+[CONTRIBUTING.md](https://github.com/AllenCellModeling/ack/blob/master/CONTRIBUTING.md)
 
 ### Developer Installation
 The following two commands will install the package with dev dependencies in editable

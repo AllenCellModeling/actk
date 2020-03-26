@@ -99,12 +99,9 @@ class SingleCellFeatures(Step):
         ----------
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame]
             The primary cell dataset to use for generating features JSON for each cell.
-            Required dataset columns: [
-                "CellId",
-                "CellIndex"
-                "FOVId",
-                "StandardizedFOVPath",
-            ]
+
+            **Required dataset columns:** *["CellId", "CellIndex" "FOVId",
+            "StandardizedFOVPath"]*
 
         cell_ceiling_adjustment: int
             The adjust to use for raising the cell shape ceiling. If <= 0, this will be

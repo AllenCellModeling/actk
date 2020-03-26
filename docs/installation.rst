@@ -12,6 +12,7 @@ To install ack, run this command in your terminal:
 
 .. code-block:: console
 
+    $ pip install numpy
     $ pip install ack
 
 This is the preferred method to install ack, as it will always install the most recent stable release.
