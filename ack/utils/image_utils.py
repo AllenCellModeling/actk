@@ -120,7 +120,7 @@ def get_normed_image_array(
     nuc_seg = nuc_seg.get_image_data("YXZ", S=0, T=0, C=0)
     memb_seg = memb_seg.get_image_data("YXZ", S=0, T=0, C=0)
 
-    # We do not assume that the segementations are the same size as the raw
+    # We do not assume that the segmentations are the same size as the raw
     # Resize the segmentations to match the raw
     # We drop the channel dimension from the raw size retrieval
     raw_size = np.array(raw.shape[1:]).astype(float)
@@ -243,7 +243,7 @@ def crop_raw_channels_with_segmentation(
     The original version of this function can be found at:
     https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#114
     """
-    # Select segementation indicies
+    # Select segmentation indicies
     nuc_ind = np.array(channels) == Channels.NucleusSegmentation
     memb_ind = np.array(channels) == Channels.MembraneSegmentation
 
@@ -310,7 +310,7 @@ def prepare_image_for_feature_extraction(
 
 def get_features_from_image(image: np.ndarray) -> Dict:
     """
-    Generate all segementation, DNA, membrane, and structure features from the provided
+    Generate all segmentation, DNA, membrane, and structure features from the provided
     image.
 
     Parameters
