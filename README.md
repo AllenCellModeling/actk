@@ -21,6 +21,12 @@ In general, all commands for this package will follow the format: `ack {step} {c
 * `step` is the name of the step, such as "StandardizeFOVArray" or "SingleCellFeatures"
 * `command` is what you want that step to do, such as "run" or "push"
 
+Each step will check that the dataset provided contains the required fields prior to
+processing. For details and definitions on each field, see our
+[dataset fields documentation](https://AllenCellModeling.github.io/ack/dataset_fields.html).
+
+An example dataset can be seen [here](https://open.quiltdata.com/b/aics-modeling-packages-test-resources/tree/ack/test_data/data/example_dataset.csv).
+
 ### Pipeline
 To run the entire pipeline from start to finish you can simply run:
 
@@ -36,8 +42,6 @@ also for the entire pipeline with:
 ```bash
 ack all run --dataset {path to dataset} --cell_ceiling_adjustment {integer}
 ```
-
-An example dataset can be seen [here](https://open.quiltdata.com/b/aics-modeling-packages-test-resources/tree/ack/test_data/data/example_dataset.csv).
 
 ### Individual Steps
 * `ack standardizefovarray run --dataset {path to dataset}`, Generate standardized,
