@@ -188,6 +188,19 @@ def select_and_adjust_segmentation_ceiling(
     # Because they are conservatively segmented,
     # we raise the "ceiling" of the cell shape
 
+    # This is the so-called "roof-augmentation" that Greg (@gregjohnso) invented to
+    # handle the bad "roof" in old membrane segmentations.
+    #
+    # Specially, because the photobleaching, the signal near the top is very weak.
+    # Then, the membrane segmentation stops earlier (in terms of Z position) than the
+    # truth. For some structures living near the top of the cell, like mitochodira, the
+    # structure segmentation may be out of the membrane segmentation, as the membrane
+    # segmentation is "shorter" than it should be, then the structure segmentation
+    # will be mostly choped off and make the integrated cell model learn nothing.
+    #
+    # So, "roof-augmentation" is the method to fix the "shorter" membrane segmentation
+    # issues.
+
     # Adjust image ceiling if adjustment is greater than zero
     if cell_ceiling_adjustment > 0:
         # Get the center of mass of the nucleus
