@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Top-level package for ack."""
+"""Top-level package for actk."""
 
 __author__ = "Jackson Maxfield Brown"
 __email__ = "jacksonb@alleninstitute.org"

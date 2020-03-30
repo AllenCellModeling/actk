@@ -13,8 +13,8 @@ from unittest import mock
 
 import fire
 
-from ack import steps
-from ack.bin.all import All
+from actk import steps
+from actk.bin.all import All
 
 ###############################################################################
 

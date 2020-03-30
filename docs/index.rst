@@ -1,4 +1,4 @@
-Welcome to ack's documentation!
+Welcome to actk's documentation!
 ======================================
 
 .. toctree::

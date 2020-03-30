@@ -17,7 +17,7 @@ from distributed import LocalCluster
 from prefect import Flow
 from prefect.engine.executors import DaskExecutor, LocalExecutor
 
-from ack import steps
+from actk import steps
 
 ###############################################################################
 
@@ -82,7 +82,7 @@ class All:
                 # Create or get log dir
                 # Do not include ms
                 log_dir_name = datetime.now().isoformat().split(".")[0]
-                log_dir = Path(f"~/.dask_logs/ack/{log_dir_name}").expanduser()
+                log_dir = Path(f"~/.dask_logs/actk/{log_dir_name}").expanduser()
                 # Log dir settings
                 log_dir.mkdir(parents=True, exist_ok=True)
 
@@ -122,7 +122,7 @@ class All:
             exe = DaskExecutor(distributed_executor_address)
 
         # Configure your flow
-        with Flow("ack") as flow:
+        with Flow("actk") as flow:
             standardized_fov_paths_dataset = standardize_fov_array(
                 dataset=dataset,
                 distributed_executor_address=distributed_executor_address,

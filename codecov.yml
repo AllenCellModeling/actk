@@ -1,7 +1,7 @@
 ignore:
     - "**/__init__.py"
-    - "ack/bin/.*"
-    - "ack/vendor/.*"
+    - "actk/bin/.*"
+    - "actk/vendor/.*"
 
 coverage:
   status:

@@ -1,10 +1,10 @@
-# ack
+# actk
 
-[![Build Status](https://github.com/AllenCellModeling/ack/workflows/Build%20Master/badge.svg)](https://github.com/AllenCellModeling/ack/actions)
-[![Documentation](https://github.com/AllenCellModeling/ack/workflows/Documentation/badge.svg)](https://AllenCellModeling.github.io/ack)
-[![Code Coverage](https://codecov.io/gh/AllenCellModeling/ack/branch/master/graph/badge.svg)](https://codecov.io/gh/AllenCellModeling/ack)
+[![Build Status](https://github.com/AllenCellModeling/actk/workflows/Build%20Master/badge.svg)](https://github.com/AllenCellModeling/actk/actions)
+[![Documentation](https://github.com/AllenCellModeling/actk/workflows/Documentation/badge.svg)](https://AllenCellModeling.github.io/actk)
+[![Code Coverage](https://codecov.io/gh/AllenCellModeling/actk/branch/master/graph/badge.svg)](https://codecov.io/gh/AllenCellModeling/actk)
 
-Automated Cell Kit
+Automated Cell Toolkit
 
 ---
 
@@ -16,22 +16,23 @@ pipeline is used for the [Cell Feature Explorer](https://cfe.allencell.org/).
 All steps and functionality in this package can be run as single steps or all together
 by using the command line.
 
-In general, all commands for this package will follow the format: `ack {step} {command}`
+In general, all commands for this package will follow the format:
+`actk {step} {command}`
 
 * `step` is the name of the step, such as "StandardizeFOVArray" or "SingleCellFeatures"
 * `command` is what you want that step to do, such as "run" or "push"
 
 Each step will check that the dataset provided contains the required fields prior to
 processing. For details and definitions on each field, see our
-[dataset fields documentation](https://AllenCellModeling.github.io/ack/dataset_fields.html).
+[dataset fields documentation](https://AllenCellModeling.github.io/actk/dataset_fields.html).
 
-An example dataset can be seen [here](https://open.quiltdata.com/b/aics-modeling-packages-test-resources/tree/ack/test_data/data/example_dataset.csv).
+An example dataset can be seen [here](https://open.quiltdata.com/b/aics-modeling-packages-test-resources/tree/actk/test_data/data/example_dataset.csv).
 
 ### Pipeline
 To run the entire pipeline from start to finish you can simply run:
 
 ```bash
-ack all run --dataset {path to dataset}
+actk all run --dataset {path to dataset}
 ```
 
 Step specific parameters can additionally be passed by simply appending them.
@@ -40,29 +41,29 @@ For example: the step `SingleCellFeatures` has a parameter for
 also for the entire pipeline with:
 
 ```bash
-ack all run --dataset {path to dataset} --cell_ceiling_adjustment {integer}
+actk all run --dataset {path to dataset} --cell_ceiling_adjustment {integer}
 ```
 
 ### Individual Steps
-* `ack standardizefovarray run --dataset {path to dataset}`, Generate standardized,
+* `actk standardizefovarray run --dataset {path to dataset}`, Generate standardized,
 ordered, and normalized FOV images as OME-Tiffs.
-* `ack singlecellfeatures run --dataset {path to dataset}`, Generate a features JSON
+* `actk singlecellfeatures run --dataset {path to dataset}`, Generate a features JSON
 file for each cell in the dataset.
 
 ## Installation
 **Install Requires:** The python package, `numpy`, must be installed prior to the
 installation of this package: `pip install numpy`
 
-**Stable Release:** `pip install ack`<br>
-**Development Head:** `pip install git+https://github.com/AllenCellModeling/ack.git`
+**Stable Release:** `pip install actk`<br>
+**Development Head:** `pip install git+https://github.com/AllenCellModeling/actk.git`
 
 ## Documentation
 For full package documentation please visit
-[allencellmodeling.github.io/ack](https://allencellmodeling.github.io/ack/index.html).
+[allencellmodeling.github.io/actk](https://allencellmodeling.github.io/actk/index.html).
 
 ## Development
 See
-[CONTRIBUTING.md](https://github.com/AllenCellModeling/ack/blob/master/CONTRIBUTING.md)
+[CONTRIBUTING.md](https://github.com/AllenCellModeling/actk/blob/master/CONTRIBUTING.md)
 for information related to developing the code.
 
 For more details on how this pipeline is constructed please see
@@ -70,7 +71,7 @@ For more details on how this pipeline is constructed please see
 and [datastep](https://github.com/AllenCellModeling/datastep).
 
 To add new steps to this pipeline, run `make_new_step` and follow the instructions in
-[CONTRIBUTING.md](https://github.com/AllenCellModeling/ack/blob/master/CONTRIBUTING.md)
+[CONTRIBUTING.md](https://github.com/AllenCellModeling/actk/blob/master/CONTRIBUTING.md)
 
 ### Developer Installation
 The following two commands will install the package with dev dependencies in editable

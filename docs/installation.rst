@@ -8,14 +8,14 @@ Installation
 Stable release
 --------------
 
-To install ack, run this command in your terminal:
+To install actk, run this command in your terminal:
 
 .. code-block:: console
 
     $ pip install numpy
-    $ pip install ack
+    $ pip install actk
 
-This is the preferred method to install ack, as it will always install the most recent stable release.
+This is the preferred method to install actk, as it will always install the most recent stable release.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -27,19 +27,19 @@ you through the process.
 From sources
 ------------
 
-The sources for ack can be downloaded from the `Github repo`_.
+The sources for actk can be downloaded from the `Github repo`_.
 
 You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/AllenCellModeling/ack
+    $ git clone git://github.com/AllenCellModeling/actk
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl  -OL https://github.com/AllenCellModeling/ack/tarball/master
+    $ curl  -OL https://github.com/AllenCellModeling/actk/tarball/master
 
 Once you have a copy of the source, you can install it with:
 
@@ -48,5 +48,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/AllenCellModeling/ack
-.. _tarball: https://github.com/AllenCellModeling/ack/tarball/master
+.. _Github repo: https://github.com/AllenCellModeling/actk
+.. _tarball: https://github.com/AllenCellModeling/actk/tarball/master
