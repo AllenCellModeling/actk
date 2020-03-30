@@ -1,0 +1,413 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>actk package &mdash; actk 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="actk.bin package" href="actk.bin.html" />
+    <link rel="prev" title="actk" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> actk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Package modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">actk package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="actk.bin.html">actk.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="actk.steps.html">actk.steps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="actk.utils.html">actk.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-actk.constants">actk.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-actk.exceptions">actk.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-actk">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">actk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">actk</a> &raquo;</li>
+        
+      <li>actk package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/actk.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="actk.bin.html" class="btn btn-neutral float-right" title="actk.bin package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="actk" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="actk-package">
+<h1>actk package<a class="headerlink" href="#actk-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="actk.bin.html">actk.bin package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actk.bin.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.bin.html#module-actk.bin.all">actk.bin.all module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.bin.html#module-actk.bin.cli">actk.bin.cli module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.bin.html#module-actk.bin">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="actk.steps.html">actk.steps package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="actk.steps.single_cell_features.html">actk.steps.single_cell_features package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="actk.steps.single_cell_features.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="actk.steps.single_cell_features.html#module-actk.steps.single_cell_features.single_cell_features">actk.steps.single_cell_features.single_cell_features module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="actk.steps.single_cell_features.html#module-actk.steps.single_cell_features">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="actk.steps.standardize_fov_array.html">actk.steps.standardize_fov_array package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="actk.steps.standardize_fov_array.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="actk.steps.standardize_fov_array.html#module-actk.steps.standardize_fov_array.standardize_fov_array">actk.steps.standardize_fov_array.standardize_fov_array module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="actk.steps.standardize_fov_array.html#module-actk.steps.standardize_fov_array">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.html#module-actk.steps">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="actk.utils.html">actk.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actk.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.utils.html#module-actk.utils.dask_utils">actk.utils.dask_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.utils.html#module-actk.utils.dataset_utils">actk.utils.dataset_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.utils.html#module-actk.utils.image_utils">actk.utils.image_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.utils.html#module-actk.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-actk.constants">
+<span id="actk-constants-module"></span><h2>actk.constants module<a class="headerlink" href="#module-actk.constants" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="actk.constants.Channels">
+<em class="property">class </em><code class="sig-prename descclassname">actk.constants.</code><code class="sig-name descname">Channels</code><a class="reference internal" href="_modules/actk/constants.html#Channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.constants.Channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="actk.constants.Channels.Brightfield">
+<code class="sig-name descname">Brightfield</code><em class="property"> = 'brightfield'</em><a class="headerlink" href="#actk.constants.Channels.Brightfield" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.Channels.DNA">
+<code class="sig-name descname">DNA</code><em class="property"> = 'dna'</em><a class="headerlink" href="#actk.constants.Channels.DNA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.Channels.DefaultOrderList">
+<code class="sig-name descname">DefaultOrderList</code><em class="property"> = ['nucleus_segmentation', 'membrane_segmentation', 'dna', 'membrane', 'structure', 'brightfield']</em><a class="headerlink" href="#actk.constants.Channels.DefaultOrderList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.Channels.Membrane">
+<code class="sig-name descname">Membrane</code><em class="property"> = 'membrane'</em><a class="headerlink" href="#actk.constants.Channels.Membrane" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.Channels.MembraneSegmentation">
+<code class="sig-name descname">MembraneSegmentation</code><em class="property"> = 'membrane_segmentation'</em><a class="headerlink" href="#actk.constants.Channels.MembraneSegmentation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.Channels.NucleusSegmentation">
+<code class="sig-name descname">NucleusSegmentation</code><em class="property"> = 'nucleus_segmentation'</em><a class="headerlink" href="#actk.constants.Channels.NucleusSegmentation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.Channels.Structure">
+<code class="sig-name descname">Structure</code><em class="property"> = 'structure'</em><a class="headerlink" href="#actk.constants.Channels.Structure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="actk.constants.DatasetFields">
+<em class="property">class </em><code class="sig-prename descclassname">actk.constants.</code><code class="sig-name descname">DatasetFields</code><a class="reference internal" href="_modules/actk/constants.html#DatasetFields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.constants.DatasetFields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.AllExpectedInputs">
+<code class="sig-name descname">AllExpectedInputs</code><em class="property"> = ['CellId', 'CellIndex', 'FOVId', 'SourceReadPath', 'NucleusSegmentationReadPath', 'MembraneSegmentationReadPath', 'ChannelIndexDNA', 'ChannelIndexMembrane', 'ChannelIndexStructure', 'ChannelIndexBrightfield']</em><a class="headerlink" href="#actk.constants.DatasetFields.AllExpectedInputs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.CellFeaturesPath">
+<code class="sig-name descname">CellFeaturesPath</code><em class="property"> = 'CellFeaturesPath'</em><a class="headerlink" href="#actk.constants.DatasetFields.CellFeaturesPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.CellId">
+<code class="sig-name descname">CellId</code><em class="property"> = 'CellId'</em><a class="headerlink" href="#actk.constants.DatasetFields.CellId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.CellIndex">
+<code class="sig-name descname">CellIndex</code><em class="property"> = 'CellIndex'</em><a class="headerlink" href="#actk.constants.DatasetFields.CellIndex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.ChannelIndexBrightfield">
+<code class="sig-name descname">ChannelIndexBrightfield</code><em class="property"> = 'ChannelIndexBrightfield'</em><a class="headerlink" href="#actk.constants.DatasetFields.ChannelIndexBrightfield" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.ChannelIndexDNA">
+<code class="sig-name descname">ChannelIndexDNA</code><em class="property"> = 'ChannelIndexDNA'</em><a class="headerlink" href="#actk.constants.DatasetFields.ChannelIndexDNA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.ChannelIndexMembrane">
+<code class="sig-name descname">ChannelIndexMembrane</code><em class="property"> = 'ChannelIndexMembrane'</em><a class="headerlink" href="#actk.constants.DatasetFields.ChannelIndexMembrane" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.ChannelIndexStructure">
+<code class="sig-name descname">ChannelIndexStructure</code><em class="property"> = 'ChannelIndexStructure'</em><a class="headerlink" href="#actk.constants.DatasetFields.ChannelIndexStructure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.FOVId">
+<code class="sig-name descname">FOVId</code><em class="property"> = 'FOVId'</em><a class="headerlink" href="#actk.constants.DatasetFields.FOVId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.MembraneSegmentationReadPath">
+<code class="sig-name descname">MembraneSegmentationReadPath</code><em class="property"> = 'MembraneSegmentationReadPath'</em><a class="headerlink" href="#actk.constants.DatasetFields.MembraneSegmentationReadPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.NucleusSegmentationReadPath">
+<code class="sig-name descname">NucleusSegmentationReadPath</code><em class="property"> = 'NucleusSegmentationReadPath'</em><a class="headerlink" href="#actk.constants.DatasetFields.NucleusSegmentationReadPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.SourceReadPath">
+<code class="sig-name descname">SourceReadPath</code><em class="property"> = 'SourceReadPath'</em><a class="headerlink" href="#actk.constants.DatasetFields.SourceReadPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.StandardizedFOVPath">
+<code class="sig-name descname">StandardizedFOVPath</code><em class="property"> = 'StandardizedFOVPath'</em><a class="headerlink" href="#actk.constants.DatasetFields.StandardizedFOVPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-actk.exceptions">
+<span id="actk-exceptions-module"></span><h2>actk.exceptions module<a class="headerlink" href="#module-actk.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="actk.exceptions.MissingDataError">
+<em class="property">exception </em><code class="sig-prename descclassname">actk.exceptions.</code><code class="sig-name descname">MissingDataError</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], required_columns: List[str]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/exceptions.html#MissingDataError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.exceptions.MissingDataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-actk">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-actk" title="Permalink to this headline">¶</a></h2>
+<p>Top-level package for actk.</p>
+<dl class="function">
+<dt id="actk.get_module_version">
+<code class="sig-prename descclassname">actk.</code><code class="sig-name descname">get_module_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk.html#get_module_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.get_module_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

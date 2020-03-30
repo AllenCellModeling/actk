@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>actk.steps package &mdash; actk 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="actk.steps.single_cell_features package" href="actk.steps.single_cell_features.html" />
+    <link rel="prev" title="actk.bin package" href="actk.bin.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> actk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Package modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="actk.html">actk package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="actk.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="actk.bin.html">actk.bin package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">actk.steps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="actk.utils.html">actk.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="actk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="actk.html#module-actk.constants">actk.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="actk.html#module-actk.exceptions">actk.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="actk.html#module-actk">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">actk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">actk</a> &raquo;</li>
+        
+          <li><a href="actk.html">actk package</a> &raquo;</li>
+        
+      <li>actk.steps package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/actk.steps.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="actk.steps.single_cell_features.html" class="btn btn-neutral float-right" title="actk.steps.single_cell_features package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="actk.bin.html" class="btn btn-neutral float-left" title="actk.bin package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="actk-steps-package">
+<h1>actk.steps package<a class="headerlink" href="#actk-steps-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="actk.steps.single_cell_features.html">actk.steps.single_cell_features package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.single_cell_features.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.single_cell_features.html#module-actk.steps.single_cell_features.single_cell_features">actk.steps.single_cell_features.single_cell_features module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.single_cell_features.html#module-actk.steps.single_cell_features">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="actk.steps.standardize_fov_array.html">actk.steps.standardize_fov_array package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.standardize_fov_array.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.standardize_fov_array.html#module-actk.steps.standardize_fov_array.standardize_fov_array">actk.steps.standardize_fov_array.standardize_fov_array module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.standardize_fov_array.html#module-actk.steps.standardize_fov_array">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-actk.steps">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-actk.steps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="actk.steps.SingleCellFeatures">
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">SingleCellFeatures</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray'&gt;], filepath_columns=['CellFeaturesPath']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_features/single_cell_features.html#SingleCellFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.SingleCellFeatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
+<dl class="method">
+<dt id="actk.steps.SingleCellFeatures.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], cell_ceiling_adjustment: int = 7, distributed_executor_address: Optional[str] = None, clean: bool = False, debug: bool = False, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_features/single_cell_features.html#SingleCellFeatures.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.SingleCellFeatures.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provided a dataset generate a features JSON file for each cell.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>dataset</strong> (<em>Union[str, Path, pd.DataFrame, dd.DataFrame]</em>) – The primary cell dataset to use for generating features JSON for each cell.</p>
+<p><strong>Required dataset columns:</strong> <em>[“CellId”, “CellIndex” “FOVId”,
+“StandardizedFOVPath”]</em></p>
+</li>
+<li><p><strong>cell_ceiling_adjustment</strong> (<em>int</em>) – The adjust to use for raising the cell shape ceiling. If &lt;= 0, this will be
+ignored and cell data will be selected but not adjusted.
+Default: 7</p></li>
+<li><p><strong>distributed_executor_address</strong> (<em>Optional[str]</em>) – An optional executor address to pass to some computation engine.
+Default: None</p></li>
+<li><p><strong>clean</strong> (<em>bool</em>) – Should the local staging directory be cleaned prior to this run.
+Default: False (Do not clean)</p></li>
+<li><p><strong>debug</strong> (<em>bool</em>) – A debug flag for the developer to use to manipulate how much data runs,
+how it is processed, etc.
+Default: False (Do not debug)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>manifest_save_path</strong> – Path to the produced manifest with the CellFeaturesPath column added.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="actk.steps.StandardizeFOVArray">
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">StandardizeFOVArray</code><span class="sig-paren">(</span><em class="sig-param">filepath_columns=['StandardizedFOVPath']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.StandardizeFOVArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
+<dl class="method">
+<dt id="actk.steps.StandardizeFOVArray.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29), distributed_executor_address: Optional[str] = None, clean: bool = False, debug: bool = False, **kwargs</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.StandardizeFOVArray.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a dataset of raw FOV images and their nucleus and membrane
+segmentations, into a single, standard order and shape, and normalized image.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>dataset</strong> (<em>Union[str, Path, pd.DataFrame, dd.DataFrame]</em>) – The dataset to use for generating standard order, normalized, image arrays.</p>
+<p><strong>Required dataset columns:</strong> <em>[“FOVId”, “SourceReadPath”,
+“NucleusSegmentationReadPath”, “MembraneSegmentationReadPath”,
+“ChannelIndexDNA”, “ChannelIndexMembrane”, “ChannelIndexStructure”,
+“ChannelIndexBrightfield”]</em></p>
+</li>
+<li><p><strong>desired_pixel_sizes</strong> (<em>Tuple[float]</em>) – The desired pixel size for to resize each image to in XYZ order.
+Default: (0.29, 0.29, 0.29)</p></li>
+<li><p><strong>distributed_executor_address</strong> (<em>Optional[str]</em>) – An optional executor address to pass to some computation engine.
+Default: None</p></li>
+<li><p><strong>clean</strong> (<em>bool</em>) – Should the local staging directory be cleaned prior to this run.
+Default: False (Do not clean)</p></li>
+<li><p><strong>debug</strong> (<em>bool</em>) – A debug flag for the developer to use to manipulate how much data runs,
+how it is processed, etc.
+Default: False (Do not debug)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>manifest_save_path</strong> – Path to the produced manifest with the StandardizedFOVPath column added.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

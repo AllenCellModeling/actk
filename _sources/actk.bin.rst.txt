@@ -1,0 +1,30 @@
+actk.bin package
+================
+
+Submodules
+----------
+
+actk.bin.all module
+-------------------
+
+.. automodule:: actk.bin.all
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+actk.bin.cli module
+-------------------
+
+.. automodule:: actk.bin.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: actk.bin
+   :members:
+   :undoc-members:
+   :show-inheritance:

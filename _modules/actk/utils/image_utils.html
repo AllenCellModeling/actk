@@ -1,0 +1,627 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>actk.utils.image_utils &mdash; actk 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> actk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../actk.html">actk package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../actk.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../actk.bin.html">actk.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../actk.steps.html">actk.steps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../actk.utils.html">actk.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../actk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../actk.html#module-actk.constants">actk.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../actk.html#module-actk.exceptions">actk.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../actk.html#module-actk">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">actk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../actk.html">actk</a> &raquo;</li>
+        
+      <li>actk.utils.image_utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for actk.utils.image_utils</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">aicsimageprocessing</span> <span class="k">as</span> <span class="nn">proc</span>
+<span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">aicsfeature.extractor</span> <span class="kn">import</span> <span class="n">cell</span><span class="p">,</span> <span class="n">cell_nuc</span><span class="p">,</span> <span class="n">dna</span>
+<span class="kn">from</span> <span class="nn">aicsimageio</span> <span class="kn">import</span> <span class="n">AICSImage</span><span class="p">,</span> <span class="n">transforms</span><span class="p">,</span> <span class="n">types</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">gaussian_filter</span> <span class="k">as</span> <span class="n">ndf</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">fftconvolve</span> <span class="k">as</span> <span class="n">convolve</span>
+
+<span class="kn">from</span> <span class="nn">..constants</span> <span class="kn">import</span> <span class="n">Channels</span>
+
+<span class="c1">#######################################################################################</span>
+
+
+<div class="viewcode-block" id="get_normed_image_array"><a class="viewcode-back" href="../../../actk.utils.html#actk.utils.image_utils.get_normed_image_array">[docs]</a><span class="k">def</span> <span class="nf">get_normed_image_array</span><span class="p">(</span>
+    <span class="n">raw_image</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">ImageLike</span><span class="p">,</span>
+    <span class="n">nucleus_seg_image</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">ImageLike</span><span class="p">,</span>
+    <span class="n">membrane_seg_image</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">ImageLike</span><span class="p">,</span>
+    <span class="n">dna_channel_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">membrane_channel_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">structure_channel_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">brightfield_channel_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">current_pixel_sizes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">desired_pixel_sizes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provided the original raw image, and a nucleus and membrane segmentation, construct</span>
+<span class="sd">    a standardized, ordered, and normalized array of the images.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    raw_image: types.ImageLike</span>
+<span class="sd">        A filepath to the raw imaging data. The image should be 4D and include</span>
+<span class="sd">        channels for DNA, Membrane, Structure, and Transmitted Light.</span>
+
+<span class="sd">    nucleus_seg_image: types.ImageLike</span>
+<span class="sd">        A filepath to the nucleus segmentation for the provided raw image.</span>
+
+<span class="sd">    membrane_seg_image: types.ImageLike</span>
+<span class="sd">        A filepath to the membrane segmentation for the provided raw image.</span>
+
+<span class="sd">    dna_channel_index: int</span>
+<span class="sd">        The index in channel dimension in the raw image that stores DNA data.</span>
+
+<span class="sd">    membrane_channel_index: int</span>
+<span class="sd">        The index in the channel dimension in the raw image that stores membrane data.</span>
+
+<span class="sd">    structure_channel_index: int</span>
+<span class="sd">        The index in the channel dimension in the raw image that stores structure data.</span>
+
+<span class="sd">    brightfield_channel_index: int</span>
+<span class="sd">        The index in the channel dimension in the raw image that stores the brightfield</span>
+<span class="sd">        data.</span>
+
+<span class="sd">    current_pixel_sizes: Optioal[Tuple[float]]</span>
+<span class="sd">        The current physical pixel sizes as a tuple of the raw image.</span>
+<span class="sd">        Default: None (`aicsimageio.AICSImage.get_physical_pixel_size` on the raw image)</span>
+
+<span class="sd">    desired_pixel_sizes: Optional[Tuple[float]]</span>
+<span class="sd">        The desired physical pixel sizes as a tuple to scale all images to.</span>
+<span class="sd">        Default: None (scale all images to current_pixel_sizes if different)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    normed: np.ndarray</span>
+<span class="sd">        The normalized images stacked into a single CYXZ numpy ndarray.</span>
+
+<span class="sd">    channels: List[str]</span>
+<span class="sd">        The standardized channel names for the returned array.</span>
+
+<span class="sd">    pixel_sizes: Tuple[float]</span>
+<span class="sd">        The physical pixel sizes of the returned image in XYZ order.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The original version of this function can be found at:</span>
+<span class="sd">    https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#9</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Construct image objects</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">AICSImage</span><span class="p">(</span><span class="n">raw_image</span><span class="p">)</span>
+    <span class="n">nuc_seg</span> <span class="o">=</span> <span class="n">AICSImage</span><span class="p">(</span><span class="n">nucleus_seg_image</span><span class="p">)</span>
+    <span class="n">memb_seg</span> <span class="o">=</span> <span class="n">AICSImage</span><span class="p">(</span><span class="n">membrane_seg_image</span><span class="p">)</span>
+
+    <span class="c1"># Get default current and desired pixel sizes</span>
+    <span class="k">if</span> <span class="n">current_pixel_sizes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">current_pixel_sizes</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">get_physical_pixel_size</span><span class="p">()</span>
+
+    <span class="c1"># Default desired to be the same pixel size</span>
+    <span class="k">if</span> <span class="n">desired_pixel_sizes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">desired_pixel_sizes</span> <span class="o">=</span> <span class="n">current_pixel_sizes</span>
+
+    <span class="c1"># Select the channels</span>
+    <span class="n">channel_indices</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">dna_channel_index</span><span class="p">,</span>
+        <span class="n">membrane_channel_index</span><span class="p">,</span>
+        <span class="n">structure_channel_index</span><span class="p">,</span>
+        <span class="n">brightfield_channel_index</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">selected_channels</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">raw</span><span class="o">.</span><span class="n">get_image_dask_data</span><span class="p">(</span><span class="s2">&quot;YXZ&quot;</span><span class="p">,</span> <span class="n">S</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">index</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">channel_indices</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Combine selections and get numpy array</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">selected_channels</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+
+    <span class="c1"># Convert pixel sizes to numpy arrays</span>
+    <span class="n">current_pixel_sizes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">current_pixel_sizes</span><span class="p">)</span>
+    <span class="n">desired_pixel_sizes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">desired_pixel_sizes</span><span class="p">)</span>
+
+    <span class="c1"># Only resize raw image if desired pixel sizes is different from current</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">current_pixel_sizes</span><span class="p">,</span> <span class="n">desired_pixel_sizes</span><span class="p">):</span>
+        <span class="n">scale_raw</span> <span class="o">=</span> <span class="n">current_pixel_sizes</span> <span class="o">/</span> <span class="n">desired_pixel_sizes</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">proc</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">scale_raw</span><span class="p">,</span> <span class="s2">&quot;bilinear&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">])</span>
+
+    <span class="c1"># Prep segmentations</span>
+    <span class="n">nuc_seg</span> <span class="o">=</span> <span class="n">nuc_seg</span><span class="o">.</span><span class="n">get_image_data</span><span class="p">(</span><span class="s2">&quot;YXZ&quot;</span><span class="p">,</span> <span class="n">S</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">memb_seg</span> <span class="o">=</span> <span class="n">memb_seg</span><span class="o">.</span><span class="n">get_image_data</span><span class="p">(</span><span class="s2">&quot;YXZ&quot;</span><span class="p">,</span> <span class="n">S</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># We do not assume that the segmentations are the same size as the raw</span>
+    <span class="c1"># Resize the segmentations to match the raw</span>
+    <span class="c1"># We drop the channel dimension from the raw size retrieval</span>
+    <span class="n">raw_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">nuc_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nuc_seg</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">memb_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">memb_seg</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">scale_nuc</span> <span class="o">=</span> <span class="n">raw_size</span> <span class="o">/</span> <span class="n">nuc_size</span>
+    <span class="n">scale_memb</span> <span class="o">=</span> <span class="n">raw_size</span> <span class="o">/</span> <span class="n">memb_size</span>
+
+    <span class="c1"># Actual resize</span>
+    <span class="n">nuc_seg</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">nuc_seg</span><span class="p">,</span> <span class="n">scale_nuc</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+    <span class="n">memb_seg</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">memb_seg</span><span class="p">,</span> <span class="n">scale_memb</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Normalize images</span>
+    <span class="n">normalized_images</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">channel_indices</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="n">brightfield_channel_index</span><span class="p">:</span>
+            <span class="n">norm_method</span> <span class="o">=</span> <span class="s2">&quot;trans&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">norm_method</span> <span class="o">=</span> <span class="s2">&quot;img_bg_sub&quot;</span>
+
+        <span class="c1"># Normalize and append</span>
+        <span class="n">normalized_images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">proc</span><span class="o">.</span><span class="n">normalize_img</span><span class="p">(</span><span class="n">raw</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="n">norm_method</span><span class="p">))</span>
+
+    <span class="c1"># Stack all together</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">nuc_seg</span><span class="p">,</span> <span class="n">memb_seg</span><span class="p">,</span> <span class="o">*</span><span class="n">normalized_images</span><span class="p">])</span>
+    <span class="n">channel_names</span> <span class="o">=</span> <span class="n">Channels</span><span class="o">.</span><span class="n">DefaultOrderList</span>
+
+    <span class="k">return</span> <span class="n">img</span><span class="p">,</span> <span class="n">channel_names</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">desired_pixel_sizes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="select_and_adjust_segmentation_ceiling"><a class="viewcode-back" href="../../../actk.utils.html#actk.utils.image_utils.select_and_adjust_segmentation_ceiling">[docs]</a><span class="k">def</span> <span class="nf">select_and_adjust_segmentation_ceiling</span><span class="p">(</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">cell_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cell_ceiling_adjustment</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Select and adjust the cell shape &quot;ceiling&quot; for a specific cell in the provided</span>
+<span class="sd">    image.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    image: np.ndarray</span>
+<span class="sd">        The 4D, CYXZ, image numpy ndarray output from `get_normed_image_array`.</span>
+
+<span class="sd">    cell_index: int</span>
+<span class="sd">        The integer index for the target cell.</span>
+
+<span class="sd">    cell_ceiling_adjustment: int</span>
+<span class="sd">        The adjust to use for raising the cell shape ceiling. If &lt;= 0, this will be</span>
+<span class="sd">        ignored and cell data will be selected but not adjusted.</span>
+<span class="sd">        Default: 7</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    adjusted: np.ndarray</span>
+<span class="sd">        The image with the membrane segmentation adjusted for ceiling shape correction.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The original version of this function can be found at:</span>
+<span class="sd">    https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#83</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Select only the data in the first two channels (the segmentation channels)</span>
+    <span class="c1"># where the data matches the provided cell index</span>
+    <span class="n">image</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">cell_index</span>
+
+    <span class="c1"># Because they are conservatively segmented,</span>
+    <span class="c1"># we raise the &quot;ceiling&quot; of the cell shape</span>
+
+    <span class="c1"># This is the so-called &quot;roof-augmentation&quot; that Greg (@gregjohnso) invented to</span>
+    <span class="c1"># handle the bad &quot;roof&quot; in old membrane segmentations.</span>
+    <span class="c1">#</span>
+    <span class="c1"># Specially, because the photobleaching, the signal near the top is very weak.</span>
+    <span class="c1"># Then, the membrane segmentation stops earlier (in terms of Z position) than the</span>
+    <span class="c1"># truth. For some structures living near the top of the cell, like mitochodira, the</span>
+    <span class="c1"># structure segmentation may be out of the membrane segmentation, as the membrane</span>
+    <span class="c1"># segmentation is &quot;shorter&quot; than it should be, then the structure segmentation</span>
+    <span class="c1"># will be mostly choped off and make the integrated cell model learn nothing.</span>
+    <span class="c1">#</span>
+    <span class="c1"># So, &quot;roof-augmentation&quot; is the method to fix the &quot;shorter&quot; membrane segmentation</span>
+    <span class="c1"># issues.</span>
+
+    <span class="c1"># Adjust image ceiling if adjustment is greater than zero</span>
+    <span class="k">if</span> <span class="n">cell_ceiling_adjustment</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Get the center of mass of the nucleus</span>
+        <span class="n">nuc_com</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">get_center_of_mass</span><span class="p">(</span><span class="n">image</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Get the top of the membrane</span>
+        <span class="n">memb_top</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">image</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Get the halfway point between the two</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">nuc_com</span> <span class="o">+</span> <span class="n">memb_top</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="c1"># Get the shape of the cell from the membrane segmentation</span>
+        <span class="n">cell_shape</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">start</span><span class="p">:]</span>
+
+        <span class="c1"># Adjust cell shape &quot;ceiling&quot; using the adjustment integer provided</span>
+        <span class="n">start_ind</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">cell_ceiling_adjustment</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">imf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cell_ceiling_adjustment</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">imf</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">start_ind</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">cell_shape</span> <span class="o">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">cell_shape</span><span class="p">,</span> <span class="n">imf</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-8</span>
+
+        <span class="c1"># Set the image data with the new cell shape data</span>
+        <span class="n">image</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">start</span><span class="p">:]</span> <span class="o">=</span> <span class="n">cell_shape</span>
+
+    <span class="k">return</span> <span class="n">image</span></div>
+
+
+<div class="viewcode-block" id="crop_raw_channels_with_segmentation"><a class="viewcode-back" href="../../../actk.utils.html#actk.utils.image_utils.crop_raw_channels_with_segmentation">[docs]</a><span class="k">def</span> <span class="nf">crop_raw_channels_with_segmentation</span><span class="p">(</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">channels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Crop imaging data in raw channels using a provided selected full field of with a</span>
+<span class="sd">    target cell in the segmentation channels.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    image: np.ndarray</span>
+<span class="sd">        The 4D, CYXZ, image numpy ndarray output from</span>
+<span class="sd">        `select_and_adjust_segmentation_ceiling`.</span>
+
+<span class="sd">    channels: List[str]</span>
+<span class="sd">        The channel names for the provided image.</span>
+<span class="sd">        The channels output from `get_normed_image_array`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    cropped: np.ndarray</span>
+<span class="sd">        A 4D numpy ndarray with CYXZ dimensions in the same order as provided.</span>
+<span class="sd">        The raw DNA channel has been cropped using the nucleus segmentation.</span>
+<span class="sd">        All other raw channels have been cropped using the membrane segmentation.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The original version of this function can be found at:</span>
+<span class="sd">    https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#114</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Select segmentation indicies</span>
+    <span class="n">nuc_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span> <span class="o">==</span> <span class="n">Channels</span><span class="o">.</span><span class="n">NucleusSegmentation</span>
+    <span class="n">memb_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span> <span class="o">==</span> <span class="n">Channels</span><span class="o">.</span><span class="n">MembraneSegmentation</span>
+
+    <span class="c1"># Select DNA and all other indicies</span>
+    <span class="n">dna_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span> <span class="o">==</span> <span class="n">Channels</span><span class="o">.</span><span class="n">DNA</span>
+    <span class="n">other_channel_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">))</span>
+    <span class="n">other_channel_inds</span><span class="p">[</span><span class="n">nuc_ind</span> <span class="o">|</span> <span class="n">memb_ind</span> <span class="o">|</span> <span class="n">dna_ind</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Crop DNA channel with the nucleus segmentation</span>
+    <span class="n">image</span><span class="p">[</span><span class="n">dna_ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">dna_ind</span><span class="p">]</span> <span class="o">*</span> <span class="n">image</span><span class="p">[</span><span class="n">nuc_ind</span><span class="p">]</span>
+
+    <span class="c1"># All other channels are cropped using membrane segmentation</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">other_channel_inds</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">image</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">image</span><span class="p">[</span><span class="n">memb_ind</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">image</span></div>
+
+
+<div class="viewcode-block" id="prepare_image_for_feature_extraction"><a class="viewcode-back" href="../../../actk.utils.html#actk.utils.image_utils.prepare_image_for_feature_extraction">[docs]</a><span class="k">def</span> <span class="nf">prepare_image_for_feature_extraction</span><span class="p">(</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prep an image and return any parameters required for feature extraction.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    image: np.ndarray</span>
+<span class="sd">        The 4D, CYXZ, image numpy ndarray output from</span>
+<span class="sd">        `crop_raw_channels_with_segmentation`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prepped_image: np.ndarray</span>
+<span class="sd">        The prepared image after cell rigid registration and binarizing the</span>
+<span class="sd">        segmentations.</span>
+<span class="sd">    center_of_mass: np.ndarray</span>
+<span class="sd">        The index of the center of mass of the membrane segmentation for the provided</span>
+<span class="sd">        image.</span>
+<span class="sd">    angle: List[List[float]]</span>
+<span class="sd">        The major angle of the membrane segmentation for the provided image.</span>
+<span class="sd">    flipdim: np.ndarry</span>
+<span class="sd">        Boolean array informing if the dimensions of the image should be flipped.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The original version of this function can be found at:</span>
+<span class="sd">    https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/alignment_tools.py#5</span>
+
+<span class="sd">    The docstring for the original version of this function was incorrect.</span>
+<span class="sd">    It stated that it took in a CXYZ image but it took in a CYXZ.</span>
+<span class="sd">    See `get_features_from_image` for reasoning.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get center of mass for the membrane</span>
+    <span class="n">memb_com</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">get_center_of_mass</span><span class="p">(</span><span class="n">proc</span><span class="o">.</span><span class="n">get_channel</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Perform a rigid registration on the image</span>
+    <span class="n">prepped</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">flipdim</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">cell_rigid_registration</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+    <span class="c1"># Make sure the nuc and cell channels are binary</span>
+    <span class="n">prepped</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">prepped</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
+
+    <span class="k">return</span> <span class="n">prepped</span><span class="p">,</span> <span class="n">memb_com</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">flipdim</span></div>
+
+
+<div class="viewcode-block" id="get_features_from_image"><a class="viewcode-back" href="../../../actk.utils.html#actk.utils.image_utils.get_features_from_image">[docs]</a><span class="k">def</span> <span class="nf">get_features_from_image</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate all segmentation, DNA, membrane, and structure features from the provided</span>
+<span class="sd">    image.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    image: np.ndarray</span>
+<span class="sd">        The 4D, CYXZ, image numpy ndarray output from</span>
+<span class="sd">        `crop_raw_channels_with_segmentation`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    features: Dict</span>
+<span class="sd">        A single dictionary filled with features.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The original version of this function can be found at:</span>
+<span class="sd">    https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/features.py#8</span>
+
+<span class="sd">    The docstring for the original version of this function was incorrect.</span>
+<span class="sd">    It stated that it took in a CXYZ image but it took in a CYXZ. This can be seen from</span>
+<span class="sd">    line #17 where a transpose to CZYX is done with `img.transpose(0, 3, 1, 2)`.</span>
+<span class="sd">    A transpose of (0, 3, 1, 2) on a CXYZ image would result in a CZXY not CZYX.</span>
+<span class="sd">    Additionally, simply following the original processing chain shows that the original</span>
+<span class="sd">    function is simply handed the output from the original version of the function</span>
+<span class="sd">    `crop_raw_channels_with_segmentation` (crop_cell_nuc) which results in a `CYXZ`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get prepared image and feature parameters</span>
+    <span class="n">prepped</span><span class="p">,</span> <span class="n">memb_com</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">flipdim</span> <span class="o">=</span> <span class="n">prepare_image_for_feature_extraction</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+    <span class="c1"># Transpose to CZYX</span>
+    <span class="n">prepped</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transpose_to_dims</span><span class="p">(</span><span class="n">prepped</span><span class="p">,</span> <span class="s2">&quot;CYXZ&quot;</span><span class="p">,</span> <span class="s2">&quot;CZYX&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Construct dictionary of basic features</span>
+    <span class="n">regularization_params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;imsize_orig&quot;</span><span class="p">:</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+        <span class="s2">&quot;com&quot;</span><span class="p">:</span> <span class="n">memb_com</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+        <span class="s2">&quot;angle&quot;</span><span class="p">:</span> <span class="n">angle</span><span class="p">,</span>
+        <span class="s2">&quot;flipdim&quot;</span><span class="p">:</span> <span class="n">flipdim</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+        <span class="s2">&quot;imsize_registered&quot;</span><span class="p">:</span> <span class="n">prepped</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Unpack channels</span>
+    <span class="n">nuc_seg</span> <span class="o">=</span> <span class="n">prepped</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">memb_seg</span> <span class="o">=</span> <span class="n">prepped</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dna_image</span> <span class="o">=</span> <span class="n">prepped</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">memb_image</span> <span class="o">=</span> <span class="n">prepped</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">struct_image</span> <span class="o">=</span> <span class="n">prepped</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+
+    <span class="c1"># Adjust the DNA and membrane images</span>
+    <span class="n">adjusted_dna_image</span> <span class="o">=</span> <span class="p">((</span><span class="n">nuc_seg</span> <span class="o">*</span> <span class="n">dna_image</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;uint16&quot;</span><span class="p">)</span>
+    <span class="n">adjusted_memb_image</span> <span class="o">=</span> <span class="p">((</span><span class="n">memb_seg</span> <span class="o">*</span> <span class="n">memb_image</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;uint16&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Simple deblur for better structure localization detection</span>
+    <span class="n">imf1</span> <span class="o">=</span> <span class="n">ndf</span><span class="p">(</span><span class="n">struct_image</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">)</span>
+    <span class="n">imf2</span> <span class="o">=</span> <span class="n">ndf</span><span class="p">(</span><span class="n">struct_image</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Adjust structure image</span>
+    <span class="n">adjusted_struct_image</span> <span class="o">=</span> <span class="n">imf2</span> <span class="o">-</span> <span class="n">imf1</span>
+    <span class="n">adjusted_struct_image</span><span class="p">[</span><span class="n">adjusted_struct_image</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Get features for the image using the adjusted images</span>
+    <span class="n">memb_nuc_struct_feats</span> <span class="o">=</span> <span class="n">cell_nuc</span><span class="o">.</span><span class="n">get_features</span><span class="p">(</span>
+        <span class="n">nuc_seg</span><span class="p">,</span> <span class="n">memb_seg</span><span class="p">,</span> <span class="n">adjusted_struct_image</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s2">&quot;records&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Get DNA and membrane image features</span>
+    <span class="n">dna_feats</span> <span class="o">=</span> <span class="n">dna</span><span class="o">.</span><span class="n">get_features</span><span class="p">(</span><span class="n">adjusted_dna_image</span><span class="p">,</span> <span class="n">seg</span><span class="o">=</span><span class="n">nuc_seg</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s2">&quot;records&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">memb_feats</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">get_features</span><span class="p">(</span><span class="n">adjusted_memb_image</span><span class="p">,</span> <span class="n">seg</span><span class="o">=</span><span class="n">memb_seg</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span>
+        <span class="s2">&quot;records&quot;</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Combine all features</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="o">**</span><span class="n">regularization_params</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">memb_nuc_struct_feats</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">dna_feats</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">memb_feats</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">features</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
