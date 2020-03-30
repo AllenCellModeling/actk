@@ -9,7 +9,7 @@ from pathlib import Path
 
 from quilt3 import Package
 
-from ack import get_module_version
+from actk import get_module_version
 
 ###############################################################################
 
@@ -67,7 +67,7 @@ def upload_test_data(args: Args):
     try:
         # Get test data dir
         data_dir = (
-            Path(__file__).parent.parent / "ack" / "tests" / "data"
+            Path(__file__).parent.parent / "actk" / "tests" / "data"
         ).resolve(strict=True)
 
         # Report with directory will be used for upload
@@ -83,7 +83,7 @@ def upload_test_data(args: Args):
         # Check for dry run
         if args.dry_run:
             # Attempt to build the package
-            built = package.build("ack/test_data")
+            built = package.build("actk/test_data")
 
             # Get resolved save path
             manifest_save_path = Path("upload_manifest.jsonl").resolve()
@@ -108,9 +108,11 @@ def upload_test_data(args: Args):
             # Check confirmation
             if confirmation == "y":
                 pushed = package.push(
-                    "ack/test_data",
+                    "actk/test_data",
                     "s3://aics-modeling-packages-test-resources",
-                    message=f"Test resources for `ack` version: {get_module_version()}."
+                    message=(
+                        f"Test resources for `actk` version: {get_module_version()}."
+                    )
                 )
 
                 log.info(f"Completed package push. Result hash: {pushed.top_hash}")

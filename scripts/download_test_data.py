@@ -63,13 +63,13 @@ def download_test_data(args: Args):
     try:
         # Get test data dir
         data_dir = (
-            Path(__file__).parent.parent / "ack" / "tests" / "data"
+            Path(__file__).parent.parent / "actk" / "tests" / "data"
         ).resolve()
         data_dir.mkdir(exist_ok=True)
 
         # Get quilt package
         package = Package.browse(
-            "ack/test_data",
+            "actk/test_data",
             "s3://aics-modeling-packages-test-resources",
             top_hash=args.top_hash
         )

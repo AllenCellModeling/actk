@@ -4,20 +4,20 @@ Contributions are welcome, and they are greatly appreciated! Every little bit
 helps, and credit will always be given.
 
 ## Get Started!
-Ready to contribute? Here's how to set up `ack` for local development.
+Ready to contribute? Here's how to set up `actk` for local development.
 
-1. Fork the `ack` repo on GitHub.
+1. Fork the `actk` repo on GitHub.
 
 1. Clone your fork locally:
 
     ```bash
-    git clone git@github.com:{your_name_here}/ack.git
+    git clone git@github.com:{your_name_here}/actk.git
     ```
 
 1. Install the project in editable mode. (It is also recommended to work in a virtualenv or anaconda environment):
 
     ```bash
-    cd ack/
+    cd actk/
     pip install numpy
     pip install -e .[dev]
     ```

@@ -5,8 +5,8 @@ import dask.dataframe as dd
 import pandas as pd
 import pytest
 
-from ack import exceptions
-from ack.utils import dataset_utils
+from actk import exceptions
+from actk.utils import dataset_utils
 
 #######################################################################################
 

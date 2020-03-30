@@ -8,7 +8,7 @@ import pytest
 from aicsimageio import AICSImage
 from numpy import testing as nptest
 
-from ack.utils import image_utils
+from actk.utils import image_utils
 
 #######################################################################################
 
