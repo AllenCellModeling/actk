@@ -97,13 +97,18 @@
 <li class="toctree-l3 current"><a class="reference internal" href="ack.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#">ack.bin package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ack.steps.html">ack.steps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ack.utils.html">ack.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#module-ack.constants">ack.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#module-ack.exceptions">ack.exceptions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ack.html#module-ack">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
@@ -228,24 +233,24 @@ This is only used for data logging operations, not computation purposes.</p>
 
 <dl class="method">
 <dt id="ack.bin.all.All.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">clean: bool = False</em>, <em class="sig-param">debug: bool = False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ack/bin/all.html#All.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.bin.all.All.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: str</em>, <em class="sig-param">distributed: bool = False</em>, <em class="sig-param">clean: bool = False</em>, <em class="sig-param">debug: bool = False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ack/bin/all.html#All.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.bin.all.All.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run a flow with your steps.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>str</em>) – The dataset to use for the pipeline.</p></li>
+<li><p><strong>distributed</strong> (<em>bool</em>) – A boolean option to determine if the jobs should be distributed to a SLURM
+cluster when possible.
+Default: False (Do not distribute)</p></li>
 <li><p><strong>clean</strong> (<em>bool</em>) – Should the local staging directory be cleaned prior to this run.
 Default: False (Do not clean)</p></li>
 <li><p><strong>debug</strong> (<em>bool</em>) – A debug flag for the developer to use to manipulate how much data runs,
-how it is processed, etc.
+how it is processed, etc. Additionally, if debug is True, any mapped
+operation will run on threads instead of processes.
 Default: False (Do not debug)</p></li>
 </ul>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>Documentation on prefect:
-<a class="reference external" href="https://docs.prefect.io/core/">https://docs.prefect.io/core/</a></p>
-<p>Basic prefect example:
-<a class="reference external" href="https://docs.prefect.io/core/">https://docs.prefect.io/core/</a></p>
 </dd></dl>
 
 </dd></dl>

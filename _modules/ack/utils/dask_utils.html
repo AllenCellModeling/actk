@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ack.bin.cli &mdash; ack 0.1.0 documentation</title>
+  <title>ack.utils.dask_utils &mdash; ack 0.1.0 documentation</title>
   
 
   
@@ -161,7 +161,7 @@
         
           <li><a href="../../ack.html">ack</a> &raquo;</li>
         
-      <li>ack.bin.cli</li>
+      <li>ack.utils.dask_utils</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -176,49 +176,51 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for ack.bin.cli</h1><div class="highlight"><pre>
+  <h1>Source code for ack.utils.dask_utils</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This script will convert all the steps into CLI callables.</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">Future</span> <span class="k">as</span> <span class="n">ThreadFuture</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span> <span class="k">as</span> <span class="n">ThreadClient</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="sd">You should not edit this script.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">Client</span> <span class="k">as</span> <span class="n">DaskClient</span>
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">Future</span> <span class="k">as</span> <span class="n">DaskFuture</span>
 
-<span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">mock</span>
-
-<span class="kn">import</span> <span class="nn">fire</span>
-
-<span class="kn">from</span> <span class="nn">ack</span> <span class="kn">import</span> <span class="n">steps</span>
-<span class="kn">from</span> <span class="nn">ack.bin.all</span> <span class="kn">import</span> <span class="n">All</span>
-
-<span class="c1">###############################################################################</span>
-
-<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
-    <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;[</span><span class="si">%(levelname)4s</span><span class="s2">:</span><span class="si">%(lineno)4s</span><span class="s2"> </span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
-<span class="p">)</span>
-
-<span class="c1">###############################################################################</span>
+<span class="c1">#######################################################################################</span>
 
 
-<div class="viewcode-block" id="cli"><a class="viewcode-back" href="../../../ack.bin.html#ack.bin.cli.cli">[docs]</a><span class="k">def</span> <span class="nf">cli</span><span class="p">():</span>
-    <span class="n">step_map</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span> <span class="n">step</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
-    <span class="p">}</span>
+<div class="viewcode-block" id="DistributedHandler"><a class="viewcode-back" href="../../../ack.utils.html#ack.utils.dask_utils.DistributedHandler">[docs]</a><span class="k">class</span> <span class="nc">DistributedHandler</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Create client based off address existance</span>
+        <span class="k">if</span> <span class="n">address</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">ThreadClient</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">DaskClient</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
 
-    <span class="c1"># Interrupt fire print return</span>
-    <span class="k">with</span> <span class="n">mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;fire.core._PrintResult&quot;</span><span class="p">):</span>
-        <span class="n">fire</span><span class="o">.</span><span class="n">Fire</span><span class="p">({</span><span class="o">**</span><span class="n">step_map</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span> <span class="n">All</span><span class="p">})</span></div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">client</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span>
 
+<div class="viewcode-block" id="DistributedHandler.gather"><a class="viewcode-back" href="../../../ack.utils.html#ack.utils.dask_utils.DistributedHandler.gather">[docs]</a>    <span class="k">def</span> <span class="nf">gather</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">futures</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">ThreadFuture</span><span class="p">,</span> <span class="n">DaskFuture</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="n">ThreadClient</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span></div>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">cli</span><span class="p">()</span>
+<div class="viewcode-block" id="DistributedHandler.close"><a class="viewcode-back" href="../../../ack.utils.html#ack.utils.dask_utils.DistributedHandler.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="n">ThreadClient</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 </pre></div>
 
            </div>

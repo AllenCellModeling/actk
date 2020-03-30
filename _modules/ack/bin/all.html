@@ -95,13 +95,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../ack.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../ack.bin.html">ack.bin package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../ack.steps.html">ack.steps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../ack.utils.html">ack.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../../../ack.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../ack.html#module-ack.constants">ack.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../ack.html#module-ack.exceptions">ack.exceptions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../ack.html#module-ack">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dataset_fields.html">Dataset fields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
@@ -183,7 +188,10 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
+<span class="kn">from</span> <span class="nn">dask_jobqueue</span> <span class="kn">import</span> <span class="n">SLURMCluster</span>
 <span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">LocalCluster</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span>
 <span class="kn">from</span> <span class="nn">prefect.engine.executors</span> <span class="kn">import</span> <span class="n">DaskExecutor</span><span class="p">,</span> <span class="n">LocalExecutor</span>
@@ -203,64 +211,120 @@
 <span class="sd">        Set all of your available steps here.</span>
 <span class="sd">        This is only used for data logging operations, not computation purposes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">step_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">steps</span><span class="o">.</span><span class="n">Raw</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">step_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">steps</span><span class="o">.</span><span class="n">StandardizeFOVArray</span><span class="p">(),</span>
+            <span class="n">steps</span><span class="o">.</span><span class="n">SingleCellFeatures</span><span class="p">(),</span>
+        <span class="p">]</span>
 
 <div class="viewcode-block" id="All.run"><a class="viewcode-back" href="../../../ack.bin.html#ack.bin.all.All.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">clean</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">distributed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">clean</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Run a flow with your steps.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        dataset: str</span>
+<span class="sd">            The dataset to use for the pipeline.</span>
+
+<span class="sd">        distributed: bool</span>
+<span class="sd">            A boolean option to determine if the jobs should be distributed to a SLURM</span>
+<span class="sd">            cluster when possible.</span>
+<span class="sd">            Default: False (Do not distribute)</span>
+
 <span class="sd">        clean: bool</span>
 <span class="sd">            Should the local staging directory be cleaned prior to this run.</span>
 <span class="sd">            Default: False (Do not clean)</span>
+
 <span class="sd">        debug: bool</span>
 <span class="sd">            A debug flag for the developer to use to manipulate how much data runs,</span>
-<span class="sd">            how it is processed, etc.</span>
+<span class="sd">            how it is processed, etc. Additionally, if debug is True, any mapped</span>
+<span class="sd">            operation will run on threads instead of processes.</span>
 <span class="sd">            Default: False (Do not debug)</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Documentation on prefect:</span>
-<span class="sd">        https://docs.prefect.io/core/</span>
-
-<span class="sd">        Basic prefect example:</span>
-<span class="sd">        https://docs.prefect.io/core/</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initalize steps</span>
-        <span class="n">raw</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">Raw</span><span class="p">()</span>
+        <span class="n">standardize_fov_array</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">StandardizeFOVArray</span><span class="p">()</span>
+        <span class="n">single_cell_features</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">SingleCellFeatures</span><span class="p">()</span>
 
         <span class="c1"># Choose executor</span>
         <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
             <span class="n">exe</span> <span class="o">=</span> <span class="n">LocalExecutor</span><span class="p">()</span>
+            <span class="n">distributed_executor_address</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Debug flagged. Will use threads instead of Dask.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Set up connection to computation cluster</span>
-            <span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">distributed</span><span class="p">:</span>
+                <span class="c1"># Create or get log dir</span>
+                <span class="c1"># Do not include ms</span>
+                <span class="n">log_dir_name</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">log_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;~/.dask_logs/ack/</span><span class="si">{</span><span class="n">log_dir_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+                <span class="c1"># Log dir settings</span>
+                <span class="n">log_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-            <span class="c1"># Inform of Dask UI</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cluster dashboard available at: </span><span class="si">{</span><span class="n">cluster</span><span class="o">.</span><span class="n">dashboard_link</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="c1"># Create cluster</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating SLURMCluster&quot;</span><span class="p">)</span>
+                <span class="n">cluster</span> <span class="o">=</span> <span class="n">SLURMCluster</span><span class="p">(</span>
+                    <span class="n">cores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">memory</span><span class="o">=</span><span class="s2">&quot;4GB&quot;</span><span class="p">,</span>
+                    <span class="n">queue</span><span class="o">=</span><span class="s2">&quot;aics_cpu_general&quot;</span><span class="p">,</span>
+                    <span class="n">walltime</span><span class="o">=</span><span class="s2">&quot;10:00:00&quot;</span><span class="p">,</span>
+                    <span class="n">local_directory</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">log_dir</span><span class="p">),</span>
+                    <span class="n">log_directory</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">log_dir</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Created SLURMCluster&quot;</span><span class="p">)</span>
 
-            <span class="c1"># Create dask executor</span>
-            <span class="n">exe</span> <span class="o">=</span> <span class="n">DaskExecutor</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">scheduler_address</span><span class="p">)</span>
+                <span class="c1"># Set adaptive worker settings</span>
+                <span class="n">cluster</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">minimum_jobs</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">maximum_jobs</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+                <span class="c1"># Use the port from the created connector to set executor address</span>
+                <span class="n">distributed_executor_address</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">scheduler_address</span>
+
+                <span class="c1"># Log dashboard URI</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dask dashboard available at: </span><span class="si">{</span><span class="n">cluster</span><span class="o">.</span><span class="n">dashboard_link</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Create local cluster</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating LocalCluster&quot;</span><span class="p">)</span>
+                <span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">()</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Created LocalCluster&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Set distributed_executor_address</span>
+                <span class="n">distributed_executor_address</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">scheduler_address</span>
+
+                <span class="c1"># Log dashboard URI</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dask dashboard available at: </span><span class="si">{</span><span class="n">cluster</span><span class="o">.</span><span class="n">dashboard_link</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Use dask cluster</span>
+            <span class="n">exe</span> <span class="o">=</span> <span class="n">DaskExecutor</span><span class="p">(</span><span class="n">distributed_executor_address</span><span class="p">)</span>
 
         <span class="c1"># Configure your flow</span>
         <span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;ack&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
-            <span class="c1"># If you want to clean the local staging directories pass clean</span>
-            <span class="c1"># If you want to utilize some debugging functionality pass debug</span>
-            <span class="c1"># If you don&#39;t utilize any of these, just pass the parameters you need.</span>
-            <span class="n">raw</span><span class="p">(</span>
+            <span class="n">standardized_fov_paths_dataset</span> <span class="o">=</span> <span class="n">standardize_fov_array</span><span class="p">(</span>
+                <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+                <span class="n">distributed_executor_address</span><span class="o">=</span><span class="n">distributed_executor_address</span><span class="p">,</span>
                 <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span>
                 <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>  <span class="c1"># Allows us to pass `--n {some integer}` or other params</span>
+                <span class="c1"># Allows us to pass `--desired_pixel_sizes [{float},{float},{float}]`</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">_</span> <span class="o">=</span> <span class="n">single_cell_features</span><span class="p">(</span>
+                <span class="n">dataset</span><span class="o">=</span><span class="n">standardized_fov_paths_dataset</span><span class="p">,</span>
+                <span class="n">distributed_executor_address</span><span class="o">=</span><span class="n">distributed_executor_address</span><span class="p">,</span>
+                <span class="n">clean</span><span class="o">=</span><span class="n">clean</span><span class="p">,</span>
+                <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span>
+                <span class="c1"># Allows us to pass `--cell_ceiling_adjustment {int}`</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="c1"># Run flow and get ending state</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">flow</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">executor</span><span class="o">=</span><span class="n">exe</span><span class="p">)</span>
 
         <span class="c1"># Get and display any outputs you want to see on your local terminal</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">get_result</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">flow</span><span class="p">))</span></div>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">single_cell_features</span><span class="o">.</span><span class="n">get_result</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">flow</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="All.pull"><a class="viewcode-back" href="../../../ack.bin.html#ack.bin.all.All.pull">[docs]</a>    <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

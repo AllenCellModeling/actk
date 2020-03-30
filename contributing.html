@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="ack.steps.raw package" href="ack.steps.raw.html" /> 
+    <link rel="prev" title="Dataset Fields" href="dataset_fields.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -96,13 +96,18 @@
 <li class="toctree-l3"><a class="reference internal" href="ack.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="ack.bin.html">ack.bin package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ack.steps.html">ack.steps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ack.utils.html">ack.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#module-ack.constants">ack.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#module-ack.exceptions">ack.exceptions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ack.html#module-ack">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#deploying">Deploying</a></li>
@@ -170,7 +175,7 @@
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
       
-        <a href="ack.steps.raw.html" class="btn btn-neutral float-left" title="ack.steps.raw package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="dataset_fields.html" class="btn btn-neutral float-left" title="Dataset Fields" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -195,7 +200,15 @@ helps, and credit will always be given.</p>
 </li>
 <li><p>Install the project in editable mode. (It is also recommended to work in a virtualenv or anaconda environment):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ack/
+pip install numpy
 pip install -e .<span class="o">[</span>dev<span class="o">]</span>
+</pre></div>
+</div>
+</li>
+<li><p>Download the test resources:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>   python scripts/download_test_resources.py
+
+If you need to upload new resources please <span class="nb">let</span> a core maintainer know.
 </pre></div>
 </div>
 </li>

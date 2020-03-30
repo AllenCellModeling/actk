@@ -6,7 +6,8 @@ Subpackages
 
 .. toctree::
 
-   ack.steps.raw
+   ack.steps.single_cell_features
+   ack.steps.standardize_fov_array
 
 Module contents
 ---------------

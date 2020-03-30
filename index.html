@@ -96,13 +96,18 @@
 <li class="toctree-l3"><a class="reference internal" href="ack.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="ack.bin.html">ack.bin package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ack.steps.html">ack.steps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ack.utils.html">ack.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#module-ack.constants">ack.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#module-ack.exceptions">ack.exceptions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ack.html#module-ack">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
@@ -191,27 +196,88 @@
 <a class="reference external image-reference" href="https://codecov.io/gh/AllenCellModeling/ack"><img alt="Code Coverage" src="https://codecov.io/gh/AllenCellModeling/ack/branch/master/graph/badge.svg" /></a>
 <p>Automated Cell Kit</p>
 <hr class="docutils" />
-<p><em>Edit this README and make it relevant to your project</em></p>
+<p>A pipeline to process field-of-view (FOV) microscopy images and generate data and
+render-ready products for the cells in each field. Of note, the data produced by this
+pipeline is used for the <a class="reference external" href="https://cfe.allencell.org/">Cell Feature Explorer</a>.</p>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<p>All steps and functionality in this package can be run as single steps or all together
+by using the command line.</p>
+<p>In general, all commands for this package will follow the format: <code class="docutils literal notranslate"><span class="pre">ack</span> <span class="pre">{step}</span> <span class="pre">{command}</span></code></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">step</span></code> is the name of the step, such as “StandardizeFOVArray” or “SingleCellFeatures”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">command</span></code> is what you want that step to do, such as “run” or “push”</p></li>
+</ul>
+<p>Each step will check that the dataset provided contains the required fields prior to
+processing. For details and definitions on each field, see our
+<a class="reference external" href="https://AllenCellModeling.github.io/ack/dataset_fields.html">dataset fields documentation</a>.</p>
+<p>An example dataset can be seen <a class="reference external" href="https://open.quiltdata.com/b/aics-modeling-packages-test-resources/tree/ack/test_data/data/example_dataset.csv">here</a>.</p>
+<div class="section" id="pipeline">
+<h3>Pipeline<a class="headerlink" href="#pipeline" title="Permalink to this headline">¶</a></h3>
+<p>To run the entire pipeline from start to finish you can simply run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ack all run --dataset <span class="o">{</span>path to dataset<span class="o">}</span>
+</pre></div>
+</div>
+<p>Step specific parameters can additionally be passed by simply appending them.
+For example: the step <code class="docutils literal notranslate"><span class="pre">SingleCellFeatures</span></code> has a parameter for
+<code class="docutils literal notranslate"><span class="pre">cell_ceiling_adjustment</span></code> and this can be set on both the individual step run level and
+also for the entire pipeline with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ack all run --dataset <span class="o">{</span>path to dataset<span class="o">}</span> --cell_ceiling_adjustment <span class="o">{</span>integer<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="individual-steps">
+<h3>Individual Steps<a class="headerlink" href="#individual-steps" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ack</span> <span class="pre">standardizefovarray</span> <span class="pre">run</span> <span class="pre">--dataset</span> <span class="pre">{path</span> <span class="pre">to</span> <span class="pre">dataset}</span></code>, Generate standardized,
+ordered, and normalized FOV images as OME-Tiffs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ack</span> <span class="pre">singlecellfeatures</span> <span class="pre">run</span> <span class="pre">--dataset</span> <span class="pre">{path</span> <span class="pre">to</span> <span class="pre">dataset}</span></code>, Generate a features JSON
+file for each cell in the dataset.</p></li>
+</ul>
+</div>
+</div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">git+https://github.com/AllenCellModeling/ack.git</span></code></p>
+<p><strong>Install Requires:</strong> The python package, <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, must be installed prior to the
+installation of this package: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">numpy</span></code></p>
+<p><strong>Stable Release:</strong> <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ack</span></code><span class="raw-html-m2r"><br></span>
+<strong>Development Head:</strong> <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">git+https://github.com/AllenCellModeling/ack.git</span></code></p>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>For full package documentation please visit
+<a class="reference external" href="https://allencellmodeling.github.io/ack/index.html">allencellmodeling.github.io/ack</a>.</p>
 </div>
 <div class="section" id="development">
 <h2>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h2>
-<p>See <a class="reference external" href="CONTRIBUTING.md">CONTRIBUTING.md</a> for information related to developing the code.</p>
+<p>See
+<a class="reference external" href="https://github.com/AllenCellModeling/ack/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a>
+for information related to developing the code.</p>
+<p>For more details on how this pipeline is constructed please see
+<a class="reference external" href="https://github.com/AllenCellModeling/cookiecutter-stepworkflow">cookiecutter-stepworkflow</a>
+and <a class="reference external" href="https://github.com/AllenCellModeling/datastep">datastep</a>.</p>
+<p>To add new steps to this pipeline, run <code class="docutils literal notranslate"><span class="pre">make_new_step</span></code> and follow the instructions in
+<a class="reference external" href="https://github.com/AllenCellModeling/ack/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a></p>
 <div class="section" id="developer-installation">
 <h3>Developer Installation<a class="headerlink" href="#developer-installation" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.[dev]</span></code></p>
+<p>The following two commands will install the package with dev dependencies in editable
+mode and download all resources required for testing.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -e .<span class="o">[</span>dev<span class="o">]</span>
+python scripts/download_test_data.py
+</pre></div>
+</div>
 </div>
 <div class="section" id="aics-developer-instructions">
 <h3>AICS Developer Instructions<a class="headerlink" href="#aics-developer-instructions" title="Permalink to this headline">¶</a></h3>
-<p>If you want to run this pipeline with the Pipeline Integrated Cell dataset (<code class="docutils literal notranslate"><span class="pre">pipeline</span> <span class="pre">4.*</span></code>) run the following commands:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -e .<span class="o">[</span>aics<span class="o">]</span>
+<p>If you want to run this pipeline with the Pipeline Integrated Cell dataset
+(<code class="docutils literal notranslate"><span class="pre">pipeline</span> <span class="pre">4.*</span></code>) run the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -e .<span class="o">[</span>all<span class="o">]</span>
 python scripts/download_aics_dataset.py
 </pre></div>
 </div>
-<p>Options for this script are available and can be viewed with: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">scripts/download_aics_dataset.py</span> <span class="pre">--help</span></code></p>
-<p><a href="#id1"><span class="problematic" id="id2">**</span></a><em>Free software: Allen Institute Software License</em>**</p>
+<p>Options for this script are available and can be viewed with:
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">scripts/download_aics_dataset.py</span> <span class="pre">--help</span></code></p>
+<p><a href="#id2"><span class="problematic" id="id3">**</span></a><em>Free software: Allen Institute Software License</em>**</p>
 </div>
 </div>
 </div>

@@ -1,0 +1,419 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ack.steps.standardize_fov_array.standardize_fov_array &mdash; ack 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> ack
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ack.html">ack package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../ack.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ack.bin.html">ack.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ack.steps.html">ack.steps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ack.utils.html">ack.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../ack.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../ack.html#module-ack.constants">ack.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../ack.html#module-ack.exceptions">ack.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../ack.html#module-ack">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">ack</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../ack.html">ack</a> &raquo;</li>
+        
+      <li>ack.steps.standardize_fov_array.standardize_fov_array</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ack.steps.standardize_fov_array.standardize_fov_array</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">aicsimageio</span> <span class="kn">import</span> <span class="n">transforms</span>
+<span class="kn">from</span> <span class="nn">aicsimageio.writers</span> <span class="kn">import</span> <span class="n">OmeTiffWriter</span>
+<span class="kn">from</span> <span class="nn">datastep</span> <span class="kn">import</span> <span class="n">Step</span><span class="p">,</span> <span class="n">log_run_params</span>
+
+<span class="kn">from</span> <span class="nn">...constants</span> <span class="kn">import</span> <span class="n">DatasetFields</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">dataset_utils</span><span class="p">,</span> <span class="n">image_utils</span>
+<span class="kn">from</span> <span class="nn">...utils.dask_utils</span> <span class="kn">import</span> <span class="n">DistributedHandler</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">REQUIRED_DATASET_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">DatasetFields</span><span class="o">.</span><span class="n">FOVId</span><span class="p">,</span>
+    <span class="n">DatasetFields</span><span class="o">.</span><span class="n">SourceReadPath</span><span class="p">,</span>
+    <span class="n">DatasetFields</span><span class="o">.</span><span class="n">NucleusSegmentationReadPath</span><span class="p">,</span>
+    <span class="n">DatasetFields</span><span class="o">.</span><span class="n">MembraneSegmentationReadPath</span><span class="p">,</span>
+    <span class="n">DatasetFields</span><span class="o">.</span><span class="n">ChannelIndexDNA</span><span class="p">,</span>
+    <span class="n">DatasetFields</span><span class="o">.</span><span class="n">ChannelIndexMembrane</span><span class="p">,</span>
+    <span class="n">DatasetFields</span><span class="o">.</span><span class="n">ChannelIndexStructure</span><span class="p">,</span>
+    <span class="n">DatasetFields</span><span class="o">.</span><span class="n">ChannelIndexBrightfield</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="StandardizeFOVArrayResult"><a class="viewcode-back" href="../../../../ack.steps.standardize_fov_array.html#ack.steps.StandardizeFOVArrayResult">[docs]</a><span class="k">class</span> <span class="nc">StandardizeFOVArrayResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">fov_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span></div>
+
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="StandardizeFOVArray"><a class="viewcode-back" href="../../../../ack.steps.standardize_fov_array.html#ack.steps.StandardizeFOVArray">[docs]</a><span class="k">class</span> <span class="nc">StandardizeFOVArray</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath_columns</span><span class="o">=</span><span class="p">[</span><span class="n">DatasetFields</span><span class="o">.</span><span class="n">StandardizedFOVPath</span><span class="p">]):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">filepath_columns</span><span class="o">=</span><span class="n">filepath_columns</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_generate_standardized_fov_array</span><span class="p">(</span>
+        <span class="n">row_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">row</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
+        <span class="n">desired_pixel_sizes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">save_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StandardizeFOVArrayResult</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beginning Standardized FOV Generation for FOVId: </span><span class="si">{</span><span class="n">row</span><span class="o">.</span><span class="n">FOVId</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get normalized image array</span>
+        <span class="n">normalized_img</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">pixel_sizes</span> <span class="o">=</span> <span class="n">image_utils</span><span class="o">.</span><span class="n">get_normed_image_array</span><span class="p">(</span>
+            <span class="n">raw_image</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">SourceReadPath</span><span class="p">,</span>
+            <span class="n">nucleus_seg_image</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">NucleusSegmentationReadPath</span><span class="p">,</span>
+            <span class="n">membrane_seg_image</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">MembraneSegmentationReadPath</span><span class="p">,</span>
+            <span class="n">dna_channel_index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">ChannelIndexDNA</span><span class="p">,</span>
+            <span class="n">membrane_channel_index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">ChannelIndexMembrane</span><span class="p">,</span>
+            <span class="n">structure_channel_index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">ChannelIndexStructure</span><span class="p">,</span>
+            <span class="n">brightfield_channel_index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">ChannelIndexBrightfield</span><span class="p">,</span>
+            <span class="n">desired_pixel_sizes</span><span class="o">=</span><span class="n">desired_pixel_sizes</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Reshape data for serialization</span>
+        <span class="n">reshaped</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transpose_to_dims</span><span class="p">(</span><span class="n">normalized_img</span><span class="p">,</span> <span class="s2">&quot;CYXZ&quot;</span><span class="p">,</span> <span class="s2">&quot;CZYX&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Save array as OME Tiff</span>
+        <span class="n">save_path</span> <span class="o">=</span> <span class="n">save_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="o">.</span><span class="n">FOVId</span><span class="si">}</span><span class="s2">.ome.tiff&quot;</span>
+        <span class="k">with</span> <span class="n">OmeTiffWriter</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">overwrite_file</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">reshaped</span><span class="p">,</span>
+                <span class="n">dimension_order</span><span class="o">=</span><span class="s2">&quot;CZYX&quot;</span><span class="p">,</span>
+                <span class="n">channel_names</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span>
+                <span class="n">pixels_physical_size</span><span class="o">=</span><span class="n">pixel_sizes</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beginning Standardized FOV Generation for FOVId: </span><span class="si">{</span><span class="n">row</span><span class="o">.</span><span class="n">FOVId</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">StandardizeFOVArrayResult</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">FOVId</span><span class="p">,</span> <span class="n">save_path</span><span class="p">)</span>
+
+<div class="viewcode-block" id="StandardizeFOVArray.run"><a class="viewcode-back" href="../../../../ack.steps.standardize_fov_array.html#ack.steps.StandardizeFOVArray.run">[docs]</a>    <span class="nd">@log_run_params</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dataset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
+        <span class="n">desired_pixel_sizes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.29</span><span class="p">,</span> <span class="mf">0.29</span><span class="p">,</span> <span class="mf">0.29</span><span class="p">),</span>
+        <span class="n">distributed_executor_address</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">clean</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a dataset of raw FOV images and their nucleus and membrane</span>
+<span class="sd">        segmentations, into a single, standard order and shape, and normalized image.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dataset: Union[str, Path, pd.DataFrame, dd.DataFrame]</span>
+<span class="sd">            The dataset to use for generating standard order, normalized, image arrays.</span>
+
+<span class="sd">            **Required dataset columns:** *[&quot;FOVId&quot;, &quot;SourceReadPath&quot;,</span>
+<span class="sd">            &quot;NucleusSegmentationReadPath&quot;, &quot;MembraneSegmentationReadPath&quot;,</span>
+<span class="sd">            &quot;ChannelIndexDNA&quot;, &quot;ChannelIndexMembrane&quot;, &quot;ChannelIndexStructure&quot;,</span>
+<span class="sd">            &quot;ChannelIndexBrightfield&quot;]*</span>
+
+<span class="sd">        desired_pixel_sizes: Tuple[float]</span>
+<span class="sd">            The desired pixel size for to resize each image to in XYZ order.</span>
+<span class="sd">            Default: (0.29, 0.29, 0.29)</span>
+
+<span class="sd">        distributed_executor_address: Optional[str]</span>
+<span class="sd">            An optional executor address to pass to some computation engine.</span>
+<span class="sd">            Default: None</span>
+
+<span class="sd">        clean: bool</span>
+<span class="sd">            Should the local staging directory be cleaned prior to this run.</span>
+<span class="sd">            Default: False (Do not clean)</span>
+
+<span class="sd">        debug: bool</span>
+<span class="sd">            A debug flag for the developer to use to manipulate how much data runs,</span>
+<span class="sd">            how it is processed, etc.</span>
+<span class="sd">            Default: False (Do not debug)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        manifest_save_path: Path</span>
+<span class="sd">            Path to the produced manifest with the StandardizedFOVPath column added.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Handle dataset provided as string or path</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># Read dataset</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+        <span class="c1"># Check the dataset for the required columns</span>
+        <span class="n">dataset_utils</span><span class="o">.</span><span class="n">check_required_fields</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">required_fields</span><span class="o">=</span><span class="n">REQUIRED_DATASET_FIELDS</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Log original length of cell dataset</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original dataset length: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># As there is an assumption that this dataset is for cells,</span>
+        <span class="c1"># generate the FOV dataset by selecting unique FOV Ids</span>
+        <span class="n">fov_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">DatasetFields</span><span class="o">.</span><span class="n">FOVId</span><span class="p">)</span>
+
+        <span class="c1"># Log produced FOV dataset length</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unique FOV&#39;s found in dataset: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">fov_dataset</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create standardized fovs directory</span>
+        <span class="n">fovs_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_local_staging_dir</span> <span class="o">/</span> <span class="s2">&quot;standardized_fovs&quot;</span>
+        <span class="n">fovs_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Process each row</span>
+        <span class="k">with</span> <span class="n">DistributedHandler</span><span class="p">(</span><span class="n">distributed_executor_address</span><span class="p">)</span> <span class="k">as</span> <span class="n">handler</span><span class="p">:</span>
+            <span class="c1"># Start processing</span>
+            <span class="n">futures</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_generate_standardized_fov_array</span><span class="p">,</span>
+                <span class="c1"># Convert dataframe iterrows into two lists of items to iterate over</span>
+                <span class="c1"># One list will be row index</span>
+                <span class="c1"># One list will be the pandas series of every row</span>
+                <span class="o">*</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">fov_dataset</span><span class="o">.</span><span class="n">iterrows</span><span class="p">())),</span>
+                <span class="c1"># Pass the other parameters as list of the same thing for each</span>
+                <span class="c1"># mapped function call</span>
+                <span class="p">[</span><span class="n">desired_pixel_sizes</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fov_dataset</span><span class="p">))],</span>
+                <span class="p">[</span><span class="n">fovs_dir</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fov_dataset</span><span class="p">))],</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Block until all complete</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span>
+
+        <span class="c1"># Generate fov paths rows</span>
+        <span class="n">standardized_fov_paths_dataset</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">standardized_fov_paths_dataset</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="n">DatasetFields</span><span class="o">.</span><span class="n">FOVId</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">fov_id</span><span class="p">,</span>
+                    <span class="n">DatasetFields</span><span class="o">.</span><span class="n">StandardizedFOVPath</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Convert fov paths to dataframe</span>
+        <span class="n">standardized_fov_paths_dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">standardized_fov_paths_dataset</span><span class="p">)</span>
+
+        <span class="c1"># Join original dataset to the fov paths</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+            <span class="n">standardized_fov_paths_dataset</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">DatasetFields</span><span class="o">.</span><span class="n">FOVId</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Save manifest to CSV</span>
+        <span class="n">manifest_save_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_local_staging_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;manifest.csv&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">manifest_save_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">manifest_save_path</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

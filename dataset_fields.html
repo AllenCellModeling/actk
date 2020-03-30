@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; ack 0.1.0 documentation</title>
+  <title>Dataset Fields &mdash; ack 0.1.0 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="ack" href="modules.html" />
-    <link rel="prev" title="Welcome to ack’s documentation!" href="index.html" /> 
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="ack.utils package" href="ack.utils.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -87,9 +87,9 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#stable-release">Stable release</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#from-sources">From sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Package modules</a><ul>
@@ -108,7 +108,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dataset fields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
@@ -159,13 +159,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Installation</li>
+      <li>Dataset Fields</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/dataset_fields.md.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -175,10 +175,10 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="modules.html" class="btn btn-neutral float-right" title="ack" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to ack’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="ack.utils.html" class="btn btn-neutral float-left" title="ack.utils package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -187,35 +187,86 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="stable-release">
-<h2>Stable release<a class="headerlink" href="#stable-release" title="Permalink to this headline">¶</a></h2>
-<p>To install ack, run this command in your terminal:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install numpy
-<span class="gp">$</span> pip install ack
-</pre></div>
-</div>
-<p>This is the preferred method to install ack, as it will always install the most recent stable release.</p>
-<p>If you don’t have <a class="reference external" href="https://pip.pypa.io">pip</a> installed, this <a class="reference external" href="http://docs.python-guide.org/en/latest/starting/installation/">Python installation guide</a> can guide
-you through the process.</p>
-</div>
-<div class="section" id="from-sources">
-<h2>From sources<a class="headerlink" href="#from-sources" title="Permalink to this headline">¶</a></h2>
-<p>The sources for ack can be downloaded from the <a class="reference external" href="https://github.com/AllenCellModeling/ack">Github repo</a>.</p>
-<p>You can either clone the public repository:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone git://github.com/AllenCellModeling/ack
-</pre></div>
-</div>
-<p>Or download the <a class="reference external" href="https://github.com/AllenCellModeling/ack/tarball/master">tarball</a>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> curl  -OL https://github.com/AllenCellModeling/ack/tarball/master
-</pre></div>
-</div>
-<p>Once you have a copy of the source, you can install it with:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> python setup.py install
-</pre></div>
-</div>
-</div>
+  <div class="section" id="dataset-fields">
+<h1>Dataset Fields<a class="headerlink" href="#dataset-fields" title="Permalink to this headline">¶</a></h1>
+<p>Definitions, examples, and units for each field required for processing or produced.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Definition</p></th>
+<th class="head"><p>Example (s)</p></th>
+<th class="head"><p>Units</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CellId</p></td>
+<td><p>A unique identifier for a cell. Can be an integer, string, or other, but must be serializable and unique.</p></td>
+<td><p>1, 2, 3, f0e3ac9a-5f20-4c40-bc6b-9c7c0a7e026d</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-odd"><td><p>CellIndex</p></td>
+<td><p>The integer value used in a segmentation image to indicate that a voxel belongs to a specific cell.</p></td>
+<td><p>1, 2, 3</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-even"><td><p>FOVId</p></td>
+<td><p>A unique identifier for a Field-of-View image. Can be an integer, string, or other, but must be serializable and unique.</p></td>
+<td><p>1, 2, 3, f0e3ac9a-5f20-4c40-bc6b-9c7c0a7e026d</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-odd"><td><p>SourceReadPath</p></td>
+<td><p>The path to reader a raw microscopy image file. This file should contain at least four channels (DNA, membrane, tagged structure, and brightfield).</p></td>
+<td><p>/allen/aics/modeling/jacksonb/data/example_raw.czi</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-even"><td><p>NucleusSegmentationReadPath</p></td>
+<td><p>The path to read a nucleus segmentation image file. This file is usually generated by segmenting the DNA channel from a raw microscopy image.</p></td>
+<td><p>/allen/aics/modeling/jacksonb/data/example_nuc_seg.ome.tiff</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-odd"><td><p>MembraneSegmentationReadPath</p></td>
+<td><p>The path to read a membrane segmentation image file. This file is usually generated by segmenting the membrane channel from a raw microscopy image.</p></td>
+<td><p>/allen/aics/modeling/jacksonb/data/example_memb_seg.ome.tiff</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-even"><td><p>ChannelIndexDNA</p></td>
+<td><p>The integer index of the DNA channel in a raw microscopy image after it has been read into memory.</p></td>
+<td><p>0, 1, 2, 3</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-odd"><td><p>ChannelIndexMembrane</p></td>
+<td><p>The integer index of the membrane channel in a raw microscopy image after it has been read into memory.</p></td>
+<td><p>0, 1, 2, 3</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-even"><td><p>ChannelIndexStructure</p></td>
+<td><p>The integer index of the structure channel in a raw microscopy image after it has been read into memory.</p></td>
+<td><p>0, 1, 2, 3</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-odd"><td><p>ChannelIndexBrightfield</p></td>
+<td><p>The integer index of the brightfield channel in a raw microscopy image after it has been read into memory.</p></td>
+<td><p>0, 1, 2, 3</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-even"><td><p>StandardizedFOVPath</p></td>
+<td><p>The path to read a standardized FOV image file. This file is generated from the “StandardizeFOVArray” step.</p></td>
+<td><p>/allen/aics/modeling/jacksonb/data/example_fov_array.ome.tiff</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-odd"><td><p>CellFeaturesPath</p></td>
+<td><p>The path to read a cell features JSON file. This file is generated from the “SingleCellFeatures” step.</p></td>
+<td><p>/allen/aics/modeling/jacksonb/data/example_cell_feats.json</p></td>
+<td><p>None</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 

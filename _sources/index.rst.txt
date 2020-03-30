@@ -9,6 +9,7 @@ Welcome to ack's documentation!
    Overview <self>
    installation
    Package modules <modules>
+   Dataset fields <dataset_fields>
    contributing
 
 .. mdinclude:: ../README.md

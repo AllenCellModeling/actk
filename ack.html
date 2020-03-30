@@ -97,13 +97,18 @@
 <li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="ack.bin.html">ack.bin package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ack.steps.html">ack.steps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ack.utils.html">ack.utils package</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ack.constants">ack.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ack.exceptions">ack.exceptions module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-ack">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
@@ -199,10 +204,16 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ack.steps.html">ack.steps package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="ack.steps.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ack.steps.raw.html">ack.steps.raw package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="ack.steps.raw.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ack.steps.raw.html#module-ack.steps.raw.raw">ack.steps.raw.raw module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ack.steps.raw.html#module-ack.steps.raw">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ack.steps.single_cell_features.html">ack.steps.single_cell_features package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ack.steps.single_cell_features.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ack.steps.single_cell_features.html#module-ack.steps.single_cell_features.single_cell_features">ack.steps.single_cell_features.single_cell_features module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ack.steps.single_cell_features.html#module-ack.steps.single_cell_features">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ack.steps.standardize_fov_array.html">ack.steps.standardize_fov_array package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ack.steps.standardize_fov_array.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ack.steps.standardize_fov_array.html#module-ack.steps.standardize_fov_array.standardize_fov_array">ack.steps.standardize_fov_array.standardize_fov_array module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ack.steps.standardize_fov_array.html#module-ack.steps.standardize_fov_array">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -210,8 +221,143 @@
 <li class="toctree-l2"><a class="reference internal" href="ack.steps.html#module-ack.steps">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="ack.utils.html">ack.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ack.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ack.utils.html#module-ack.utils.dask_utils">ack.utils.dask_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ack.utils.html#module-ack.utils.dataset_utils">ack.utils.dataset_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ack.utils.html#module-ack.utils.image_utils">ack.utils.image_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ack.utils.html#module-ack.utils">Module contents</a></li>
+</ul>
+</li>
 </ul>
 </div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-ack.constants">
+<span id="ack-constants-module"></span><h2>ack.constants module<a class="headerlink" href="#module-ack.constants" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ack.constants.Channels">
+<em class="property">class </em><code class="sig-prename descclassname">ack.constants.</code><code class="sig-name descname">Channels</code><a class="reference internal" href="_modules/ack/constants.html#Channels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.constants.Channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="ack.constants.Channels.Brightfield">
+<code class="sig-name descname">Brightfield</code><em class="property"> = 'brightfield'</em><a class="headerlink" href="#ack.constants.Channels.Brightfield" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.Channels.DNA">
+<code class="sig-name descname">DNA</code><em class="property"> = 'dna'</em><a class="headerlink" href="#ack.constants.Channels.DNA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.Channels.DefaultOrderList">
+<code class="sig-name descname">DefaultOrderList</code><em class="property"> = ['nucleus_segmentation', 'membrane_segmentation', 'dna', 'membrane', 'structure', 'brightfield']</em><a class="headerlink" href="#ack.constants.Channels.DefaultOrderList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.Channels.Membrane">
+<code class="sig-name descname">Membrane</code><em class="property"> = 'membrane'</em><a class="headerlink" href="#ack.constants.Channels.Membrane" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.Channels.MembraneSegmentation">
+<code class="sig-name descname">MembraneSegmentation</code><em class="property"> = 'membrane_segmentation'</em><a class="headerlink" href="#ack.constants.Channels.MembraneSegmentation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.Channels.NucleusSegmentation">
+<code class="sig-name descname">NucleusSegmentation</code><em class="property"> = 'nucleus_segmentation'</em><a class="headerlink" href="#ack.constants.Channels.NucleusSegmentation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.Channels.Structure">
+<code class="sig-name descname">Structure</code><em class="property"> = 'structure'</em><a class="headerlink" href="#ack.constants.Channels.Structure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ack.constants.DatasetFields">
+<em class="property">class </em><code class="sig-prename descclassname">ack.constants.</code><code class="sig-name descname">DatasetFields</code><a class="reference internal" href="_modules/ack/constants.html#DatasetFields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.constants.DatasetFields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.AllExpectedInputs">
+<code class="sig-name descname">AllExpectedInputs</code><em class="property"> = ['CellId', 'CellIndex', 'FOVId', 'SourceReadPath', 'NucleusSegmentationReadPath', 'MembraneSegmentationReadPath', 'ChannelIndexDNA', 'ChannelIndexMembrane', 'ChannelIndexStructure', 'ChannelIndexBrightfield']</em><a class="headerlink" href="#ack.constants.DatasetFields.AllExpectedInputs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.CellFeaturesPath">
+<code class="sig-name descname">CellFeaturesPath</code><em class="property"> = 'CellFeaturesPath'</em><a class="headerlink" href="#ack.constants.DatasetFields.CellFeaturesPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.CellId">
+<code class="sig-name descname">CellId</code><em class="property"> = 'CellId'</em><a class="headerlink" href="#ack.constants.DatasetFields.CellId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.CellIndex">
+<code class="sig-name descname">CellIndex</code><em class="property"> = 'CellIndex'</em><a class="headerlink" href="#ack.constants.DatasetFields.CellIndex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.ChannelIndexBrightfield">
+<code class="sig-name descname">ChannelIndexBrightfield</code><em class="property"> = 'ChannelIndexBrightfield'</em><a class="headerlink" href="#ack.constants.DatasetFields.ChannelIndexBrightfield" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.ChannelIndexDNA">
+<code class="sig-name descname">ChannelIndexDNA</code><em class="property"> = 'ChannelIndexDNA'</em><a class="headerlink" href="#ack.constants.DatasetFields.ChannelIndexDNA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.ChannelIndexMembrane">
+<code class="sig-name descname">ChannelIndexMembrane</code><em class="property"> = 'ChannelIndexMembrane'</em><a class="headerlink" href="#ack.constants.DatasetFields.ChannelIndexMembrane" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.ChannelIndexStructure">
+<code class="sig-name descname">ChannelIndexStructure</code><em class="property"> = 'ChannelIndexStructure'</em><a class="headerlink" href="#ack.constants.DatasetFields.ChannelIndexStructure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.FOVId">
+<code class="sig-name descname">FOVId</code><em class="property"> = 'FOVId'</em><a class="headerlink" href="#ack.constants.DatasetFields.FOVId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.MembraneSegmentationReadPath">
+<code class="sig-name descname">MembraneSegmentationReadPath</code><em class="property"> = 'MembraneSegmentationReadPath'</em><a class="headerlink" href="#ack.constants.DatasetFields.MembraneSegmentationReadPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.NucleusSegmentationReadPath">
+<code class="sig-name descname">NucleusSegmentationReadPath</code><em class="property"> = 'NucleusSegmentationReadPath'</em><a class="headerlink" href="#ack.constants.DatasetFields.NucleusSegmentationReadPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.SourceReadPath">
+<code class="sig-name descname">SourceReadPath</code><em class="property"> = 'SourceReadPath'</em><a class="headerlink" href="#ack.constants.DatasetFields.SourceReadPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ack.constants.DatasetFields.StandardizedFOVPath">
+<code class="sig-name descname">StandardizedFOVPath</code><em class="property"> = 'StandardizedFOVPath'</em><a class="headerlink" href="#ack.constants.DatasetFields.StandardizedFOVPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-ack.exceptions">
+<span id="ack-exceptions-module"></span><h2>ack.exceptions module<a class="headerlink" href="#module-ack.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="ack.exceptions.MissingDataError">
+<em class="property">exception </em><code class="sig-prename descclassname">ack.exceptions.</code><code class="sig-name descname">MissingDataError</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], required_columns: List[str]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ack/exceptions.html#MissingDataError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.exceptions.MissingDataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-ack">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ack" title="Permalink to this headline">¶</a></h2>

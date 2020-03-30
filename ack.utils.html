@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ack.utils package &mdash; ack 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Dataset Fields" href="dataset_fields.html" />
+    <link rel="prev" title="ack.steps.standardize_fov_array package" href="ack.steps.standardize_fov_array.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ack
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Package modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ack.html">ack package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="ack.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ack.bin.html">ack.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ack.steps.html">ack.steps package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ack.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#module-ack.constants">ack.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#module-ack.exceptions">ack.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ack.html#module-ack">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ack</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">ack</a> &raquo;</li>
+        
+          <li><a href="ack.html">ack package</a> &raquo;</li>
+        
+      <li>ack.utils package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/ack.utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="dataset_fields.html" class="btn btn-neutral float-right" title="Dataset Fields" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ack.steps.standardize_fov_array.html" class="btn btn-neutral float-left" title="ack.steps.standardize_fov_array package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ack-utils-package">
+<h1>ack.utils package<a class="headerlink" href="#ack-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-ack.utils.dask_utils">
+<span id="ack-utils-dask-utils-module"></span><h2>ack.utils.dask_utils module<a class="headerlink" href="#module-ack.utils.dask_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ack.utils.dask_utils.DistributedHandler">
+<em class="property">class </em><code class="sig-prename descclassname">ack.utils.dask_utils.</code><code class="sig-name descname">DistributedHandler</code><span class="sig-paren">(</span><em class="sig-param">address: Optional[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ack/utils/dask_utils.html#DistributedHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.utils.dask_utils.DistributedHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="ack.utils.dask_utils.DistributedHandler.client">
+<em class="property">property </em><code class="sig-name descname">client</code><a class="headerlink" href="#ack.utils.dask_utils.DistributedHandler.client" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ack.utils.dask_utils.DistributedHandler.close">
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ack/utils/dask_utils.html#DistributedHandler.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.utils.dask_utils.DistributedHandler.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="ack.utils.dask_utils.DistributedHandler.gather">
+<code class="sig-name descname">gather</code><span class="sig-paren">(</span><em class="sig-param">futures: Iterable[Union[concurrent.futures._base.Future, distributed.client.Future]]</em><span class="sig-paren">)</span> &#x2192; Iterable[Any]<a class="reference internal" href="_modules/ack/utils/dask_utils.html#DistributedHandler.gather"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.utils.dask_utils.DistributedHandler.gather" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-ack.utils.dataset_utils">
+<span id="ack-utils-dataset-utils-module"></span><h2>ack.utils.dataset_utils module<a class="headerlink" href="#module-ack.utils.dataset_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="ack.utils.dataset_utils.check_required_fields">
+<code class="sig-prename descclassname">ack.utils.dataset_utils.</code><code class="sig-name descname">check_required_fields</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], required_fields: List[str]</em><span class="sig-paren">)</span> &#x2192; Optional[ack.exceptions.MissingDataError]<a class="reference internal" href="_modules/ack/utils/dataset_utils.html#check_required_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.utils.dataset_utils.check_required_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-ack.utils.image_utils">
+<span id="ack-utils-image-utils-module"></span><h2>ack.utils.image_utils module<a class="headerlink" href="#module-ack.utils.image_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="ack.utils.image_utils.crop_raw_channels_with_segmentation">
+<code class="sig-prename descclassname">ack.utils.image_utils.</code><code class="sig-name descname">crop_raw_channels_with_segmentation</code><span class="sig-paren">(</span><em class="sig-param">image: numpy.ndarray, channels: List[str]</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/ack/utils/image_utils.html#crop_raw_channels_with_segmentation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.utils.image_utils.crop_raw_channels_with_segmentation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crop imaging data in raw channels using a provided selected full field of with a
+target cell in the segmentation channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>np.ndarray</em>) – The 4D, CYXZ, image numpy ndarray output from
+<cite>select_and_adjust_segmentation_ceiling</cite>.</p></li>
+<li><p><strong>channels</strong> (<em>List[str]</em>) – The channel names for the provided image.
+The channels output from <cite>get_normed_image_array</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>cropped</strong> – A 4D numpy ndarray with CYXZ dimensions in the same order as provided.
+The raw DNA channel has been cropped using the nucleus segmentation.
+All other raw channels have been cropped using the membrane segmentation.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The original version of this function can be found at:
+<a class="reference external" href="https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#114">https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#114</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ack.utils.image_utils.get_features_from_image">
+<code class="sig-prename descclassname">ack.utils.image_utils.</code><code class="sig-name descname">get_features_from_image</code><span class="sig-paren">(</span><em class="sig-param">image: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; Dict<a class="reference internal" href="_modules/ack/utils/image_utils.html#get_features_from_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.utils.image_utils.get_features_from_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate all segmentation, DNA, membrane, and structure features from the provided
+image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>image</strong> (<em>np.ndarray</em>) – The 4D, CYXZ, image numpy ndarray output from
+<cite>crop_raw_channels_with_segmentation</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>features</strong> – A single dictionary filled with features.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The original version of this function can be found at:
+<a class="reference external" href="https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/features.py#8">https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/features.py#8</a></p>
+<p>The docstring for the original version of this function was incorrect.
+It stated that it took in a CXYZ image but it took in a CYXZ. This can be seen from
+line #17 where a transpose to CZYX is done with <cite>img.transpose(0, 3, 1, 2)</cite>.
+A transpose of (0, 3, 1, 2) on a CXYZ image would result in a CZXY not CZYX.
+Additionally, simply following the original processing chain shows that the original
+function is simply handed the output from the original version of the function
+<cite>crop_raw_channels_with_segmentation</cite> (crop_cell_nuc) which results in a <cite>CYXZ</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ack.utils.image_utils.get_normed_image_array">
+<code class="sig-prename descclassname">ack.utils.image_utils.</code><code class="sig-name descname">get_normed_image_array</code><span class="sig-paren">(</span><em class="sig-param">raw_image: Union[str, pathlib.Path, bytes, io.BufferedIOBase, numpy.ndarray, dask.array.core.Array], nucleus_seg_image: Union[str, pathlib.Path, bytes, io.BufferedIOBase, numpy.ndarray, dask.array.core.Array], membrane_seg_image: Union[str, pathlib.Path, bytes, io.BufferedIOBase, numpy.ndarray, dask.array.core.Array], dna_channel_index: int, membrane_channel_index: int, structure_channel_index: int, brightfield_channel_index: int, current_pixel_sizes: Optional[Tuple[float]] = None, desired_pixel_sizes: Optional[Tuple[float]] = None</em><span class="sig-paren">)</span> &#x2192; Tuple[numpy.ndarray, List[str], Tuple[float]]<a class="reference internal" href="_modules/ack/utils/image_utils.html#get_normed_image_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.utils.image_utils.get_normed_image_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provided the original raw image, and a nucleus and membrane segmentation, construct
+a standardized, ordered, and normalized array of the images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_image</strong> (<em>types.ImageLike</em>) – A filepath to the raw imaging data. The image should be 4D and include
+channels for DNA, Membrane, Structure, and Transmitted Light.</p></li>
+<li><p><strong>nucleus_seg_image</strong> (<em>types.ImageLike</em>) – A filepath to the nucleus segmentation for the provided raw image.</p></li>
+<li><p><strong>membrane_seg_image</strong> (<em>types.ImageLike</em>) – A filepath to the membrane segmentation for the provided raw image.</p></li>
+<li><p><strong>dna_channel_index</strong> (<em>int</em>) – The index in channel dimension in the raw image that stores DNA data.</p></li>
+<li><p><strong>membrane_channel_index</strong> (<em>int</em>) – The index in the channel dimension in the raw image that stores membrane data.</p></li>
+<li><p><strong>structure_channel_index</strong> (<em>int</em>) – The index in the channel dimension in the raw image that stores structure data.</p></li>
+<li><p><strong>brightfield_channel_index</strong> (<em>int</em>) – The index in the channel dimension in the raw image that stores the brightfield
+data.</p></li>
+<li><p><strong>current_pixel_sizes</strong> (<em>Optioal[Tuple[float]]</em>) – The current physical pixel sizes as a tuple of the raw image.
+Default: None (<cite>aicsimageio.AICSImage.get_physical_pixel_size</cite> on the raw image)</p></li>
+<li><p><strong>desired_pixel_sizes</strong> (<em>Optional[Tuple[float]]</em>) – The desired physical pixel sizes as a tuple to scale all images to.
+Default: None (scale all images to current_pixel_sizes if different)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>normed</strong> (<em>np.ndarray</em>) – The normalized images stacked into a single CYXZ numpy ndarray.</p></li>
+<li><p><strong>channels</strong> (<em>List[str]</em>) – The standardized channel names for the returned array.</p></li>
+<li><p><strong>pixel_sizes</strong> (<em>Tuple[float]</em>) – The physical pixel sizes of the returned image in XYZ order.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The original version of this function can be found at:
+<a class="reference external" href="https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#9">https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#9</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ack.utils.image_utils.prepare_image_for_feature_extraction">
+<code class="sig-prename descclassname">ack.utils.image_utils.</code><code class="sig-name descname">prepare_image_for_feature_extraction</code><span class="sig-paren">(</span><em class="sig-param">image: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; Tuple[numpy.ndarray, numpy.ndarray, List[List[float]], numpy.ndarray]<a class="reference internal" href="_modules/ack/utils/image_utils.html#prepare_image_for_feature_extraction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.utils.image_utils.prepare_image_for_feature_extraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prep an image and return any parameters required for feature extraction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>image</strong> (<em>np.ndarray</em>) – The 4D, CYXZ, image numpy ndarray output from
+<cite>crop_raw_channels_with_segmentation</cite>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>prepped_image</strong> (<em>np.ndarray</em>) – The prepared image after cell rigid registration and binarizing the
+segmentations.</p></li>
+<li><p><strong>center_of_mass</strong> (<em>np.ndarray</em>) – The index of the center of mass of the membrane segmentation for the provided
+image.</p></li>
+<li><p><strong>angle</strong> (<em>List[List[float]]</em>) – The major angle of the membrane segmentation for the provided image.</p></li>
+<li><p><strong>flipdim</strong> (<em>np.ndarry</em>) – Boolean array informing if the dimensions of the image should be flipped.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The original version of this function can be found at:
+<a class="reference external" href="https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/alignment_tools.py#5">https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/alignment_tools.py#5</a></p>
+<p>The docstring for the original version of this function was incorrect.
+It stated that it took in a CXYZ image but it took in a CYXZ.
+See <cite>get_features_from_image</cite> for reasoning.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ack.utils.image_utils.select_and_adjust_segmentation_ceiling">
+<code class="sig-prename descclassname">ack.utils.image_utils.</code><code class="sig-name descname">select_and_adjust_segmentation_ceiling</code><span class="sig-paren">(</span><em class="sig-param">image: numpy.ndarray</em>, <em class="sig-param">cell_index: int</em>, <em class="sig-param">cell_ceiling_adjustment: int = 7</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/ack/utils/image_utils.html#select_and_adjust_segmentation_ceiling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ack.utils.image_utils.select_and_adjust_segmentation_ceiling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select and adjust the cell shape “ceiling” for a specific cell in the provided
+image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>np.ndarray</em>) – The 4D, CYXZ, image numpy ndarray output from <cite>get_normed_image_array</cite>.</p></li>
+<li><p><strong>cell_index</strong> (<em>int</em>) – The integer index for the target cell.</p></li>
+<li><p><strong>cell_ceiling_adjustment</strong> (<em>int</em>) – The adjust to use for raising the cell shape ceiling. If &lt;= 0, this will be
+ignored and cell data will be selected but not adjusted.
+Default: 7</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>adjusted</strong> – The image with the membrane segmentation adjusted for ceiling shape correction.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The original version of this function can be found at:
+<a class="reference external" href="https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#83">https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#83</a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ack.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ack.utils" title="Permalink to this headline">¶</a></h2>
+<p>Utilities package for ack.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jackson Maxfield Brown
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
