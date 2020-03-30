@@ -4,7 +4,7 @@
 [![Documentation](https://github.com/AllenCellModeling/actk/workflows/Documentation/badge.svg)](https://AllenCellModeling.github.io/actk)
 [![Code Coverage](https://codecov.io/gh/AllenCellModeling/actk/branch/master/graph/badge.svg)](https://codecov.io/gh/AllenCellModeling/actk)
 
-Automated Cell Kit
+Automated Cell Toolkit
 
 ---
 

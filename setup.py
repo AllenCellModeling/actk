@@ -95,7 +95,7 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],
-    description="Automated Cell Kit",
+    description="Automated Cell Toolkit",
     entry_points={
         "console_scripts": [
             "actk=actk.bin.cli:cli"
