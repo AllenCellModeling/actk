@@ -9,7 +9,10 @@ and configure their IO in the `run` function.
 """
 
 import logging
+from datetime import datetime
+from pathlib import Path
 
+from dask_jobqueue import SLURMCluster
 from distributed import LocalCluster
 from prefect import Flow
 from prefect.engine.executors import DaskExecutor, LocalExecutor
@@ -29,64 +32,120 @@ class All:
         Set all of your available steps here.
         This is only used for data logging operations, not computation purposes.
         """
-        self.step_list = [steps.Raw()]
+        self.step_list = [
+            steps.StandardizeFOVArray(),
+            steps.SingleCellFeatures(),
+        ]
 
     def run(
-        self, clean: bool = False, debug: bool = False, **kwargs,
+        self,
+        dataset: str,
+        distributed: bool = False,
+        clean: bool = False,
+        debug: bool = False,
+        **kwargs,
     ):
         """
         Run a flow with your steps.
 
         Parameters
         ----------
+        dataset: str
+            The dataset to use for the pipeline.
+
+        distributed: bool
+            A boolean option to determine if the jobs should be distributed to a SLURM
+            cluster when possible.
+            Default: False (Do not distribute)
+
         clean: bool
             Should the local staging directory be cleaned prior to this run.
             Default: False (Do not clean)
+
         debug: bool
             A debug flag for the developer to use to manipulate how much data runs,
-            how it is processed, etc.
+            how it is processed, etc. Additionally, if debug is True, any mapped
+            operation will run on threads instead of processes.
             Default: False (Do not debug)
-
-        Notes
-        -----
-        Documentation on prefect:
-        https://docs.prefect.io/core/
-
-        Basic prefect example:
-        https://docs.prefect.io/core/
         """
         # Initalize steps
-        raw = steps.Raw()
+        standardize_fov_array = steps.StandardizeFOVArray()
+        single_cell_features = steps.SingleCellFeatures()
 
         # Choose executor
         if debug:
             exe = LocalExecutor()
+            distributed_executor_address = None
+            log.info(f"Debug flagged. Will use threads instead of Dask.")
         else:
-            # Set up connection to computation cluster
-            cluster = LocalCluster()
+            if distributed:
+                # Create or get log dir
+                # Do not include ms
+                log_dir_name = datetime.now().isoformat().split(".")[0]
+                log_dir = Path(f"~/.dask_logs/ack/{log_dir_name}").expanduser()
+                # Log dir settings
+                log_dir.mkdir(parents=True, exist_ok=True)
 
-            # Inform of Dask UI
-            log.info(f"Cluster dashboard available at: {cluster.dashboard_link}")
+                # Create cluster
+                log.info("Creating SLURMCluster")
+                cluster = SLURMCluster(
+                    cores=1,
+                    memory="4GB",
+                    queue="aics_cpu_general",
+                    walltime="10:00:00",
+                    local_directory=str(log_dir),
+                    log_directory=str(log_dir),
+                )
+                log.info("Created SLURMCluster")
 
-            # Create dask executor
-            exe = DaskExecutor(cluster.scheduler_address)
+                # Set adaptive worker settings
+                cluster.adapt(minimum_jobs=40, maximum_jobs=200)
+
+                # Use the port from the created connector to set executor address
+                distributed_executor_address = cluster.scheduler_address
+
+                # Log dashboard URI
+                log.info(f"Dask dashboard available at: {cluster.dashboard_link}")
+            else:
+                # Create local cluster
+                log.info("Creating LocalCluster")
+                cluster = LocalCluster()
+                log.info("Created LocalCluster")
+
+                # Set distributed_executor_address
+                distributed_executor_address = cluster.scheduler_address
+
+                # Log dashboard URI
+                log.info(f"Dask dashboard available at: {cluster.dashboard_link}")
+
+            # Use dask cluster
+            exe = DaskExecutor(distributed_executor_address)
 
         # Configure your flow
         with Flow("ack") as flow:
-            # If you want to clean the local staging directories pass clean
-            # If you want to utilize some debugging functionality pass debug
-            # If you don't utilize any of these, just pass the parameters you need.
-            raw(
+            standardized_fov_paths_dataset = standardize_fov_array(
+                dataset=dataset,
+                distributed_executor_address=distributed_executor_address,
                 clean=clean,
                 debug=debug,
-                **kwargs,  # Allows us to pass `--n {some integer}` or other params
+                # Allows us to pass `--desired_pixel_sizes [{float},{float},{float}]`
+                **kwargs,
+            )
+
+            _ = single_cell_features(
+                dataset=standardized_fov_paths_dataset,
+                distributed_executor_address=distributed_executor_address,
+                clean=clean,
+                debug=debug,
+                # Allows us to pass `--cell_ceiling_adjustment {int}`
+                **kwargs,
             )
 
         # Run flow and get ending state
         state = flow.run(executor=exe)
 
         # Get and display any outputs you want to see on your local terminal
-        log.info(raw.get_result(state, flow))
+        log.info(single_cell_features.get_result(state, flow))
 
     def pull(self):
         """

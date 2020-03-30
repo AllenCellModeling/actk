@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .raw import Raw
+from .single_cell_features import SingleCellFeatures
+from .standardize_fov_array import StandardizeFOVArray
 
-__all__ = ["Raw"]
+__all__ = ["SingleCellFeatures", "StandardizeFOVArray"]

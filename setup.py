@@ -10,11 +10,12 @@ with open("README.md") as readme_file:
 
 test_requirements = [
     "codecov",
-    "flake8",
+    "flake8>=3.7.7",
     "black",
-    "pytest",
-    "pytest-cov",
-    "pytest-raises",
+    "pytest>=4.3.0",
+    "pytest-cov==2.6.1",
+    "pytest-raises>=0.10",
+    "quilt3>=3.1.10",
 ]
 
 setup_requirements = [
@@ -31,6 +32,7 @@ dev_requirements = [
     "pytest-cov==2.6.1",
     "pytest-raises>=0.10",
     "pytest-runner>=4.4",
+    "quilt3>=3.1.10",
     "Sphinx>=2.0.0b1",
     "sphinx_rtd_theme>=0.1.2",
     "tox>=3.5.2",
@@ -51,16 +53,20 @@ aics_data_requirements = [
 requirements = [
     # stepworkflow requires
     "bokeh",
-    "datastep>=0.1.5",
-    "distributed",
+    "dask[bag]>=2.12.0",
+    "dask_jobqueue>=0.7.0",
+    "datastep>=0.1.6",
+    "distributed>=2.12.0",
     "docutils<0.16",  # needed for botocore (quilt dependency)
     "fire",
-    "prefect",
+    "prefect>=0.9.7",
     "python-dateutil<=2.8.0",  # need <=2.8.0 for quilt3 in step
     # project requires
+    "aicsfeature>=0.2.1",
+    "aicsimageio>=3.1.4",
+    "aicsimageprocessing>=0.7.3",
     "numpy",
     "pandas",
-    "Pillow",
 ]
 
 extra_requirements = {
@@ -88,7 +94,6 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
     ],
     description="Automated Cell Kit",
     entry_points={
