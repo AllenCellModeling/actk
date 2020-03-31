@@ -313,12 +313,12 @@ def prepare_image_for_feature_extraction(
     memb_com = proc.get_center_of_mass(proc.get_channel(image, 1))
 
     # Perform a rigid registration on the image
-    prepped, angle, flipdim = proc.cell_rigid_registration(image)
+    image, angle, flipdim = proc.cell_rigid_registration(image)
 
     # Make sure the nuc and cell channels are binary
-    prepped[0:2] = prepped[0:2] > 0.5
+    image[0:2] = image[0:2] > 0.5
 
-    return prepped, memb_com, angle, flipdim
+    return image, memb_com, angle, flipdim
 
 
 def get_features_from_image(image: np.ndarray) -> Dict:
@@ -351,10 +351,10 @@ def get_features_from_image(image: np.ndarray) -> Dict:
     `crop_raw_channels_with_segmentation` (crop_cell_nuc) which results in a `CYXZ`.
     """
     # Get prepared image and feature parameters
-    prepped, memb_com, angle, flipdim = prepare_image_for_feature_extraction(image)
+    image, memb_com, angle, flipdim = prepare_image_for_feature_extraction(image)
 
     # Transpose to CZYX
-    prepped = transforms.transpose_to_dims(prepped, "CYXZ", "CZYX")
+    image = transforms.transpose_to_dims(image, "CYXZ", "CZYX")
 
     # Construct dictionary of basic features
     regularization_params = {
@@ -362,15 +362,15 @@ def get_features_from_image(image: np.ndarray) -> Dict:
         "com": memb_com.tolist(),
         "angle": angle,
         "flipdim": flipdim.tolist(),
-        "imsize_registered": prepped.shape,
+        "imsize_registered": image.shape,
     }
 
     # Unpack channels
-    nuc_seg = prepped[0]
-    memb_seg = prepped[1]
-    dna_image = prepped[2]
-    memb_image = prepped[3]
-    struct_image = prepped[4]
+    nuc_seg = image[0]
+    memb_seg = image[1]
+    dna_image = image[2]
+    memb_image = image[3]
+    struct_image = image[4]
 
     # Adjust the DNA and membrane images
     adjusted_dna_image = ((nuc_seg * dna_image) * 2 ** 8).astype("uint16")

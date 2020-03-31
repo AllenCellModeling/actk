@@ -67,13 +67,13 @@ class StandardizeFOVArray(Step):
         )
 
         # Reshape data for serialization
-        reshaped = transforms.transpose_to_dims(normalized_img, "CYXZ", "CZYX")
+        normalized_img = transforms.transpose_to_dims(normalized_img, "CYXZ", "CZYX")
 
         # Save array as OME Tiff
         save_path = save_dir / f"{row.FOVId}.ome.tiff"
         with OmeTiffWriter(save_path, overwrite_file=True) as writer:
             writer.save(
-                data=reshaped,
+                data=normalized_img,
                 dimension_order="CZYX",
                 channel_names=channels,
                 pixels_physical_size=pixel_sizes,

@@ -56,22 +56,22 @@ class SingleCellFeatures(Step):
         log.info(f"Beginning Cell Feature Generation for CellId: {row.CellId}")
 
         # Read the standardized FOV
-        image = AICSImage(row.StandardizedFOVPath)
+        standardized_image = AICSImage(row.StandardizedFOVPath)
 
         # Select and adjust cell shape ceiling for this cell
-        adjusted = image_utils.select_and_adjust_segmentation_ceiling(
-            image=image.get_image_data("CYXZ", S=0, T=0),
+        image = image_utils.select_and_adjust_segmentation_ceiling(
+            image=standardized_image.get_image_data("CYXZ", S=0, T=0),
             cell_index=row.CellIndex,
             cell_ceiling_adjustment=cell_ceiling_adjustment,
         )
 
         # Crop the FOV to the segmentation portions
-        cropped = image_utils.crop_raw_channels_with_segmentation(
-            image=adjusted, channels=image.get_channel_names(),
+        image = image_utils.crop_raw_channels_with_segmentation(
+            image=image, channels=standardized_image.get_channel_names(),
         )
 
         # Generate features
-        features = image_utils.get_features_from_image(cropped)
+        features = image_utils.get_features_from_image(image)
 
         # Save to JSON
         save_path = save_dir / f"{row.CellId}.json"
