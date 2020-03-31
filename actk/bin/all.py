@@ -35,9 +35,7 @@ class All:
         self.step_list = [
             steps.StandardizeFOVArray(),
             steps.SingleCellFeatures(),
-            steps.SingleCellImage3D(),
-            steps.SingleCellImage2D(step_name="singlecellimage2dallproj"),
-            steps.SingleCellImage2D(step_name="singlecellimage2dyxproj"),
+            steps.SingleCellImages(),
         ]
 
     def run(
@@ -74,13 +72,7 @@ class All:
         # Initalize steps
         standardize_fov_array = steps.StandardizeFOVArray()
         single_cell_features = steps.SingleCellFeatures()
-        single_cell_image_3d = steps.SingleCellImage3D()
-        single_cell_image_2d_all_proj = steps.SingleCellImage2D(
-            step_name="singlecellimage2dallproj"
-        )
-        single_cell_image_2d_yx_proj = steps.SingleCellImage2D(
-            step_name="singlecellimage2dyxproj"
-        )
+        single_cell_images = steps.SingleCellImages()
 
         # Choose executor
         if debug:
@@ -151,7 +143,7 @@ class All:
                 **kwargs,
             )
 
-            single_cell_images_3d_dataset = single_cell_image_3d(
+            single_cell_images_dataset = single_cell_images(
                 dataset=single_cell_features_dataset,
                 distributed_executor_address=distributed_executor_address,
                 clean=clean,
@@ -160,31 +152,11 @@ class All:
                 **kwargs,
             )
 
-            _ = single_cell_image_2d_all_proj(
-                dataset=single_cell_images_3d_dataset,
-                project_all_axes=True,
-                distributed_executor_address=distributed_executor_address,
-                clean=clean,
-                debug=debug,
-                # Allows us to pass `--projection_method {str}`
-                **kwargs,
-            )
-
-            _ = single_cell_image_2d_yx_proj(
-                dataset=single_cell_images_3d_dataset,
-                project_all_axes=False,
-                distributed_executor_address=distributed_executor_address,
-                clean=clean,
-                debug=debug,
-                # Allows us to pass `--projection_method {str}`
-                **kwargs,
-            )
-
         # Run flow and get ending state
         state = flow.run(executor=exe)
 
         # Get and display any outputs you want to see on your local terminal
-        log.info(single_cell_images_3d_dataset.get_result(state, flow))
+        log.info(single_cell_images_dataset.get_result(state, flow))
 
     def pull(self):
         """
