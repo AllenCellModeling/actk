@@ -36,6 +36,7 @@ class CellImage3DResult(NamedTuple):
     cell_id: Union[int, str]
     path: Path
 
+
 ###############################################################################
 
 
