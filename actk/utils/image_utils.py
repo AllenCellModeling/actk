@@ -350,6 +350,9 @@ def get_features_from_image(image: np.ndarray) -> Dict:
     function is simply handed the output from the original version of the function
     `crop_raw_channels_with_segmentation` (crop_cell_nuc) which results in a `CYXZ`.
     """
+    # Store original shape
+    imsize_orig = image.shape
+
     # Get prepared image and feature parameters
     image, memb_com, angle, flipdim = prepare_image_for_feature_extraction(image)
 
@@ -358,7 +361,7 @@ def get_features_from_image(image: np.ndarray) -> Dict:
 
     # Construct dictionary of basic features
     regularization_params = {
-        "imsize_orig": image.shape,
+        "imsize_orig": imsize_orig,
         "com": memb_com.tolist(),
         "angle": angle,
         "flipdim": flipdim.tolist(),
