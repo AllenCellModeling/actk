@@ -35,6 +35,7 @@ class All:
         self.step_list = [
             steps.StandardizeFOVArray(),
             steps.SingleCellFeatures(),
+            steps.SingleCellImage3D(),
         ]
 
     def run(
@@ -71,6 +72,7 @@ class All:
         # Initalize steps
         standardize_fov_array = steps.StandardizeFOVArray()
         single_cell_features = steps.SingleCellFeatures()
+        single_cell_image_3d = steps.SingleCellImage3D()
 
         # Choose executor
         if debug:
@@ -132,8 +134,17 @@ class All:
                 **kwargs,
             )
 
-            _ = single_cell_features(
+            single_cell_features_dataset = single_cell_features(
                 dataset=standardized_fov_paths_dataset,
+                distributed_executor_address=distributed_executor_address,
+                clean=clean,
+                debug=debug,
+                # Allows us to pass `--cell_ceiling_adjustment {int}`
+                **kwargs,
+            )
+
+            _ = single_cell_image_3d(
+                dataset=single_cell_features_dataset,
                 distributed_executor_address=distributed_executor_address,
                 clean=clean,
                 debug=debug,
