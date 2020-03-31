@@ -4,7 +4,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import List, NamedTuple, Optional, Union
 
 import dask.dataframe as dd
 import numpy as np
@@ -27,6 +27,11 @@ REQUIRED_DATASET_FIELDS = [
     DatasetFields.StandardizedFOVPath,
     DatasetFields.CellFeaturesPath,
 ]
+
+
+class SingleCellImageResult(NamedTuple):
+    cell_id: Union[int, str]
+
 
 ###############################################################################
 

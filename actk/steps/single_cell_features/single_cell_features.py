@@ -31,7 +31,7 @@ REQUIRED_DATASET_FIELDS = [
 
 
 class SingleCellFeaturesResult(NamedTuple):
-    cell_id: int
+    cell_id: Union[int, str]
     path: Path
 
 

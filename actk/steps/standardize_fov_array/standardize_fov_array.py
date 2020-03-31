@@ -34,7 +34,7 @@ REQUIRED_DATASET_FIELDS = [
 
 
 class StandardizeFOVArrayResult(NamedTuple):
-    fov_id: int
+    fov_id: Union[int, str]
     path: Path
 
 
