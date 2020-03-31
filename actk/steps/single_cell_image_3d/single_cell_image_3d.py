@@ -10,7 +10,7 @@ import aicsimageprocessing as proc
 import dask.dataframe as dd
 import numpy as np
 import pandas as pd
-from aicsimageio import AICSImage
+from aicsimageio import AICSImage, transforms
 from aicsimageio.writers import OmeTiffWriter
 from datastep import Step, log_run_params
 
@@ -67,8 +67,8 @@ class SingleCellImage3D(Step):
         cell_ceiling_adjustment: int,
         bounding_box: np.ndarray,
         save_dir: Path,
-    ) -> np.ndarray:
-        log.info(f"Beginning bounded array generation for CellId: {row.CellId}")
+    ) -> CellImage3DResult:
+        log.info(f"Beginning 3D single cell image generation for CellId: {row.CellId}")
 
         # Initialize image object with standardized FOV
         standardized_image = AICSImage(row.StandardizedFOVPath)
@@ -77,10 +77,13 @@ class SingleCellImage3D(Step):
         image = image_utils.select_and_adjust_segmentation_ceiling(
             # Unlike most other operations, we can read in normal "CZYX" dimension order
             # here as all future operations are expecting it
-            image=standardized_image.get_image_data("CZYX", S=0, T=0),
+            image=standardized_image.get_image_data("CYXZ", S=0, T=0),
             cell_index=row.CellIndex,
             cell_ceiling_adjustment=cell_ceiling_adjustment,
         )
+
+        # Transpose to CZYX for saving and because bounding box is in CZYX order
+        image = transforms.transpose_to_dims(image, "CYXZ", "CZYX")
 
         # Perform a rigid registration on the image
         image, _, _ = proc.cell_rigid_registration(image, bbox_size=bounding_box)
@@ -99,6 +102,8 @@ class SingleCellImage3D(Step):
                 pixels_physical_size=standardized_image.get_physical_pixel_size(),
             )
 
+        log.info(f"Completed 3D single cell image generation for CellId: {row.CellId}")
+
         # Return ready to save image
         return CellImage3DResult(row.CellId, save_path)
 
@@ -112,16 +117,14 @@ class SingleCellImage3D(Step):
         **kwargs,
     ):
         """
-        Provided a dataset of cell features, generate single cell images in both 3D and
-        2D max projections.
+        Provided a dataset of cell features, generate 3D single cell images.
 
         Parameters
         ----------
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame]
-            The primary cell dataset to generate 2D max projections and 3D crops for
-            each cell.
+            The primary cell dataset to generate 3D single cell images for.
 
-            **Required dataset columns:** *["CellFeaturesPath", "StandardizedFOVPath",
+            **Required dataset columns:** *["CellId", "StandardizedFOVPath",
             "CellFeaturesPath"]*
 
         cell_ceiling_adjustment: int
@@ -141,8 +144,7 @@ class SingleCellImage3D(Step):
         Returns
         -------
         manifest_save_path: Path
-            Path to the produced manifest with the CellImage2DPath and CellImage3DPath
-            columns added.
+            Path to the produced manifest with the CellImage3DPath column added.
         """
         # Handle dataset provided as string or path
         if isinstance(dataset, (str, Path)):
