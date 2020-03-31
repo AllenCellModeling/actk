@@ -65,6 +65,7 @@ requirements = [
     "aicsfeature>=0.2.1",
     "aicsimageio>=3.1.4",
     "aicsimageprocessing>=0.7.3",
+    "imageio",
     "numpy",
     "pandas",
 ]
