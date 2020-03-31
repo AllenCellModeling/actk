@@ -36,8 +36,8 @@ class All:
             steps.StandardizeFOVArray(),
             steps.SingleCellFeatures(),
             steps.SingleCellImage3D(),
-            steps.SingleCellImage2D(step_name="SingleCellImage2DAllProjections"),
-            steps.SingleCellImage2D(step_name="SingleCellImage2DYXProjection"),
+            steps.SingleCellImage2D(step_name="singlecellimage2dallproj"),
+            steps.SingleCellImage2D(step_name="singlecellimage2dyxproj"),
         ]
 
     def run(
