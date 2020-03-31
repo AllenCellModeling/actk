@@ -12,6 +12,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
+import psutil
 from dask_jobqueue import SLURMCluster
 from distributed import LocalCluster
 from prefect import Flow
@@ -111,7 +112,11 @@ class All:
             else:
                 # Create local cluster
                 log.info("Creating LocalCluster")
-                cluster = LocalCluster()
+
+                # Each worker should have at least 3GB of memory
+                n_workers = int(psutil.virtual_memory().free / 10e8 / 3)
+                cluster = LocalCluster(n_workers=n_workers, threads_per_worker=2)
+
                 log.info("Created LocalCluster")
 
                 # Set distributed_executor_address
