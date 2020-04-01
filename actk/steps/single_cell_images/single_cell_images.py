@@ -127,8 +127,8 @@ class SingleCellImages(Step):
         # Select the DNA, Membrane, and Structure channels
         image = image[
             [
-                channels.index(target) for target in
-                [Channels.DNA, Channels.Membrane, Channels.Structure]
+                channels.index(target)
+                for target in [Channels.DNA, Channels.Membrane, Channels.Structure]
             ]
         ]
 
@@ -321,8 +321,7 @@ class SingleCellImages(Step):
 
         # Join original dataset to the fov paths
         self.manifest = dataset.merge(
-            single_cell_images_dataset,
-            on=DatasetFields.CellId
+            single_cell_images_dataset, on=DatasetFields.CellId
         )
 
         # Save manifest to CSV
