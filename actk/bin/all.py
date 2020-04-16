@@ -88,10 +88,10 @@ class All:
                 log_dir.mkdir(parents=True, exist_ok=True)
 
                 # Configure dask config
-                # dask.config.set({
-                #     "scheduler.work-stealing": False,
-                #     ""
-                # })
+                dask.config.set({
+                    "scheduler.work-stealing": False,
+                    "jobqueue.slurm.death-timeout": 120,
+                })
                 print(dask.config.config)
                 raise ValueError()
 
