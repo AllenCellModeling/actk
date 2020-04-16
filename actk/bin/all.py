@@ -99,7 +99,8 @@ class All:
                     memory="4GB",
                     queue="aics_cpu_general",
                     walltime="10:00:00",
-                    death_timeout=120,
+                    death_timeout=180,
+                    extra=["--resources nthreads=1"],
                     local_directory=str(log_dir),
                     log_directory=str(log_dir),
                 )
