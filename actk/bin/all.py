@@ -101,14 +101,14 @@ class All:
                     queue="aics_cpu_general",
                     walltime="10:00:00",
                     death_timeout=180,
-                    extra=["--resources nprocs=1"],
+                    extra=["--resources nprocs=1,nthreads"],
                     local_directory=str(log_dir),
                     log_directory=str(log_dir),
                 )
                 log.info("Created SLURMCluster")
 
                 # Scale up cluster
-                cluster.scale_up(64)
+                cluster.scale_up(8)
 
                 # Use the port from the created connector to set executor address
                 distributed_executor_address = cluster.scheduler_address
