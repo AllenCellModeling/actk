@@ -97,10 +97,11 @@ class All:
                 cluster = SLURMCluster(
                     cores=1,
                     memory="4GB",
+                    processes=1,
                     queue="aics_cpu_general",
                     walltime="10:00:00",
                     death_timeout=180,
-                    extra=["--resources nthreads=1"],
+                    extra=["--resources nprocs=1,nthreads=1"],
                     local_directory=str(log_dir),
                     log_directory=str(log_dir),
                 )
