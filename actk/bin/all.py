@@ -12,6 +12,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
+import dask.config
 from dask_jobqueue import SLURMCluster
 from distributed import LocalCluster
 from prefect import Flow
@@ -86,6 +87,14 @@ class All:
                 # Log dir settings
                 log_dir.mkdir(parents=True, exist_ok=True)
 
+                # Configure dask config
+                # dask.config.set({
+                #     "scheduler.work-stealing": False,
+                #     ""
+                # })
+                print(dask.config.config)
+                raise ValueError()
+
                 # Create cluster
                 log.info("Creating SLURMCluster")
                 cluster = SLURMCluster(
@@ -99,7 +108,7 @@ class All:
                 log.info("Created SLURMCluster")
 
                 # Set adaptive worker settings
-                cluster.adapt(minimum_jobs=40, maximum_jobs=200)
+                cluster.adapt(minimum_jobs=20, maximum_jobs=200)
 
                 # Use the port from the created connector to set executor address
                 distributed_executor_address = cluster.scheduler_address
