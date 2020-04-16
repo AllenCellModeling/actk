@@ -90,10 +90,7 @@ class All:
                 # Configure dask config
                 dask.config.set({
                     "scheduler.work-stealing": False,
-                    "jobqueue.slurm.death-timeout": 120,
                 })
-                print(dask.config.config)
-                raise ValueError()
 
                 # Create cluster
                 log.info("Creating SLURMCluster")
@@ -102,6 +99,7 @@ class All:
                     memory="4GB",
                     queue="aics_cpu_general",
                     walltime="10:00:00",
+                    death_timeout=120,
                     local_directory=str(log_dir),
                     log_directory=str(log_dir),
                 )
