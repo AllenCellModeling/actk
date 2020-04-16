@@ -101,8 +101,7 @@ class All:
                     queue="aics_cpu_general",
                     walltime="10:00:00",
                     death_timeout=180,
-                    nanny=False,
-                    extra=["--resources nprocs=1,nthreads=1"],
+                    extra=["--resources nprocs=1"],
                     local_directory=str(log_dir),
                     log_directory=str(log_dir),
                 )
