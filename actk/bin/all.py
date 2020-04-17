@@ -95,7 +95,7 @@ class All:
                 # Create cluster
                 log.info("Creating SLURMCluster")
                 cluster = SLURMCluster(
-                    cores=12,
+                    cores=8,
                     memory="80GB",
                     queue="aics_cpu_general",
                     walltime="10:00:00",
