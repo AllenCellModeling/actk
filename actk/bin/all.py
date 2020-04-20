@@ -83,7 +83,7 @@ class All:
                 # Create or get log dir
                 # Do not include ms
                 log_dir_name = datetime.now().isoformat().split(".")[0]
-                log_dir = Path(f"~/.dask_logs/actk/{log_dir_name}").expanduser()
+                log_dir = Path(f".dask_logs/{log_dir_name}").expanduser()
                 # Log dir settings
                 log_dir.mkdir(parents=True, exist_ok=True)
 
@@ -107,7 +107,7 @@ class All:
                 log.info("Created SLURMCluster")
 
                 # Scale up cluster
-                cluster.scale(10)
+                cluster.scale(20)
 
                 # Use the port from the created connector to set executor address
                 distributed_executor_address = cluster.scheduler_address
