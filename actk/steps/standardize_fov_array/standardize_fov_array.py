@@ -168,6 +168,12 @@ class StandardizeFOVArray(Step):
                 # mapped function call
                 [desired_pixel_sizes for i in range(len(fov_dataset))],
                 [fovs_dir for i in range(len(fov_dataset))],
+                # Chunk the processing in batches of 50
+                # See: https://github.com/dask/distributed/issues/2181
+                # Why: aicsimageio using dask under the hood generates hundreds of tasks per image
+                # this means that when we are running the pipeline with thousands of images, the scheduler
+                # may be overloaded
+                chunksize=50,
             )
 
             # Block until all complete
