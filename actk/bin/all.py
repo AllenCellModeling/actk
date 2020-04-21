@@ -100,7 +100,7 @@ class All:
                     memory="160GB",
                     queue="aics_cpu_general",
                     walltime="10:00:00",
-                    death_timeout=21600,
+                    death_timeout=600,
                     local_directory=str(log_dir),
                     log_directory=str(log_dir),
                 )
