@@ -90,6 +90,7 @@ class All:
                 # Configure dask config
                 dask.config.set({
                     "scheduler.work-stealing": False,
+                    "logging.distributed.worker": "info",
                 })
 
                 # Create cluster
