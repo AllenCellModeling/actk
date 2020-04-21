@@ -173,7 +173,7 @@ class StandardizeFOVArray(Step):
                 # Why: aicsimageio using dask under the hood generates hundreds of tasks per image
                 # this means that when we are running the pipeline with thousands of images, the scheduler
                 # may be overloaded
-                chunksize=50,
+                batch_size=50,
             )
 
             # Block until all complete
