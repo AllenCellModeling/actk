@@ -53,7 +53,7 @@ class SingleCellFeatures(Step):
     def _generate_single_cell_features(
         row_index: int, row: pd.Series, cell_ceiling_adjustment: int, save_dir: Path,
     ) -> SingleCellFeaturesResult:
-        log.info(f"Beginning Cell Feature Generation for CellId: {row.CellId}")
+        print(f"Beginning Cell Feature Generation for CellId: {row.CellId}")
 
         # Read the standardized FOV
         image = AICSImage(row.StandardizedFOVPath)
@@ -78,7 +78,7 @@ class SingleCellFeatures(Step):
         with open(save_path, "w") as write_out:
             json.dump(features, write_out)
 
-        log.info(f"Completed Cell Feature Generation for CellId: {row.CellId}")
+        print(f"Completed Cell Feature Generation for CellId: {row.CellId}")
 
         return SingleCellFeaturesResult(row.CellId, save_path)
 

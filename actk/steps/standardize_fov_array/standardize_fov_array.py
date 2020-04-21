@@ -52,7 +52,7 @@ class StandardizeFOVArray(Step):
         desired_pixel_sizes: Tuple[float],
         save_dir: Path,
     ) -> StandardizeFOVArrayResult:
-        log.info(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
+        print(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
 
         # Get normalized image array
         normalized_img, channels, pixel_sizes = image_utils.get_normed_image_array(
@@ -79,7 +79,7 @@ class StandardizeFOVArray(Step):
                 pixels_physical_size=pixel_sizes,
             )
 
-        log.info(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
+        print(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
 
         return StandardizeFOVArrayResult(row.FOVId, save_path)
 
