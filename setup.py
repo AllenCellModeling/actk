@@ -80,8 +80,8 @@ extra_requirements = {
         *test_requirements,
         *setup_requirements,
         *dev_requirements,
-        *interactive_requirements
-    ]
+        *interactive_requirements,
+    ],
 }
 
 setup(
@@ -96,11 +96,7 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     description="Automated Cell Toolkit",
-    entry_points={
-        "console_scripts": [
-            "actk=actk.bin.cli:cli"
-        ]
-    },
+    entry_points={"console_scripts": ["actk=actk.bin.cli:cli"]},
     install_requires=requirements,
     license="Allen Institute Software License",
     long_description=readme,
