@@ -51,8 +51,21 @@ class SingleCellFeatures(Step):
 
     @staticmethod
     def _generate_single_cell_features(
-        row_index: int, row: pd.Series, cell_ceiling_adjustment: int, save_dir: Path,
+        row_index: int,
+        row: pd.Series,
+        cell_ceiling_adjustment: int,
+        save_dir: Path,
+        overwrite: bool,
     ) -> SingleCellFeaturesResult:
+        # Get the ultimate end save path for this cell
+        save_path = save_dir / f"{row.CellId}.json"
+
+        # Check skip
+        if not overwrite and save_path.is_file():
+            print(f"Skipping Cell Feature Generate for Cell Id: {row.CellId}")
+            return SingleCellFeatures(row.CellId, save_path)
+
+        # Overwrite or didn't exist
         print(f"Beginning Cell Feature Generation for CellId: {row.CellId}")
 
         # Read the standardized FOV
@@ -74,12 +87,10 @@ class SingleCellFeatures(Step):
         features = image_utils.get_features_from_image(cropped)
 
         # Save to JSON
-        save_path = save_dir / f"{row.CellId}.json"
         with open(save_path, "w") as write_out:
             json.dump(features, write_out)
 
         print(f"Completed Cell Feature Generation for CellId: {row.CellId}")
-
         return SingleCellFeaturesResult(row.CellId, save_path)
 
     @log_run_params
@@ -88,7 +99,7 @@ class SingleCellFeatures(Step):
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
         cell_ceiling_adjustment: int = 7,
         distributed_executor_address: Optional[str] = None,
-        clean: bool = False,
+        overwrite: bool = False,
         debug: bool = False,
         **kwargs,
     ):
@@ -112,9 +123,9 @@ class SingleCellFeatures(Step):
             An optional executor address to pass to some computation engine.
             Default: None
 
-        clean: bool
-            Should the local staging directory be cleaned prior to this run.
-            Default: False (Do not clean)
+        overwrite: bool
+            If this step has already partially or completely run, should it overwrite the previous files or not.
+            Default: False (Do not overwrite or regenerate files)
 
         debug: bool
             A debug flag for the developer to use to manipulate how much data runs,
@@ -155,6 +166,7 @@ class SingleCellFeatures(Step):
                 # mapped function call
                 [cell_ceiling_adjustment for i in range(len(dataset))],
                 [features_dir for i in range(len(dataset))],
+                [overwrite for i in range(len(dataset))],
                 # Chunk the processing in batches of 50
                 # See: https://github.com/dask/distributed/issues/2181
                 # Why: aicsimageio using dask under the hood generates hundreds of tasks per image

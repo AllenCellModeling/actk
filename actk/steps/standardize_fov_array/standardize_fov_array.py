@@ -51,7 +51,17 @@ class StandardizeFOVArray(Step):
         row: pd.Series,
         desired_pixel_sizes: Tuple[float],
         save_dir: Path,
+        overwrite: bool,
     ) -> StandardizeFOVArrayResult:
+        # Get the ultimate end save path for this cell
+        save_path = save_dir / f"{row.FOVId}.ome.tiff"
+
+        # Check skip
+        if not overwrite and save_path.is_file():
+            print(f"Skipping Standardized FOV Generation for FOVId: {row.FOVId}")
+            return StandardizeFOVArrayResult(row.FOVId, save_path)
+
+        # Overwrite or didn't exist
         print(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
 
         # Get normalized image array
@@ -70,7 +80,6 @@ class StandardizeFOVArray(Step):
         reshaped = transforms.transpose_to_dims(normalized_img, "CYXZ", "CZYX")
 
         # Save array as OME Tiff
-        save_path = save_dir / f"{row.FOVId}.ome.tiff"
         with OmeTiffWriter(save_path, overwrite_file=True) as writer:
             writer.save(
                 data=reshaped,
@@ -80,7 +89,6 @@ class StandardizeFOVArray(Step):
             )
 
         print(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
-
         return StandardizeFOVArrayResult(row.FOVId, save_path)
 
     @log_run_params
@@ -89,7 +97,7 @@ class StandardizeFOVArray(Step):
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
         desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29),
         distributed_executor_address: Optional[str] = None,
-        clean: bool = False,
+        overwrite: bool = False,
         debug: bool = False,
         **kwargs,
     ) -> Path:
@@ -115,9 +123,9 @@ class StandardizeFOVArray(Step):
             An optional executor address to pass to some computation engine.
             Default: None
 
-        clean: bool
-            Should the local staging directory be cleaned prior to this run.
-            Default: False (Do not clean)
+        overwrite: bool
+            If this step has already partially or completely run, should it overwrite the previous files or not.
+            Default: False (Do not overwrite or regenerate files)
 
         debug: bool
             A debug flag for the developer to use to manipulate how much data runs,
@@ -168,6 +176,7 @@ class StandardizeFOVArray(Step):
                 # mapped function call
                 [desired_pixel_sizes for i in range(len(fov_dataset))],
                 [fovs_dir for i in range(len(fov_dataset))],
+                [overwrite for i in range(len(dataset))],
                 # Chunk the processing in batches of 50
                 # See: https://github.com/dask/distributed/issues/2181
                 # Why: aicsimageio using dask under the hood generates hundreds of tasks per image

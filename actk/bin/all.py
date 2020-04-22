@@ -42,7 +42,7 @@ class All:
         self,
         dataset: str,
         distributed: bool = False,
-        clean: bool = False,
+        overwrite: bool = False,
         debug: bool = False,
         **kwargs,
     ):
@@ -59,9 +59,9 @@ class All:
             cluster when possible.
             Default: False (Do not distribute)
 
-        clean: bool
-            Should the local staging directory be cleaned prior to this run.
-            Default: False (Do not clean)
+        overwrite: bool
+            If this pipeline has already partially or completely run, should it overwrite the previous files or not.
+            Default: False (Do not overwrite or regenerate files)
 
         debug: bool
             A debug flag for the developer to use to manipulate how much data runs,
@@ -133,7 +133,7 @@ class All:
             standardized_fov_paths_dataset = standardize_fov_array(
                 dataset=dataset,
                 distributed_executor_address=distributed_executor_address,
-                clean=clean,
+                overwrite=overwrite,
                 debug=debug,
                 # Allows us to pass `--desired_pixel_sizes [{float},{float},{float}]`
                 **kwargs,
@@ -142,7 +142,7 @@ class All:
             _ = single_cell_features(
                 dataset=standardized_fov_paths_dataset,
                 distributed_executor_address=distributed_executor_address,
-                clean=clean,
+                overwrite=overwrite,
                 debug=debug,
                 # Allows us to pass `--cell_ceiling_adjustment {int}`
                 **kwargs,
