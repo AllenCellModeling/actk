@@ -116,4 +116,4 @@ ENV/
 
 # Project specific
 data/
-.dask_logs
+.dask_logs/
