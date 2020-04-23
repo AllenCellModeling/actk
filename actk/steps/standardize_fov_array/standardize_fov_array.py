@@ -41,6 +41,7 @@ class StandardizeFOVArrayResult(NamedTuple):
 
 class StandardizeFOVArrayError(NamedTuple):
     fov_id: int
+    error: str
 
 
 ###############################################################################
@@ -101,7 +102,7 @@ class StandardizeFOVArray(Step):
         # Catch and return error
         except Exception as e:
             print(f"Failed Standardized FOV Generation for FOVId: {row.FOVId}. Error: {e}")
-            return StandardizeFOVArrayError(row.FOVId)
+            return StandardizeFOVArrayError(row.FOVId, str(e))
 
     @log_run_params
     def run(
@@ -203,7 +204,12 @@ class StandardizeFOVArray(Step):
                     }
                 )
             else:
-                errors.append(result.fov_id)
+                errors.append(
+                    {
+                        DatasetFields.FOVId: result.fov_id,
+                        "Error": result.error,
+                    }
+                )
 
         # Convert fov paths to dataframe
         standardized_fov_paths_dataset = pd.DataFrame(standardized_fov_paths_dataset)

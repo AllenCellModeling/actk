@@ -37,6 +37,7 @@ class SingleCellFeaturesResult(NamedTuple):
 
 class SingleCellFeaturesError(NamedTuple):
     cell_id: int
+    error: str
 
 
 ###############################################################################
@@ -102,7 +103,7 @@ class SingleCellFeatures(Step):
         # Catch and return error
         except Exception as e:
             print(f"Failed Cell Feature Generation for CellId: {row.CellId}. Error: {e}")
-            return SingleCellFeaturesError(row.CellId)
+            return SingleCellFeaturesError(row.CellId, str(e))
 
     @log_run_params
     def run(
@@ -192,7 +193,12 @@ class SingleCellFeatures(Step):
                     }
                 )
             else:
-                errors.append(result.cell_id)
+                errors.append(
+                    {
+                        DatasetFields.CellId: result.cell_id,
+                        "Error": result.error,
+                    }
+                )
 
         # Convert features paths rows to dataframe
         cell_features_dataset = pd.DataFrame(cell_features_dataset)
