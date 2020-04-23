@@ -52,21 +52,21 @@ aics_data_requirements = [
 
 requirements = [
     # stepworkflow requires
-    "bokeh",
+    "bokeh==2.0.1",
     "dask[bag]==2.12.0",
     "dask_jobqueue==0.7.0",
-    "datastep>=0.1.6",
+    "datastep==0.1.6",
     "distributed==2.12.0",
-    "docutils<0.16",  # needed for botocore (quilt dependency)
-    "fire",
+    "docutils==0.15.2",  # needed for botocore (quilt dependency)
+    "fire==0.3.0",
     "prefect==0.9.7",
-    "python-dateutil<=2.8.0",  # need <=2.8.0 for quilt3 in step
+    "python-dateutil==2.8.0",  # need <=2.8.0 for quilt3 in step
     # project requires
-    "aicsfeature>=0.2.1",
-    "aicsimageio>=3.1.4",
-    "aicsimageprocessing>=0.7.3",
-    "numpy",
-    "pandas",
+    "aicsfeature==0.2.1",
+    "aicsimageio==3.1.4",
+    "aicsimageprocessing==0.7.3",
+    "numpy==1.18.2",
+    "pandas==1.0.3",
 ]
 
 extra_requirements = {
