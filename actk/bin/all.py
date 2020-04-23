@@ -107,8 +107,8 @@ class All:
                 )
                 log.info("Created SLURMCluster")
 
-                # Adapt cluster
-                cluster.adapt(minimum_jobs=1, maximum_jobs=20)
+                # Scale cluster
+                cluster.scale(20)
 
                 # Use the port from the created connector to set executor address
                 distributed_executor_address = cluster.scheduler_address
