@@ -153,13 +153,13 @@ class SingleCellFeatures(Step):
         if isinstance(dataset, (str, Path)):
             dataset = Path(dataset).expanduser().resolve(strict=True)
 
-            # Read dataset
-            dataset = pd.read_csv(dataset)
+            # Check dataset and manifest have required fields
+            dataset_utils.check_required_fields(
+                dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
+            )
 
-        # Check dataset and manifest have required fields
-        dataset_utils.check_required_fields(
-            dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
-        )
+        # Read dataset
+        dataset = pd.read_csv(dataset)
 
         # Create features directory
         features_dir = self.step_local_staging_dir / "cell_features"

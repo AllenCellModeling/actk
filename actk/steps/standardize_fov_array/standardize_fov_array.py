@@ -154,13 +154,13 @@ class StandardizeFOVArray(Step):
         if isinstance(dataset, (str, Path)):
             dataset = Path(dataset).expanduser().resolve(strict=True)
 
-            # Read dataset
-            dataset = pd.read_csv(dataset)
+            # Check the dataset for the required columns
+            dataset_utils.check_required_fields(
+                dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
+            )
 
-        # Check the dataset for the required columns
-        dataset_utils.check_required_fields(
-            dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
-        )
+        # Read dataset
+        dataset = pd.read_csv(dataset)
 
         # Log original length of cell dataset
         log.info(f"Original dataset length: {len(dataset)}")
