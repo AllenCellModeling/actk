@@ -116,6 +116,14 @@ def download_aics_dataset(args: Args):
             data = data.apply(pd.DataFrame.sample, frac=args.sample)
             data = data.reset_index(drop=True)
 
+        # Rename columns to match DatasetFields
+        data = data.rename(columns={
+            "ChannelNumber405": DatasetFields.ChannelIndexDNA,
+            "ChannelNumber638": DatasetFields.ChannelIndexMembrane,
+            "ChannelNumberStruct": DatasetFields.ChannelIndexStructure,
+            "ChannelNumberBrightfield": DatasetFields.ChannelIndexBrightfield,
+        })
+
         # Save to CSV
         data.to_csv(args.save_path, index=False)
 
