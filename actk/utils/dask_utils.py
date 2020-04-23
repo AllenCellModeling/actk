@@ -27,7 +27,7 @@ class DistributedHandler:
         self, func, *iterables, batch_size: int = 20, **kwargs,
     ) -> Iterable[Any]:
         """
-        A function to map a function across iterables in a batched fashion.
+        Map a function across iterables in a batched fashion.
 
         If the iterables are of length 1000, but the batch size is 10, it will
         process and _complete_ 10 at a time. Other batch implementations relate
