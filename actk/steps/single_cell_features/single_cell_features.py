@@ -35,6 +35,10 @@ class SingleCellFeaturesResult(NamedTuple):
     path: Path
 
 
+class SingleCellFeaturesError(NamedTuple):
+    cell_id: int
+
+
 ###############################################################################
 
 
@@ -68,30 +72,37 @@ class SingleCellFeatures(Step):
         # Overwrite or didn't exist
         print(f"Beginning Cell Feature Generation for CellId: {row.CellId}")
 
-        # Read the standardized FOV
-        image = AICSImage(row.StandardizedFOVPath)
+        # Wrap errors for debugging later
+        try:
+            # Read the standardized FOV
+            image = AICSImage(row.StandardizedFOVPath)
 
-        # Select and adjust cell shape ceiling for this cell
-        adjusted = image_utils.select_and_adjust_segmentation_ceiling(
-            image=image.get_image_data("CYXZ", S=0, T=0),
-            cell_index=row.CellIndex,
-            cell_ceiling_adjustment=cell_ceiling_adjustment,
-        )
+            # Select and adjust cell shape ceiling for this cell
+            adjusted = image_utils.select_and_adjust_segmentation_ceiling(
+                image=image.get_image_data("CYXZ", S=0, T=0),
+                cell_index=row.CellIndex,
+                cell_ceiling_adjustment=cell_ceiling_adjustment,
+            )
 
-        # Crop the FOV to the segmentation portions
-        cropped = image_utils.crop_raw_channels_with_segmentation(
-            image=adjusted, channels=image.get_channel_names(),
-        )
+            # Crop the FOV to the segmentation portions
+            cropped = image_utils.crop_raw_channels_with_segmentation(
+                image=adjusted, channels=image.get_channel_names(),
+            )
 
-        # Generate features
-        features = image_utils.get_features_from_image(cropped)
+            # Generate features
+            features = image_utils.get_features_from_image(cropped)
 
-        # Save to JSON
-        with open(save_path, "w") as write_out:
-            json.dump(features, write_out)
+            # Save to JSON
+            with open(save_path, "w") as write_out:
+                json.dump(features, write_out)
 
-        print(f"Completed Cell Feature Generation for CellId: {row.CellId}")
-        return SingleCellFeaturesResult(row.CellId, save_path)
+            print(f"Completed Cell Feature Generation for CellId: {row.CellId}")
+            return SingleCellFeaturesResult(row.CellId, save_path)
+
+        # Catch and return error
+        except Exception as e:
+            print(f"Failed Cell Feature Generation for CellId: {row.CellId}. Error: {e}")
+            return SingleCellFeaturesError(row.CellId)
 
     @log_run_params
     def run(
@@ -171,13 +182,17 @@ class SingleCellFeatures(Step):
 
         # Generate features paths rows
         cell_features_dataset = []
+        errors = []
         for result in results:
-            cell_features_dataset.append(
-                {
-                    DatasetFields.CellId: result.cell_id,
-                    DatasetFields.CellFeaturesPath: result.path,
-                }
-            )
+            if isinstance(result, SingleCellFeaturesResult):
+                cell_features_dataset.append(
+                    {
+                        DatasetFields.CellId: result.cell_id,
+                        DatasetFields.CellFeaturesPath: result.path,
+                    }
+                )
+            else:
+                errors.append(result.cell_id)
 
         # Convert features paths rows to dataframe
         cell_features_dataset = pd.DataFrame(cell_features_dataset)
@@ -188,5 +203,9 @@ class SingleCellFeatures(Step):
         # Save manifest to CSV
         manifest_save_path = self.step_local_staging_dir / f"manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
+
+        # Save errored cells to JSON
+        with open(self.step_local_staging_dir / "errors.json", "w") as write_out:
+            json.dump(errors, write_out)
 
         return manifest_save_path
