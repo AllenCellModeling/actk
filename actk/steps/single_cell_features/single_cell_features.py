@@ -203,6 +203,10 @@ class SingleCellFeatures(Step):
         # Convert features paths rows to dataframe
         cell_features_dataset = pd.DataFrame(cell_features_dataset)
 
+        # Drop CellFeaturesPath column if it already exists
+        if DatasetFields.CellFeaturesPath in dataset.columns:
+            dataset = dataset.drop(columns=[DatasetFields.CellFeaturesPath])
+
         # Join original dataset to the fov paths
         self.manifest = dataset.merge(cell_features_dataset, on=DatasetFields.CellId)
 

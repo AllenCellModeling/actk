@@ -214,6 +214,10 @@ class StandardizeFOVArray(Step):
         # Convert fov paths to dataframe
         standardized_fov_paths_dataset = pd.DataFrame(standardized_fov_paths_dataset)
 
+        # Drop StandardizedFOVPath column if it already exists
+        if DatasetFields.StandardizedFOVPath in dataset.columns:
+            dataset = dataset.drop(columns=[DatasetFields.StandardizedFOVPath])
+
         # Join original dataset to the fov paths
         self.manifest = dataset.merge(
             standardized_fov_paths_dataset, on=DatasetFields.FOVId
