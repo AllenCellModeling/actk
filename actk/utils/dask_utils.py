@@ -24,7 +24,7 @@ class DistributedHandler:
         return self._client
 
     def batched_map(
-        self, func, *iterables, batch_size: int = 20, **kwargs,
+        self, func, *iterables, batch_size: int = 10, **kwargs,
     ) -> Iterable[Any]:
         """
         Map a function across iterables in a batched fashion.
