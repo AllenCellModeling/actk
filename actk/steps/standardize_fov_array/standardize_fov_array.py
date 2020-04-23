@@ -166,7 +166,7 @@ class StandardizeFOVArray(Step):
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
-            futures = handler.client.map(
+            results = handler.batched_map(
                 self._generate_standardized_fov_array,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
@@ -177,16 +177,7 @@ class StandardizeFOVArray(Step):
                 [desired_pixel_sizes for i in range(len(fov_dataset))],
                 [fovs_dir for i in range(len(fov_dataset))],
                 [overwrite for i in range(len(dataset))],
-                # Chunk the processing in batches of 50
-                # See: https://github.com/dask/distributed/issues/2181
-                # Why: aicsimageio using dask under the hood generates hundreds of tasks per image
-                # this means that when we are running the pipeline with thousands of images, the scheduler
-                # may be overloaded
-                batch_size=50,
             )
-
-            # Block until all complete
-            results = handler.gather(futures)
 
         # Generate fov paths rows
         standardized_fov_paths_dataset = []
