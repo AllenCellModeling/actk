@@ -68,7 +68,7 @@ class SingleCellFeatures(Step):
         # Check skip
         if not overwrite and save_path.is_file():
             print(f"Skipping Cell Feature Generate for Cell Id: {row.CellId}")
-            return SingleCellFeatures(row.CellId, save_path)
+            return SingleCellFeaturesResult(row.CellId, save_path)
 
         # Overwrite or didn't exist
         print(f"Beginning Cell Feature Generation for CellId: {row.CellId}")
