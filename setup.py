@@ -52,6 +52,7 @@ aics_data_requirements = [
 
 requirements = [
     # stepworkflow requires
+    "aics_dask_utils==0.1.0",
     "bokeh==2.0.1",
     "dask[bag]==2.12.0",
     "dask_jobqueue==0.7.0",

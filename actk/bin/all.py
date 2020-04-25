@@ -60,7 +60,8 @@ class All:
             Default: False (Do not distribute)
 
         overwrite: bool
-            If this pipeline has already partially or completely run, should it overwrite the previous files or not.
+            If this pipeline has already partially or completely run, should it
+            overwrite the previous files or not.
             Default: False (Do not overwrite or regenerate files)
 
         debug: bool

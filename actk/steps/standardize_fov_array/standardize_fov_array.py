@@ -12,9 +12,10 @@ from aicsimageio import transforms
 from aicsimageio.writers import OmeTiffWriter
 from datastep import Step, log_run_params
 
+from aics_dask_utils import DistributedHandler
+
 from ...constants import DatasetFields
 from ...utils import dataset_utils, image_utils
-from ...utils.dask_utils import DistributedHandler
 
 ###############################################################################
 
@@ -94,14 +95,16 @@ class StandardizeFOVArray(Step):
                     dimension_order="CZYX",
                     channel_names=channels,
                     pixels_physical_size=pixel_sizes,
-            )
+                )
 
             print(f"Completed Standardized FOV Generation for FOVId: {row.FOVId}")
             return StandardizeFOVArrayResult(row.FOVId, save_path)
 
         # Catch and return error
         except Exception as e:
-            print(f"Failed Standardized FOV Generation for FOVId: {row.FOVId}. Error: {e}")
+            print(
+                f"Failed Standardized FOV Generation for FOVId: {row.FOVId}. Error: {e}"
+            )
             return StandardizeFOVArrayError(row.FOVId, str(e))
 
     @log_run_params
@@ -137,7 +140,8 @@ class StandardizeFOVArray(Step):
             Default: None
 
         overwrite: bool
-            If this step has already partially or completely run, should it overwrite the previous files or not.
+            If this step has already partially or completely run, should it overwrite
+            the previous files or not.
             Default: False (Do not overwrite or regenerate files)
 
         debug: bool
@@ -205,10 +209,7 @@ class StandardizeFOVArray(Step):
                 )
             else:
                 errors.append(
-                    {
-                        DatasetFields.FOVId: result.fov_id,
-                        "Error": result.error,
-                    }
+                    {DatasetFields.FOVId: result.fov_id, "Error": result.error}
                 )
 
         # Convert fov paths to dataframe

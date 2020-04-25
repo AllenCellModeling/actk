@@ -11,9 +11,10 @@ import pandas as pd
 from aicsimageio import AICSImage
 from datastep import Step, log_run_params
 
+from aics_dask_utils import DistributedHandler
+
 from ...constants import DatasetFields
 from ...utils import dataset_utils, image_utils
-from ...utils.dask_utils import DistributedHandler
 from ..standardize_fov_array import StandardizeFOVArray
 
 ###############################################################################
@@ -102,7 +103,9 @@ class SingleCellFeatures(Step):
 
         # Catch and return error
         except Exception as e:
-            print(f"Failed Cell Feature Generation for CellId: {row.CellId}. Error: {e}")
+            print(
+                f"Failed Cell Feature Generation for CellId: {row.CellId}. Error: {e}"
+            )
             return SingleCellFeaturesError(row.CellId, str(e))
 
     @log_run_params
@@ -136,7 +139,8 @@ class SingleCellFeatures(Step):
             Default: None
 
         overwrite: bool
-            If this step has already partially or completely run, should it overwrite the previous files or not.
+            If this step has already partially or completely run, should it overwrite
+            the previous files or not.
             Default: False (Do not overwrite or regenerate files)
 
         debug: bool
@@ -194,10 +198,7 @@ class SingleCellFeatures(Step):
                 )
             else:
                 errors.append(
-                    {
-                        DatasetFields.CellId: result.cell_id,
-                        "Error": result.error,
-                    }
+                    {DatasetFields.CellId: result.cell_id, "Error": result.error}
                 )
 
         # Convert features paths rows to dataframe
