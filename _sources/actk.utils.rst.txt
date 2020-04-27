@@ -4,14 +4,6 @@ actk.utils package
 Submodules
 ----------
 
-actk.utils.dask\_utils module
------------------------------
-
-.. automodule:: actk.utils.dask_utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 actk.utils.dataset\_utils module
 --------------------------------
 
