@@ -66,9 +66,9 @@ def upload_test_data(args: Args):
     # Try running the download pipeline
     try:
         # Get test data dir
-        data_dir = (
-            Path(__file__).parent.parent / "actk" / "tests" / "data"
-        ).resolve(strict=True)
+        data_dir = (Path(__file__).parent.parent / "actk" / "tests" / "data").resolve(
+            strict=True
+        )
 
         # Report with directory will be used for upload
         log.info(f"Using contents of directory: {data_dir}")
@@ -112,7 +112,7 @@ def upload_test_data(args: Args):
                     "s3://aics-modeling-packages-test-resources",
                     message=(
                         f"Test resources for `actk` version: {get_module_version()}."
-                    )
+                    ),
                 )
 
                 log.info(f"Completed package push. Result hash: {pushed.top_hash}")

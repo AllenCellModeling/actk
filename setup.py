@@ -52,21 +52,22 @@ aics_data_requirements = [
 
 requirements = [
     # stepworkflow requires
-    "bokeh",
-    "dask[bag]>=2.12.0",
-    "dask_jobqueue>=0.7.0",
-    "datastep>=0.1.6",
-    "distributed>=2.12.0",
-    "docutils<0.16",  # needed for botocore (quilt dependency)
-    "fire",
-    "prefect>=0.9.7",
-    "python-dateutil<=2.8.0",  # need <=2.8.0 for quilt3 in step
+    "aics_dask_utils==0.1.0",
+    "bokeh==2.0.1",
+    "dask[bag]==2.12.0",
+    "dask_jobqueue==0.7.0",
+    "datastep==0.1.6",
+    "distributed==2.12.0",
+    "docutils==0.15.2",  # needed for botocore (quilt dependency)
+    "fire==0.3.0",
+    "prefect==0.9.7",
+    "python-dateutil==2.8.0",  # need <=2.8.0 for quilt3 in step
     # project requires
-    "aicsfeature>=0.2.1",
-    "aicsimageio>=3.1.4",
-    "aicsimageprocessing>=0.7.3",
-    "numpy",
-    "pandas",
+    "aicsfeature==0.2.1",
+    "aicsimageio==3.1.4",
+    "aicsimageprocessing==0.7.3",
+    "numpy==1.18.2",
+    "pandas==1.0.3",
 ]
 
 extra_requirements = {
@@ -80,8 +81,8 @@ extra_requirements = {
         *test_requirements,
         *setup_requirements,
         *dev_requirements,
-        *interactive_requirements
-    ]
+        *interactive_requirements,
+    ],
 }
 
 setup(
@@ -96,11 +97,7 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     description="Automated Cell Toolkit",
-    entry_points={
-        "console_scripts": [
-            "actk=actk.bin.cli:cli"
-        ]
-    },
+    entry_points={"console_scripts": ["actk=actk.bin.cli:cli"]},
     install_requires=requirements,
     license="Allen Institute Software License",
     long_description=readme,

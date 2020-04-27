@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
 import logging
 from pathlib import Path
 from typing import NamedTuple, Optional, Tuple, Union
@@ -11,9 +12,10 @@ from aicsimageio import transforms
 from aicsimageio.writers import OmeTiffWriter
 from datastep import Step, log_run_params
 
+from aics_dask_utils import DistributedHandler
+
 from ...constants import DatasetFields
 from ...utils import dataset_utils, image_utils
-from ...utils.dask_utils import DistributedHandler
 
 ###############################################################################
 
@@ -38,6 +40,11 @@ class StandardizeFOVArrayResult(NamedTuple):
     path: Path
 
 
+class StandardizeFOVArrayError(NamedTuple):
+    fov_id: int
+    error: str
+
+
 ###############################################################################
 
 
@@ -51,37 +58,54 @@ class StandardizeFOVArray(Step):
         row: pd.Series,
         desired_pixel_sizes: Tuple[float],
         save_dir: Path,
+        overwrite: bool,
     ) -> StandardizeFOVArrayResult:
-        log.info(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
-
-        # Get normalized image array
-        normalized_img, channels, pixel_sizes = image_utils.get_normed_image_array(
-            raw_image=row.SourceReadPath,
-            nucleus_seg_image=row.NucleusSegmentationReadPath,
-            membrane_seg_image=row.MembraneSegmentationReadPath,
-            dna_channel_index=row.ChannelIndexDNA,
-            membrane_channel_index=row.ChannelIndexMembrane,
-            structure_channel_index=row.ChannelIndexStructure,
-            brightfield_channel_index=row.ChannelIndexBrightfield,
-            desired_pixel_sizes=desired_pixel_sizes,
-        )
-
-        # Reshape data for serialization
-        reshaped = transforms.transpose_to_dims(normalized_img, "CYXZ", "CZYX")
-
-        # Save array as OME Tiff
+        # Get the ultimate end save path for this cell
         save_path = save_dir / f"{row.FOVId}.ome.tiff"
-        with OmeTiffWriter(save_path, overwrite_file=True) as writer:
-            writer.save(
-                data=reshaped,
-                dimension_order="CZYX",
-                channel_names=channels,
-                pixels_physical_size=pixel_sizes,
+
+        # Check skip
+        if not overwrite and save_path.is_file():
+            print(f"Skipping Standardized FOV Generation for FOVId: {row.FOVId}")
+            return StandardizeFOVArrayResult(row.FOVId, save_path)
+
+        # Overwrite or didn't exist
+        print(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
+
+        # Wrap errors for debugging later
+        try:
+            # Get normalized image array
+            normalized_img, channels, pixel_sizes = image_utils.get_normed_image_array(
+                raw_image=row.SourceReadPath,
+                nucleus_seg_image=row.NucleusSegmentationReadPath,
+                membrane_seg_image=row.MembraneSegmentationReadPath,
+                dna_channel_index=row.ChannelIndexDNA,
+                membrane_channel_index=row.ChannelIndexMembrane,
+                structure_channel_index=row.ChannelIndexStructure,
+                brightfield_channel_index=row.ChannelIndexBrightfield,
+                desired_pixel_sizes=desired_pixel_sizes,
             )
 
-        log.info(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
+            # Reshape data for serialization
+            reshaped = transforms.transpose_to_dims(normalized_img, "CYXZ", "CZYX")
 
-        return StandardizeFOVArrayResult(row.FOVId, save_path)
+            # Save array as OME Tiff
+            with OmeTiffWriter(save_path, overwrite_file=True) as writer:
+                writer.save(
+                    data=reshaped,
+                    dimension_order="CZYX",
+                    channel_names=channels,
+                    pixels_physical_size=pixel_sizes,
+                )
+
+            print(f"Completed Standardized FOV Generation for FOVId: {row.FOVId}")
+            return StandardizeFOVArrayResult(row.FOVId, save_path)
+
+        # Catch and return error
+        except Exception as e:
+            print(
+                f"Failed Standardized FOV Generation for FOVId: {row.FOVId}. Error: {e}"
+            )
+            return StandardizeFOVArrayError(row.FOVId, str(e))
 
     @log_run_params
     def run(
@@ -89,7 +113,7 @@ class StandardizeFOVArray(Step):
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
         desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29),
         distributed_executor_address: Optional[str] = None,
-        clean: bool = False,
+        overwrite: bool = False,
         debug: bool = False,
         **kwargs,
     ) -> Path:
@@ -115,9 +139,10 @@ class StandardizeFOVArray(Step):
             An optional executor address to pass to some computation engine.
             Default: None
 
-        clean: bool
-            Should the local staging directory be cleaned prior to this run.
-            Default: False (Do not clean)
+        overwrite: bool
+            If this step has already partially or completely run, should it overwrite
+            the previous files or not.
+            Default: False (Do not overwrite or regenerate files)
 
         debug: bool
             A debug flag for the developer to use to manipulate how much data runs,
@@ -133,13 +158,13 @@ class StandardizeFOVArray(Step):
         if isinstance(dataset, (str, Path)):
             dataset = Path(dataset).expanduser().resolve(strict=True)
 
-            # Read dataset
-            dataset = pd.read_csv(dataset)
+            # Check the dataset for the required columns
+            dataset_utils.check_required_fields(
+                dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
+            )
 
-        # Check the dataset for the required columns
-        dataset_utils.check_required_fields(
-            dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
-        )
+        # Read dataset
+        dataset = pd.read_csv(dataset)
 
         # Log original length of cell dataset
         log.info(f"Original dataset length: {len(dataset)}")
@@ -158,7 +183,7 @@ class StandardizeFOVArray(Step):
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
-            futures = handler.client.map(
+            results = handler.batched_map(
                 self._generate_standardized_fov_array,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
@@ -168,23 +193,31 @@ class StandardizeFOVArray(Step):
                 # mapped function call
                 [desired_pixel_sizes for i in range(len(fov_dataset))],
                 [fovs_dir for i in range(len(fov_dataset))],
+                [overwrite for i in range(len(dataset))],
             )
-
-            # Block until all complete
-            results = handler.gather(futures)
 
         # Generate fov paths rows
         standardized_fov_paths_dataset = []
+        errors = []
         for result in results:
-            standardized_fov_paths_dataset.append(
-                {
-                    DatasetFields.FOVId: result.fov_id,
-                    DatasetFields.StandardizedFOVPath: result.path,
-                }
-            )
+            if isinstance(result, StandardizeFOVArrayResult):
+                standardized_fov_paths_dataset.append(
+                    {
+                        DatasetFields.FOVId: result.fov_id,
+                        DatasetFields.StandardizedFOVPath: result.path,
+                    }
+                )
+            else:
+                errors.append(
+                    {DatasetFields.FOVId: result.fov_id, "Error": result.error}
+                )
 
         # Convert fov paths to dataframe
         standardized_fov_paths_dataset = pd.DataFrame(standardized_fov_paths_dataset)
+
+        # Drop StandardizedFOVPath column if it already exists
+        if DatasetFields.StandardizedFOVPath in dataset.columns:
+            dataset = dataset.drop(columns=[DatasetFields.StandardizedFOVPath])
 
         # Join original dataset to the fov paths
         self.manifest = dataset.merge(
@@ -194,5 +227,9 @@ class StandardizeFOVArray(Step):
         # Save manifest to CSV
         manifest_save_path = self.step_local_staging_dir / f"manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
+
+        # Save errored FOVs to JSON
+        with open(self.step_local_staging_dir / "errors.json", "w") as write_out:
+            json.dump(errors, write_out)
 
         return manifest_save_path
