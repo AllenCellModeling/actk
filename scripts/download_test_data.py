@@ -40,9 +40,7 @@ class Args(argparse.Namespace):
         p.add_argument(
             "--top-hash",
             default="e3ec3b4666ee0413661cf93f9129c7053d2b1aeafe2eff64298b4109d3a276a1",
-            help=(
-                "A specific version of the package to retrieve. Default: latest"
-            ),
+            help=("A specific version of the package to retrieve. Default: latest"),
         )
         p.add_argument(
             "--debug",
@@ -62,22 +60,18 @@ def download_test_data(args: Args):
     # Try running the download pipeline
     try:
         # Get test data dir
-        data_dir = (
-            Path(__file__).parent.parent / "actk" / "tests" / "data"
-        ).resolve()
+        data_dir = (Path(__file__).parent.parent / "actk" / "tests" / "data").resolve()
         data_dir.mkdir(exist_ok=True)
 
         # Get quilt package
         package = Package.browse(
             "actk/test_data",
             "s3://aics-modeling-packages-test-resources",
-            top_hash=args.top_hash
+            top_hash=args.top_hash,
         )
 
         # Download
-        package["data"].fetch(
-            data_dir
-        )
+        package["data"].fetch(data_dir)
 
         log.info(f"Completed package download.")
 
