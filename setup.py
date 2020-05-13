@@ -65,7 +65,7 @@ requirements = [
     "python-dateutil==2.8.0",  # need <=2.8.0 for quilt3 in step
     # project requires
     "aicsfeature==0.2.1",
-    "aicsimageio==3.1.4",
+    "aicsimageio==3.2.0",
     "aicsimageprocessing==0.7.3",
     "numpy==1.18.2",
     "pandas==1.0.3",
