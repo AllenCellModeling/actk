@@ -13,6 +13,7 @@ from datetime import datetime
 from pathlib import Path
 
 import dask.config
+import psutil
 from dask_jobqueue import SLURMCluster
 from distributed import LocalCluster
 from prefect import Flow
@@ -80,7 +81,7 @@ class All:
         if debug:
             exe = LocalExecutor()
             distributed_executor_address = None
-            log.info(f"Debug flagged. Will use threads instead of Dask.")
+            log.info("Debug flagged. Will use threads instead of Dask.")
         else:
             if distributed:
                 # Create or get log dir
@@ -160,7 +161,7 @@ class All:
             single_cell_images_dataset = single_cell_images(
                 dataset=single_cell_features_dataset,
                 distributed_executor_address=distributed_executor_address,
-                clean=clean,
+                overwrite=overwrite,
                 debug=debug,
                 # Allows us to pass `--cell_ceiling_adjustment {int}`
                 **kwargs,

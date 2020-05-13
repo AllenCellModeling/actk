@@ -67,11 +67,11 @@ class SingleCellFeatures(Step):
 
         # Check skip
         if not overwrite and save_path.is_file():
-            print(f"Skipping Cell Feature Generate for Cell Id: {row.CellId}")
+            log.info(f"Skipping Cell Feature Generate for Cell Id: {row.CellId}")
             return SingleCellFeaturesResult(row.CellId, save_path)
 
         # Overwrite or didn't exist
-        print(f"Beginning Cell Feature Generation for CellId: {row.CellId}")
+        log.info(f"Beginning Cell Feature Generation for CellId: {row.CellId}")
 
         # Wrap errors for debugging later
         try:
@@ -97,12 +97,12 @@ class SingleCellFeatures(Step):
             with open(save_path, "w") as write_out:
                 json.dump(features, write_out)
 
-            print(f"Completed Cell Feature Generation for CellId: {row.CellId}")
+            log.info(f"Completed Cell Feature Generation for CellId: {row.CellId}")
             return SingleCellFeaturesResult(row.CellId, save_path)
 
         # Catch and return error
         except Exception as e:
-            print(
+            log.info(
                 f"Failed Cell Feature Generation for CellId: {row.CellId}. Error: {e}"
             )
             return SingleCellFeaturesError(row.CellId, str(e))
@@ -211,7 +211,7 @@ class SingleCellFeatures(Step):
         self.manifest = dataset.merge(cell_features_dataset, on=DatasetFields.CellId)
 
         # Save manifest to CSV
-        manifest_save_path = self.step_local_staging_dir / f"manifest.csv"
+        manifest_save_path = self.step_local_staging_dir / "manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
 
         # Save errored cells to JSON

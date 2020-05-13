@@ -325,7 +325,7 @@ class SingleCellImages(Step):
         )
 
         # Save manifest to CSV
-        manifest_save_path = self.step_local_staging_dir / f"manifest.csv"
+        manifest_save_path = self.step_local_staging_dir / "manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
 
         return manifest_save_path

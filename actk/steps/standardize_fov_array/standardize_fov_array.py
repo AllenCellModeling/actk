@@ -64,11 +64,11 @@ class StandardizeFOVArray(Step):
 
         # Check skip
         if not overwrite and save_path.is_file():
-            print(f"Skipping Standardized FOV Generation for FOVId: {row.FOVId}")
+            log.info(f"Skipping Standardized FOV Generation for FOVId: {row.FOVId}")
             return StandardizeFOVArrayResult(row.FOVId, save_path)
 
         # Overwrite or didn't exist
-        print(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
+        log.info(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
 
         # Wrap errors for debugging later
         try:
@@ -96,12 +96,12 @@ class StandardizeFOVArray(Step):
                     pixels_physical_size=pixel_sizes,
                 )
 
-            print(f"Completed Standardized FOV Generation for FOVId: {row.FOVId}")
+            log.info(f"Completed Standardized FOV Generation for FOVId: {row.FOVId}")
             return StandardizeFOVArrayResult(row.FOVId, save_path)
 
         # Catch and return error
         except Exception as e:
-            print(
+            log.info(
                 f"Failed Standardized FOV Generation for FOVId: {row.FOVId}. Error: {e}"
             )
             return StandardizeFOVArrayError(row.FOVId, str(e))
@@ -224,7 +224,7 @@ class StandardizeFOVArray(Step):
         )
 
         # Save manifest to CSV
-        manifest_save_path = self.step_local_staging_dir / f"manifest.csv"
+        manifest_save_path = self.step_local_staging_dir / "manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
 
         # Save errored FOVs to JSON
