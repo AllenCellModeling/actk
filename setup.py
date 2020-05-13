@@ -52,7 +52,7 @@ aics_data_requirements = [
 
 requirements = [
     # stepworkflow requires
-    "aics_dask_utils==0.1.0",
+    "aics_dask_utils==0.2.0",
     "bokeh==2.0.1",
     "cloudpickle>=1.0.0,<1.4.0",  # needed for prefect
     "dask[bag]==2.12.0",

@@ -10,6 +10,7 @@ import aicsimageprocessing as proc
 import dask.dataframe as dd
 import numpy as np
 import pandas as pd
+from aics_dask_utils import DistributedHandler
 from aicsimageio import AICSImage, transforms
 from aicsimageio.writers import OmeTiffWriter
 from datastep import Step, log_run_params
@@ -17,7 +18,6 @@ from imageio import imwrite
 
 from ...constants import Channels, DatasetFields
 from ...utils import dataset_utils, image_utils
-from ...utils.dask_utils import DistributedHandler
 from ..single_cell_features import SingleCellFeatures
 
 ###############################################################################
