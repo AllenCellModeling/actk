@@ -14,7 +14,7 @@ from pathlib import Path
 
 import dask.config
 from dask_jobqueue import SLURMCluster
-from distributed import LocalCluster
+from distributed import Client, LocalCluster
 from prefect import Flow
 from prefect.engine.executors import DaskExecutor, LocalExecutor
 
@@ -101,8 +101,8 @@ class All:
                 # Create cluster
                 log.info("Creating SLURMCluster")
                 cluster = SLURMCluster(
-                    cores=4,
-                    memory="16GB",
+                    cores=1,
+                    memory="6GB",
                     queue="aics_cpu_general",
                     walltime="10:00:00",
                     local_directory=str(log_dir),
@@ -112,6 +112,8 @@ class All:
 
                 # Spawn workers
                 cluster.scale(100)
+                client = Client(cluster)
+                client.wait_for_workers(100)
 
                 # Use the port from the created connector to set executor address
                 distributed_executor_address = cluster.scheduler_address
