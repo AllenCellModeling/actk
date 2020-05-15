@@ -9,12 +9,13 @@ and configure their IO in the `run` function.
 """
 
 import logging
+import time
 from datetime import datetime
 from pathlib import Path
 
 import dask.config
 from dask_jobqueue import SLURMCluster
-from distributed import Client, LocalCluster
+from distributed import LocalCluster
 from prefect import Flow
 from prefect.engine.executors import DaskExecutor, LocalExecutor
 
@@ -108,12 +109,20 @@ class All:
                     local_directory=str(log_dir),
                     log_directory=str(log_dir),
                 )
-                log.info("Created SLURMCluster")
 
                 # Spawn workers
                 cluster.scale(100)
-                client = Client(cluster)
-                client.wait_for_workers(100)
+
+                # Wait for workers
+                # In a dream situtation we could call
+                # client = Client(cluster)
+                # client.wait_for_workers(100)
+                # But that doesn't work
+                # instead...
+                log.info("Waiting for workers to start...")
+                time.sleep(120)
+
+                log.info("Created SLURMCluster")
 
                 # Use the port from the created connector to set executor address
                 distributed_executor_address = cluster.scheduler_address
