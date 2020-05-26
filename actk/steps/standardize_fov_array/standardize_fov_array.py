@@ -64,11 +64,11 @@ class StandardizeFOVArray(Step):
 
         # Check skip
         if not overwrite and save_path.is_file():
-            log.info(f"Skipping Standardized FOV Generation for FOVId: {row.FOVId}")
+            log.info(f"Skipping standardized FOV generation for FOVId: {row.FOVId}")
             return StandardizeFOVArrayResult(row.FOVId, save_path)
 
         # Overwrite or didn't exist
-        log.info(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
+        log.info(f"Beginning standardized FOV generation for FOVId: {row.FOVId}")
 
         # Wrap errors for debugging later
         try:
@@ -96,13 +96,13 @@ class StandardizeFOVArray(Step):
                     pixels_physical_size=pixel_sizes,
                 )
 
-            log.info(f"Completed Standardized FOV Generation for FOVId: {row.FOVId}")
+            log.info(f"Completed standardized FOV generation for FOVId: {row.FOVId}")
             return StandardizeFOVArrayResult(row.FOVId, save_path)
 
         # Catch and return error
         except Exception as e:
             log.info(
-                f"Failed Standardized FOV Generation for FOVId: {row.FOVId}. Error: {e}"
+                f"Failed standardized FOV generation for FOVId: {row.FOVId}. Error: {e}"
             )
             return StandardizeFOVArrayError(row.FOVId, str(e))
 

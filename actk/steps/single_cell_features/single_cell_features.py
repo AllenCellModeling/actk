@@ -67,11 +67,11 @@ class SingleCellFeatures(Step):
 
         # Check skip
         if not overwrite and save_path.is_file():
-            log.info(f"Skipping Cell Feature Generate for Cell Id: {row.CellId}")
+            log.info(f"Skipping cell feature generation for Cell Id: {row.CellId}")
             return SingleCellFeaturesResult(row.CellId, save_path)
 
         # Overwrite or didn't exist
-        log.info(f"Beginning Cell Feature Generation for CellId: {row.CellId}")
+        log.info(f"Beginning cell feature generation for CellId: {row.CellId}")
 
         # Wrap errors for debugging later
         try:
@@ -97,13 +97,13 @@ class SingleCellFeatures(Step):
             with open(save_path, "w") as write_out:
                 json.dump(features, write_out)
 
-            log.info(f"Completed Cell Feature Generation for CellId: {row.CellId}")
+            log.info(f"Completed cell feature generation for CellId: {row.CellId}")
             return SingleCellFeaturesResult(row.CellId, save_path)
 
         # Catch and return error
         except Exception as e:
             log.info(
-                f"Failed Cell Feature Generation for CellId: {row.CellId}. Error: {e}"
+                f"Failed cell feature generation for CellId: {row.CellId}. Error: {e}"
             )
             return SingleCellFeaturesError(row.CellId, str(e))
 
