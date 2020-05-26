@@ -40,6 +40,11 @@ class CellImagesResult(NamedTuple):
     path_2d_yx_proj: Path
 
 
+class CellImagesError(NamedTuple):
+    cell_id: Union[int, str]
+    error: str
+
+
 ###############################################################################
 
 
@@ -77,121 +82,156 @@ class SingleCellImages(Step):
         cell_images_3d_dir: Path,
         cell_images_2d_all_proj_dir: Path,
         cell_images_2d_yx_proj_dir: Path,
-    ) -> CellImagesResult:
-        log.info(f"Beginning single cell image generation for CellId: {row.CellId}")
-
-        # Initialize image object with standardized FOV
-        standardized_image = AICSImage(row.StandardizedFOVPath)
-        channels = standardized_image.get_channel_names()
-
-        # Select and adjust cell shape ceiling for this cell
-        image = image_utils.select_and_adjust_segmentation_ceiling(
-            # Unlike most other operations, we can read in normal "CZYX" dimension order
-            # here as all future operations are expecting it
-            image=standardized_image.get_image_data("CYXZ", S=0, T=0),
-            cell_index=row.CellIndex,
-            cell_ceiling_adjustment=cell_ceiling_adjustment,
-        )
-
-        # Perform a rigid registration on the image
-        image, _, _ = proc.cell_rigid_registration(
-            image,
-            # Reorder bounding box as image is currently CYXZ
-            bbox_size=bounding_box[[0, 2, 3, 1]],
-        )
-
-        # Reduce size
-        crop_3d = image * 255
-        crop_3d = crop_3d.astype(np.uint8)
-
-        # Transpose to CZYX for saving
-        crop_3d = transforms.transpose_to_dims(crop_3d, "CYXZ", "CZYX")
-
-        # Save to OME-TIFF
+        overwrite: bool,
+    ) -> Union[CellImagesResult, CellImagesError]:
+        # Get the ultimate end save paths for this cell
         cell_image_3d_save_path = cell_images_3d_dir / f"{row.CellId}.ome.tiff"
-        with OmeTiffWriter(cell_image_3d_save_path, overwrite_file=True) as writer:
-            writer.save(
-                crop_3d,
-                dimension_order="CZYX",
-                channel_names=standardized_image.get_channel_names(),
-                pixels_physical_size=standardized_image.get_physical_pixel_size(),
-            )
-
-        # Generate 2d image projections
-        # Crop raw channels using segmentations
-        image = image_utils.crop_raw_channels_with_segmentation(image, channels)
-
-        # Transpose to CZYX for projections
-        image = transforms.transpose_to_dims(image, "CYXZ", "CZYX")
-
-        # Select the DNA, Membrane, and Structure channels
-        image = image[
-            [
-                channels.index(target)
-                for target in [Channels.DNA, Channels.Membrane, Channels.Structure]
-            ]
-        ]
-
-        # Set RGB colors
-        # This will set:
-        # DNA to Blue
-        # Membrane to Red
-        # Structure to Green
-        colors = [[0, 0, 1], [1, 0, 0], [0, 1, 0]]
-
-        # Get all axes projection image
-        all_proj = proc.imgtoprojection(
-            image,
-            proj_all=True,
-            proj_method=projection_method,
-            local_adjust=False,
-            global_adjust=True,
-            colors=colors,
-        )
-
-        # Convert to YXC for PNG writing
-        all_proj = transforms.transpose_to_dims(all_proj, "CYX", "YXC")
-
-        # Drop size to uint8
-        all_proj = all_proj.astype(np.uint8)
-
-        # Save to PNG
         cell_image_2d_all_proj_save_path = (
             cell_images_2d_all_proj_dir / f"{row.CellId}.png"
         )
-        imwrite(cell_image_2d_all_proj_save_path, all_proj)
-
-        # Get YX axes projection image
-        yx_proj = proc.imgtoprojection(
-            image,
-            proj_all=False,
-            proj_method=projection_method,
-            local_adjust=False,
-            global_adjust=True,
-            colors=colors,
-        )
-
-        # Convert to YXC for PNG writing
-        yx_proj = transforms.transpose_to_dims(yx_proj, "CYX", "YXC")
-
-        # Drop size to uint8
-        yx_proj = yx_proj.astype(np.uint8)
-
-        # Save to PNG
         cell_image_2d_yx_proj_save_path = (
             cell_images_2d_yx_proj_dir / f"{row.CellId}.png"
         )
-        imwrite(cell_image_2d_yx_proj_save_path, yx_proj)
 
-        log.info(f"Completed single cell image generation for CellId: {row.CellId}")
+        # Check skip
+        if (
+            not overwrite
+            # Only skip if all images exist for this cell
+            and all(p.is_file() for p in [
+                cell_image_3d_save_path,
+                cell_image_2d_all_proj_save_path,
+                cell_image_2d_yx_proj_save_path,
+            ]
+            )
+        ):
+            log.info(f"Skipping single cell image generation for CellId: {row.CellId}")
+            return CellImagesResult(
+                row.CellId,
+                cell_image_3d_save_path,
+                cell_image_2d_all_proj_save_path,
+                cell_image_2d_yx_proj_save_path,
+            )
 
-        # Return ready to save image
-        return CellImagesResult(
-            row.CellId,
-            cell_image_3d_save_path,
-            cell_image_2d_all_proj_save_path,
-            cell_image_2d_yx_proj_save_path,
-        )
+        # Overwrite or didn't exist
+        log.info(f"Beginning single cell image generation for CellId: {row.CellId}")
+
+        # Wrap errors for debugging later
+        try:
+            # Initialize image object with standardized FOV
+            standardized_image = AICSImage(row.StandardizedFOVPath)
+            channels = standardized_image.get_channel_names()
+
+            # Select and adjust cell shape ceiling for this cell
+            image = image_utils.select_and_adjust_segmentation_ceiling(
+                # Unlike most other operations, we can read in normal "CZYX" dimension
+                # order here as all future operations are expecting it
+                image=standardized_image.get_image_data("CYXZ", S=0, T=0),
+                cell_index=row.CellIndex,
+                cell_ceiling_adjustment=cell_ceiling_adjustment,
+            )
+
+            # Perform a rigid registration on the image
+            image, _, _ = proc.cell_rigid_registration(
+                image,
+                # Reorder bounding box as image is currently CYXZ
+                bbox_size=bounding_box[[0, 2, 3, 1]],
+            )
+
+            # Reduce size
+            crop_3d = image * 255
+            crop_3d = crop_3d.astype(np.uint8)
+
+            # Transpose to CZYX for saving
+            crop_3d = transforms.transpose_to_dims(crop_3d, "CYXZ", "CZYX")
+
+            # Save to OME-TIFF
+
+            with OmeTiffWriter(cell_image_3d_save_path, overwrite_file=True) as writer:
+                writer.save(
+                    crop_3d,
+                    dimension_order="CZYX",
+                    channel_names=standardized_image.get_channel_names(),
+                    pixels_physical_size=standardized_image.get_physical_pixel_size(),
+                )
+
+            # Generate 2d image projections
+            # Crop raw channels using segmentations
+            image = image_utils.crop_raw_channels_with_segmentation(image, channels)
+
+            # Transpose to CZYX for projections
+            image = transforms.transpose_to_dims(image, "CYXZ", "CZYX")
+
+            # Select the DNA, Membrane, and Structure channels
+            image = image[
+                [
+                    channels.index(target)
+                    for target in [Channels.DNA, Channels.Membrane, Channels.Structure]
+                ]
+            ]
+
+            # Set RGB colors
+            # This will set:
+            # DNA to Blue
+            # Membrane to Red
+            # Structure to Green
+            colors = [[0, 0, 1], [1, 0, 0], [0, 1, 0]]
+
+            # Get all axes projection image
+            all_proj = proc.imgtoprojection(
+                image,
+                proj_all=True,
+                proj_method=projection_method,
+                local_adjust=False,
+                global_adjust=True,
+                colors=colors,
+            )
+
+            # Convert to YXC for PNG writing
+            all_proj = transforms.transpose_to_dims(all_proj, "CYX", "YXC")
+
+            # Drop size to uint8
+            all_proj = all_proj.astype(np.uint8)
+
+            # Save to PNG
+
+            imwrite(cell_image_2d_all_proj_save_path, all_proj)
+
+            # Get YX axes projection image
+            yx_proj = proc.imgtoprojection(
+                image,
+                proj_all=False,
+                proj_method=projection_method,
+                local_adjust=False,
+                global_adjust=True,
+                colors=colors,
+            )
+
+            # Convert to YXC for PNG writing
+            yx_proj = transforms.transpose_to_dims(yx_proj, "CYX", "YXC")
+
+            # Drop size to uint8
+            yx_proj = yx_proj.astype(np.uint8)
+
+            # Save to PNG
+            imwrite(cell_image_2d_yx_proj_save_path, yx_proj)
+
+            log.info(f"Completed single cell image generation for CellId: {row.CellId}")
+
+            # Return ready to save image
+            return CellImagesResult(
+                row.CellId,
+                cell_image_3d_save_path,
+                cell_image_2d_all_proj_save_path,
+                cell_image_2d_yx_proj_save_path,
+            )
+
+        # Catch and return error
+        except Exception as e:
+            log.info(
+                f"Failed single cell image generation for CellId: {row.CellId}. "
+                "Error: {e}"
+            )
+            return CellImagesError(row.CellId, str(e))
 
     @log_run_params
     def run(
@@ -201,6 +241,7 @@ class SingleCellImages(Step):
         bounding_box_percentile: float = 95.0,
         projection_method: str = "max",
         distributed_executor_address: Optional[str] = None,
+        overwrite: bool = False,
         **kwargs,
     ):
         """
@@ -235,6 +276,11 @@ class SingleCellImages(Step):
         distributed_executor_address: Optional[str]
             An optional executor address to pass to some computation engine.
             Default: None
+
+        overwrite: bool
+            If this step has already partially or completely run, should it overwrite
+            the previous files or not.
+            Default: False (Do not overwrite or regenerate files)
 
         Returns
         -------
@@ -277,11 +323,11 @@ class SingleCellImages(Step):
             )
 
             # Block until all complete
-            bb_results = handler.gather(bounding_box_futures)
+            bbox_results = handler.gather(bounding_box_futures)
 
             # Compute bounding box with percentile
-            bb_results = np.array(bb_results)
-            bounding_box = np.percentile(bb_results, bounding_box_percentile, axis=0)
+            bbox_results = np.array(bbox_results)
+            bounding_box = np.percentile(bbox_results, bounding_box_percentile, axis=0)
             bounding_box = np.ceil(bounding_box)
 
             # Generate bounded arrays
@@ -299,6 +345,7 @@ class SingleCellImages(Step):
                 [cell_images_3d_dir for i in range(len(dataset))],
                 [cell_images_2d_all_proj_dir for i in range(len(dataset))],
                 [cell_images_2d_yx_proj_dir for i in range(len(dataset))],
+                [overwrite for i in range(len(dataset))],
             )
 
             # Block until all complete
@@ -306,18 +353,35 @@ class SingleCellImages(Step):
 
         # Generate single cell images dataset rows
         single_cell_images_dataset = []
+        errors = []
         for r in results:
-            single_cell_images_dataset.append(
-                {
-                    DatasetFields.CellId: r.cell_id,
-                    DatasetFields.CellImage3DPath: r.path_3d,
-                    DatasetFields.CellImage2DAllProjectionsPath: r.path_2d_all_proj,
-                    DatasetFields.CellImage2DYXProjectionPath: r.path_2d_yx_proj,
-                }
-            )
+            if isinstance(r, CellImagesResult):
+                single_cell_images_dataset.append(
+                    {
+                        DatasetFields.CellId: r.cell_id,
+                        DatasetFields.CellImage3DPath: r.path_3d,
+                        DatasetFields.CellImage2DAllProjectionsPath: r.path_2d_all_proj,
+                        DatasetFields.CellImage2DYXProjectionPath: r.path_2d_yx_proj,
+                    }
+                )
+            else:
+                errors.append(
+                    {DatasetFields.CellId: r.cell_id, "Error": result.error}
+                )
 
         # Convert features paths rows to dataframe
         single_cell_images_dataset = pd.DataFrame(single_cell_images_dataset)
+
+        # Drop the various single cell image columns if they already exist
+        drop_columns = []
+        if DatasetFields.CellImage3DPath in dataset.columns:
+            drop_columns.append(DatasetFields.CellImage3DPath)
+        if DatasetFields.CellImage2DAllProjectionsPath in dataset.columns:
+            drop_columns.append(DatasetFields.CellImage2DAllProjectionsPath)
+        if DatasetFields.CellImage2DYXProjectionPath in dataset.columns:
+            drop_columns.append(DatasetFields.CellImage2DYXProjectionPath)
+
+        dataset = dataset.drop(columns=drop_columns)
 
         # Join original dataset to the fov paths
         self.manifest = dataset.merge(
@@ -327,5 +391,9 @@ class SingleCellImages(Step):
         # Save manifest to CSV
         manifest_save_path = self.step_local_staging_dir / "manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
+
+        # Save errored cells to JSON
+        with open(self.step_local_staging_dir / "errors.json", "w") as write_out:
+            json.dump(errors, write_out)
 
         return manifest_save_path
