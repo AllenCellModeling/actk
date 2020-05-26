@@ -61,7 +61,7 @@ class SingleCellFeatures(Step):
         cell_ceiling_adjustment: int,
         save_dir: Path,
         overwrite: bool,
-    ) -> SingleCellFeaturesResult:
+    ) -> Union[SingleCellFeaturesResult, SingleCellFeaturesError]:
         # Get the ultimate end save path for this cell
         save_path = save_dir / f"{row.CellId}.json"
 
@@ -114,7 +114,6 @@ class SingleCellFeatures(Step):
         cell_ceiling_adjustment: int = 7,
         distributed_executor_address: Optional[str] = None,
         overwrite: bool = False,
-        debug: bool = False,
         **kwargs,
     ):
         """
@@ -141,11 +140,6 @@ class SingleCellFeatures(Step):
             If this step has already partially or completely run, should it overwrite
             the previous files or not.
             Default: False (Do not overwrite or regenerate files)
-
-        debug: bool
-            A debug flag for the developer to use to manipulate how much data runs,
-            how it is processed, etc.
-            Default: False (Do not debug)
 
         Returns
         -------

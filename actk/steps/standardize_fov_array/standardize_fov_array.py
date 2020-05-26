@@ -58,7 +58,7 @@ class StandardizeFOVArray(Step):
         desired_pixel_sizes: Tuple[float],
         save_dir: Path,
         overwrite: bool,
-    ) -> StandardizeFOVArrayResult:
+    ) -> Union[StandardizeFOVArrayResult, StandardizeFOVArrayError]:
         # Get the ultimate end save path for this cell
         save_path = save_dir / f"{row.FOVId}.ome.tiff"
 
@@ -113,7 +113,6 @@ class StandardizeFOVArray(Step):
         desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29),
         distributed_executor_address: Optional[str] = None,
         overwrite: bool = False,
-        debug: bool = False,
         **kwargs,
     ) -> Path:
         """
@@ -142,11 +141,6 @@ class StandardizeFOVArray(Step):
             If this step has already partially or completely run, should it overwrite
             the previous files or not.
             Default: False (Do not overwrite or regenerate files)
-
-        debug: bool
-            A debug flag for the developer to use to manipulate how much data runs,
-            how it is processed, etc.
-            Default: False (Do not debug)
 
         Returns
         -------
