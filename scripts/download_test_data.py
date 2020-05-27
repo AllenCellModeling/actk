@@ -39,7 +39,7 @@ class Args(argparse.Namespace):
         # Arguments
         p.add_argument(
             "--top-hash",
-            default="274447e5db0a28681e1f842b21865c02fe84f2e2e04022adc80cfaf0fe302209",
+            default="29ce49e7e4be69bf34f0f53f0d609332efa696ffb41b51d9c09705634fc7f1ec",
             help=("A specific version of the package to retrieve. Default: latest"),
         )
         p.add_argument(
