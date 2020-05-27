@@ -287,7 +287,7 @@ class SingleCellImages(Step):
         Returns
         -------
         manifest_save_path: Path
-            Path to the produced manifest with the CellImage3DPath column added.
+            Path to the produced manifest with the various cell image path fields added.
         """
         # Handle dataset provided as string or path
         if isinstance(dataset, (str, Path)):
