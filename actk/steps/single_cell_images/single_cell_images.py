@@ -366,7 +366,7 @@ class SingleCellImages(Step):
                 )
             else:
                 errors.append(
-                    {DatasetFields.CellId: r.cell_id, "Error": result.error}
+                    {DatasetFields.CellId: r.cell_id, "Error": r.error}
                 )
 
         # Convert features paths rows to dataframe
