@@ -97,11 +97,13 @@ class SingleCellImages(Step):
         if (
             not overwrite
             # Only skip if all images exist for this cell
-            and all(p.is_file() for p in [
-                cell_image_3d_save_path,
-                cell_image_2d_all_proj_save_path,
-                cell_image_2d_yx_proj_save_path,
-            ]
+            and all(
+                p.is_file()
+                for p in [
+                    cell_image_3d_save_path,
+                    cell_image_2d_all_proj_save_path,
+                    cell_image_2d_yx_proj_save_path,
+                ]
             )
         ):
             log.info(f"Skipping single cell image generation for CellId: {row.CellId}")
@@ -365,9 +367,7 @@ class SingleCellImages(Step):
                     }
                 )
             else:
-                errors.append(
-                    {DatasetFields.CellId: r.cell_id, "Error": r.error}
-                )
+                errors.append({DatasetFields.CellId: r.cell_id, "Error": r.error})
 
         # Convert features paths rows to dataframe
         single_cell_images_dataset = pd.DataFrame(single_cell_images_dataset)
