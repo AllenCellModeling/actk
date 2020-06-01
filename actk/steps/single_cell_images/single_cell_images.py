@@ -316,7 +316,7 @@ class SingleCellImages(Step):
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
-            bounding_box_futures = handler.client.map(
+            bounding_box_futures = handler.client.batched_map(
                 self._get_registered_image_size,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
@@ -333,7 +333,7 @@ class SingleCellImages(Step):
             bounding_box = np.ceil(bounding_box)
 
             # Generate bounded arrays
-            futures = handler.client.map(
+            futures = handler.client.batched_map(
                 self._generate_single_cell_images,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
