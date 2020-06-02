@@ -102,8 +102,8 @@ class All:
                 # Create cluster
                 log.info("Creating SLURMCluster")
                 cluster = SLURMCluster(
-                    cores=16,
-                    memory="80GB",
+                    cores=8,
+                    memory="60GB",
                     queue="aics_cpu_general",
                     walltime="10:00:00",
                     local_directory=str(log_dir),
@@ -111,7 +111,7 @@ class All:
                 )
 
                 # Spawn workers
-                cluster.scale(40)
+                cluster.scale(60)
 
                 # Wait for workers
                 # In a dream situtation we could call
@@ -120,7 +120,7 @@ class All:
                 # But that doesn't work
                 # instead...
                 log.info("Waiting for workers to start...")
-                time.sleep(120)
+                time.sleep(60)
 
                 log.info("Created SLURMCluster")
 
