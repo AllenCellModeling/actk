@@ -41,7 +41,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Set up Python 3.7
+    - name: Set up Python
       uses: actions/setup-python@v1
       with:
         python-version: 3.7
@@ -52,3 +52,6 @@ jobs:
     - name: Lint with flake8
       run: |
         flake8 actk --count --verbose --show-source --statistics
+    - name: Check with black
+      run: |
+        black --check actk

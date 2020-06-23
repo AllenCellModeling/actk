@@ -8,82 +8,72 @@ from setuptools import find_packages, setup
 with open("README.md") as readme_file:
     readme = readme_file.read()
 
-test_requirements = [
-    "codecov",
-    "flake8>=3.7.7",
-    "black",
-    "pytest>=4.3.0",
-    "pytest-cov==2.6.1",
-    "pytest-raises>=0.10",
-    "quilt3>=3.1.10",
+setup_requirements = [
+    "pytest-runner>=5.2",
 ]
 
-setup_requirements = [
-    "pytest-runner",
+test_requirements = [
+    "black>=19.10b0",
+    "codecov>=2.1.4",
+    "flake8>=3.8.3",
+    "flake8-debugger>=3.2.1",
+    "pytest>=5.4.3",
+    "pytest-cov>=2.9.0",
+    "pytest-raises>=0.11",
+    "quilt3>=3.1.10",
 ]
 
 dev_requirements = [
-    "bumpversion>=0.5.3",
-    "coverage>=5.0a4",
-    "flake8>=3.7.7",
-    "ipython>=7.5.0",
+    *setup_requirements,
+    *test_requirements,
+    "bumpversion>=0.6.0",
+    "coverage>=5.1",
+    "ipython>=7.15.0",
     "m2r>=0.2.1",
-    "pytest>=4.3.0",
-    "pytest-cov==2.6.1",
-    "pytest-raises>=0.10",
-    "pytest-runner>=4.4",
-    "quilt3>=3.1.10",
     "Sphinx>=2.0.0b1,<3",
-    "sphinx_rtd_theme>=0.1.2",
-    "tox>=3.5.2",
-    "twine>=1.13.0",
-    "wheel>=0.33.1",
+    "sphinx_rtd_theme>=0.4.3",
+    "tox>=3.15.2",
+    "twine>=3.1.1",
+    "wheel>=0.34.2",
 ]
 
-interactive_requirements = [
-    "altair",
-    "jupyterlab",
-    "matplotlib",
+step_workflow_requirements = [
+    "aics_dask_utils==0.2.0",
+    "bokeh>=2.1.0",
+    "cloudpickle>=1.0.0,<1.4.0",  # needed for prefect
+    "dask[bag]>=2.19.0",
+    "dask_jobqueue>=0.7.0",
+    "datastep>=0.1.6",
+    "distributed>=2.19.0",
+    "docutils==0.15.2",  # needed for botocore (quilt dependency)
+    "fire",
+    "prefect>=0.12.0",
+    "python-dateutil<=2.8.0",  # need <=2.8.0 for quilt3 in step
+]
+
+requirements = [
+    *step_workflow_requirements,
+    # project requires
+    "aicsfeature==0.2.1",
+    "aicsimageio==3.2.3",
+    "aicsimageprocessing==0.7.3",
+    "numpy==1.18.2",
+    "pandas==1.0.3",
 ]
 
 aics_data_requirements = [
     "lkaccess",
 ]
 
-requirements = [
-    # stepworkflow requires
-    "aics_dask_utils==0.2.0",
-    "bokeh==2.0.1",
-    "cloudpickle>=1.0.0,<1.4.0",  # needed for prefect
-    "dask[bag]==2.12.0",
-    "dask_jobqueue==0.7.0",
-    "datastep==0.1.6",
-    "distributed==2.12.0",
-    "docutils==0.15.2",  # needed for botocore (quilt dependency)
-    "fire==0.3.0",
-    "prefect==0.9.7",
-    "python-dateutil==2.8.0",  # need <=2.8.0 for quilt3 in step
-    # project requires
-    "aicsfeature==0.2.1",
-    "aicsimageio==3.2.1",
-    "aicsimageprocessing==0.7.3",
-    "numpy==1.18.2",
-    "pandas==1.0.3",
-]
-
 extra_requirements = {
-    "test": test_requirements,
     "setup": setup_requirements,
+    "test": test_requirements,
     "dev": dev_requirements,
-    "interactive": interactive_requirements,
     "aics": aics_data_requirements,
     "all": [
         *requirements,
-        *test_requirements,
-        *setup_requirements,
         *dev_requirements,
-        *interactive_requirements,
-    ],
+    ]
 }
 
 setup(
@@ -104,7 +94,7 @@ setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     include_package_data=True,
-    keywords="computational biology",
+    keywords="actk, computational biology, workflow, cell, microscopy",
     name="actk",
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*"]),
     python_requires=">=3.6",
