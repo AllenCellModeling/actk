@@ -91,11 +91,7 @@ class All:
                 log_dir.mkdir(parents=True, exist_ok=True)
 
                 # Configure dask config
-                dask.config.set(
-                    {
-                        "scheduler.work-stealing": False,
-                    }
-                )
+                dask.config.set({"scheduler.work-stealing": False})
 
                 # Create cluster
                 log.info("Creating SLURMCluster")
