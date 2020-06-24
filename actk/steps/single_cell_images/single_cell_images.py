@@ -6,6 +6,7 @@ import logging
 from pathlib import Path
 from typing import List, NamedTuple, Optional, Union
 
+import aicsimageio
 import aicsimageprocessing as proc
 import dask.dataframe as dd
 import numpy as np
