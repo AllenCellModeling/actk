@@ -191,7 +191,7 @@ class StandardizeFOVArray(Step):
                 [desired_pixel_sizes for i in range(len(fov_dataset))],
                 [fovs_dir for i in range(len(fov_dataset))],
                 [overwrite for i in range(len(dataset))],
-                batch_size=80,
+                batch_size=120,
             )
 
         # Generate fov paths rows
