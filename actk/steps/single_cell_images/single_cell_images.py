@@ -316,13 +316,13 @@ class SingleCellImages(Step):
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
-            bounding_box_futures = handler.client.batched_map(
+            bounding_box_futures = handler.batched_map(
                 self._get_registered_image_size,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
                 # One list will be the pandas series of every row
                 *zip(*list(dataset.iterrows())),
-                batch_size=60,
+                batch_size=80,
             )
 
             # Block until all complete
@@ -334,7 +334,7 @@ class SingleCellImages(Step):
             bounding_box = np.ceil(bounding_box)
 
             # Generate bounded arrays
-            futures = handler.client.batched_map(
+            futures = handler.batched_map(
                 self._generate_single_cell_images,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
@@ -349,7 +349,7 @@ class SingleCellImages(Step):
                 [cell_images_2d_all_proj_dir for i in range(len(dataset))],
                 [cell_images_2d_yx_proj_dir for i in range(len(dataset))],
                 [overwrite for i in range(len(dataset))],
-                batch_size=60,
+                batch_size=80,
             )
 
             # Block until all complete

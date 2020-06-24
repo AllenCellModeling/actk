@@ -9,7 +9,6 @@ and configure their IO in the `run` function.
 """
 
 import logging
-import time
 from datetime import datetime
 from pathlib import Path
 
@@ -95,15 +94,14 @@ class All:
                 dask.config.set(
                     {
                         "scheduler.work-stealing": False,
-                        "logging.distributed.worker": "info",
                     }
                 )
 
                 # Create cluster
                 log.info("Creating SLURMCluster")
                 cluster = SLURMCluster(
-                    cores=8,
-                    memory="60GB",
+                    cores=4,
+                    memory="40GB",
                     queue="aics_cpu_general",
                     walltime="10:00:00",
                     local_directory=str(log_dir),
@@ -111,17 +109,7 @@ class All:
                 )
 
                 # Spawn workers
-                cluster.scale(60)
-
-                # Wait for workers
-                # In a dream situtation we could call
-                # client = Client(cluster)
-                # client.wait_for_workers(100)
-                # But that doesn't work
-                # instead...
-                log.info("Waiting for workers to start...")
-                time.sleep(60)
-
+                cluster.scale(80)
                 log.info("Created SLURMCluster")
 
                 # Use the port from the created connector to set executor address
