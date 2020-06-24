@@ -62,6 +62,9 @@ class SingleCellFeatures(Step):
         save_dir: Path,
         overwrite: bool,
     ) -> Union[SingleCellFeaturesResult, SingleCellFeaturesError]:
+        # Don't use dask for image reading
+        aicsimageio.use_dask(False)
+
         # Get the ultimate end save path for this cell
         save_path = save_dir / f"{row.CellId}.json"
 

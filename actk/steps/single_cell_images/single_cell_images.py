@@ -84,6 +84,9 @@ class SingleCellImages(Step):
         cell_images_2d_yx_proj_dir: Path,
         overwrite: bool,
     ) -> Union[CellImagesResult, CellImagesError]:
+        # Don't use dask for image reading
+        aicsimageio.use_dask(False)
+
         # Get the ultimate end save paths for this cell
         cell_image_3d_save_path = cell_images_3d_dir / f"{row.CellId}.ome.tiff"
         cell_image_2d_all_proj_save_path = (

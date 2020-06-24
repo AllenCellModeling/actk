@@ -59,6 +59,9 @@ class StandardizeFOVArray(Step):
         save_dir: Path,
         overwrite: bool,
     ) -> Union[StandardizeFOVArrayResult, StandardizeFOVArrayError]:
+        # Don't use dask for image reading
+        aicsimageio.use_dask(False)
+
         # Get the ultimate end save path for this cell
         save_path = save_dir / f"{row.FOVId}.ome.tiff"
 
