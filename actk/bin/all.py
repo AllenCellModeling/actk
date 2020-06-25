@@ -12,6 +12,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
+import aicsimageio
 import dask.config
 from dask_jobqueue import SLURMCluster
 from distributed import LocalCluster
@@ -154,8 +155,14 @@ class All:
                 **kwargs,
             )
 
-        # Run flow and get ending state
+        # Run flow and get ending state, log duration
+        start = datetime.now()
         state = flow.run(executor=exe)
+        duration = datetime.now() - start
+        log.info(
+            f"Total duration of pipeline: "
+            f"{duration.seconds // 60 // 60}:{duration.seconds // 60}:{duration % 60}"
+        )
 
         # Get and display any outputs you want to see on your local terminal
         log.info(single_cell_images_dataset.get_result(state, flow))
