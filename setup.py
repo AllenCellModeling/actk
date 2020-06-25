@@ -47,7 +47,7 @@ step_workflow_requirements = [
     "distributed>=2.19.0",
     "docutils==0.15.2",  # needed for botocore (quilt dependency)
     "fire",
-    "prefect>=0.12.0",
+    "prefect>=0.12.1",
     "python-dateutil<=2.8.0",  # need <=2.8.0 for quilt3 in step
 ]
 
