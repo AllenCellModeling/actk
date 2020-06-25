@@ -326,7 +326,7 @@ class SingleCellImages(Step):
                 # One list will be row index
                 # One list will be the pandas series of every row
                 *zip(*list(dataset.iterrows())),
-                batch_size=50,
+                batch_size=100,
             )
 
             # Block until all complete
@@ -353,7 +353,7 @@ class SingleCellImages(Step):
                 [cell_images_2d_all_proj_dir for i in range(len(dataset))],
                 [cell_images_2d_yx_proj_dir for i in range(len(dataset))],
                 [overwrite for i in range(len(dataset))],
-                batch_size=50,
+                batch_size=100,
             )
 
             # Block until all complete
