@@ -161,7 +161,9 @@ class All:
         duration = datetime.now() - start
         log.info(
             f"Total duration of pipeline: "
-            f"{duration.seconds // 60 // 60}:{duration.seconds // 60}:{duration % 60}"
+            f"{duration.seconds // 60 // 60}:"
+            f"{duration.seconds // 60}:"
+            f"{duration.seconds % 60}"
         )
 
         # Get and display any outputs you want to see on your local terminal
