@@ -127,6 +127,9 @@ class SingleCellImages(Step):
             standardized_image = AICSImage(row.StandardizedFOVPath)
             channels = standardized_image.get_channel_names()
 
+            # Preload image data
+            standardized_image.data
+
             # Select and adjust cell shape ceiling for this cell
             image = image_utils.select_and_adjust_segmentation_ceiling(
                 # Unlike most other operations, we can read in normal "CZYX" dimension

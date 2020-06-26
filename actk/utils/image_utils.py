@@ -85,6 +85,11 @@ def get_normed_image_array(
     nuc_seg = AICSImage(nucleus_seg_image)
     memb_seg = AICSImage(membrane_seg_image)
 
+    # Preload image data
+    raw.data
+    nuc_seg.data
+    memb_seg.data
+
     # Get default current and desired pixel sizes
     if current_pixel_sizes is None:
         current_pixel_sizes = raw.get_physical_pixel_size()

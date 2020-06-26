@@ -82,6 +82,9 @@ class SingleCellFeatures(Step):
             # Read the standardized FOV
             image = AICSImage(row.StandardizedFOVPath)
 
+            # Preload image data
+            image.data
+
             # Select and adjust cell shape ceiling for this cell
             adjusted = image_utils.select_and_adjust_segmentation_ceiling(
                 image=image.get_image_data("CYXZ", S=0, T=0),
