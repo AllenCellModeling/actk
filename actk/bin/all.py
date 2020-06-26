@@ -94,8 +94,8 @@ class All:
                 # Create cluster
                 log.info("Creating SLURMCluster")
                 cluster = SLURMCluster(
-                    cores=4,
-                    memory="32GB",
+                    cores=1,
+                    memory="8GB",
                     queue="aics_cpu_general",
                     walltime="10:00:00",
                     local_directory=str(log_dir),
@@ -103,7 +103,7 @@ class All:
                 )
 
                 # Spawn workers
-                cluster.scale(80)
+                cluster.scale(100)
                 log.info("Created SLURMCluster")
 
                 # Use the port from the created connector to set executor address
