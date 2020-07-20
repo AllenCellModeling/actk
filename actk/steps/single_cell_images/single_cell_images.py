@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import List, NamedTuple, Optional, Union
 
 import aicsimageio
-import aicsimageprocessing as proc
 import dask.dataframe as dd
 import numpy as np
 import pandas as pd
@@ -16,6 +15,8 @@ from aicsimageio import AICSImage, transforms
 from aicsimageio.writers import OmeTiffWriter
 from datastep import Step, log_run_params
 from imageio import imwrite
+
+import aicsimageprocessing as proc
 
 from ...constants import Channels, DatasetFields
 from ...utils import dataset_utils, image_utils
@@ -154,7 +155,6 @@ class SingleCellImages(Step):
             crop_3d = transforms.transpose_to_dims(crop_3d, "CYXZ", "CZYX")
 
             # Save to OME-TIFF
-
             with OmeTiffWriter(cell_image_3d_save_path, overwrite_file=True) as writer:
                 writer.save(
                     crop_3d,
