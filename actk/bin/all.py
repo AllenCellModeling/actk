@@ -114,7 +114,7 @@ class All:
             else:
                 # Create local cluster
                 log.info("Creating LocalCluster")
-                cluster = LocalCluster()
+                cluster = LocalCluster(n_workers=2)
                 log.info("Created LocalCluster")
 
                 # Set distributed_executor_address
