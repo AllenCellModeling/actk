@@ -40,7 +40,6 @@ dev_requirements = [
 step_workflow_requirements = [
     "aics_dask_utils==0.2.0",
     "bokeh>=2.1.0",
-    "cloudpickle>=1.0.0,<1.4.0",  # needed for prefect
     "dask[bag]>=2.19.0",
     "dask_jobqueue>=0.7.0",
     "datastep>=0.1.6",
@@ -86,6 +85,7 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
     description="Automated Cell Toolkit",
     entry_points={"console_scripts": ["actk=actk.bin.cli:cli"]},
