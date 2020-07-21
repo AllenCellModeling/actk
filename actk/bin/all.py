@@ -12,8 +12,6 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
-import aicsimageio
-import dask.config
 from dask_jobqueue import SLURMCluster
 from distributed import LocalCluster
 from prefect import Flow
