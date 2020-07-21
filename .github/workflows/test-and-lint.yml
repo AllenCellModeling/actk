@@ -19,6 +19,8 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install Cython
+        pip install numpy
         pip install .[test]
     - name: Download Test Data
       run: |
@@ -41,6 +43,8 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install Cython
+        pip install numpy
         pip install .[test]
     - name: Lint with flake8
       run: |
@@ -61,6 +65,8 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install Cython
+        pip install numpy
         pip install .[dev]
     - name: Generate Docs
       run: |
