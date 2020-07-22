@@ -38,11 +38,11 @@ dev_requirements = [
 ]
 
 step_workflow_requirements = [
-    "aics_dask_utils==0.2.0",
+    "aics_dask_utils>=0.2.0",
     "bokeh>=2.1.0",
     "dask[bag]>=2.19.0",
     "dask_jobqueue>=0.7.0",
-    "datastep>=0.1.6",
+    "datastep>=0.1.7",
     "distributed>=2.19.0",
     "docutils==0.15.2",  # needed for botocore (quilt dependency)
     "fire",
@@ -53,11 +53,11 @@ step_workflow_requirements = [
 requirements = [
     *step_workflow_requirements,
     # project requires
-    "aicsfeature==0.2.1",
-    "aicsimageio==3.2.3",
-    "aicsimageprocessing==0.7.4",
-    "numpy==1.18.2",
-    "pandas==1.0.3",
+    "aicsfeature>=0.2.1",
+    "aicsimageio>=3.2.3",
+    "aicsimageprocessing>=0.7.4",
+    "numpy>=1.18.2",
+    "pandas>=1.0.3",
 ]
 
 aics_data_requirements = [

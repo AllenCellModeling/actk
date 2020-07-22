@@ -1,4 +1,5 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help
+.PHONY: python-clean python-build gen-docs docs
+.PHONY: docker-build docker-push docker-local docker-clean help
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -25,11 +26,12 @@ endef
 export PRINT_HELP_PYSCRIPT
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
+DOCKER_IMAGE_NAME := jacksonmaxfield/actk-python
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-clean:  ## clean all build, python, and testing files
+python-clean:  ## clean all build, python, and testing files
 	rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
@@ -45,7 +47,7 @@ clean:  ## clean all build, python, and testing files
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-build: ## run tox / run tests and lint
+python-build: ## run tox / run tests and lint
 	tox
 
 gen-docs: ## generate Sphinx HTML documentation, including API docs
@@ -57,3 +59,15 @@ gen-docs: ## generate Sphinx HTML documentation, including API docs
 docs: ## generate Sphinx HTML documentation, including API docs, and serve to browser
 	make gen-docs
 	$(BROWSER) docs/_build/html/index.html
+
+docker-build:  ## build the docker image
+	docker build -t $(DOCKER_IMAGE_NAME) .
+
+docker-push:  ## push the docker image to dockerhub
+	docker push $(DOCKER_IMAGE_NAME)
+
+docker-local:  ## spawn a bash session inside the docker image
+	docker run --rm -it $(DOCKER_IMAGE_NAME) bash
+
+docker-clean:  ## remove the docker image
+	docker rmi $(DOCKER_IMAGE_NAME)
