@@ -180,7 +180,7 @@ class StandardizeFOVArray(Step):
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
-            results = handler.batched_map(
+            futures = handler.client.map(
                 self._generate_standardized_fov_array,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
@@ -191,8 +191,8 @@ class StandardizeFOVArray(Step):
                 [desired_pixel_sizes for i in range(len(fov_dataset))],
                 [fovs_dir for i in range(len(fov_dataset))],
                 [overwrite for i in range(len(dataset))],
-                batch_size=80,
             )
+            results = handler.gather(futures)
 
         # Generate fov paths rows
         standardized_fov_paths_dataset = []

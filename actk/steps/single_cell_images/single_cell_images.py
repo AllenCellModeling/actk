@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import List, NamedTuple, Optional, Union
 
 import aicsimageio
+import aicsimageprocessing as proc
 import dask.dataframe as dd
 import numpy as np
 import pandas as pd
@@ -15,8 +16,6 @@ from aicsimageio import AICSImage, transforms
 from aicsimageio.writers import OmeTiffWriter
 from datastep import Step, log_run_params
 from imageio import imwrite
-
-import aicsimageprocessing as proc
 
 from ...constants import Channels, DatasetFields
 from ...utils import dataset_utils, image_utils
@@ -323,13 +322,12 @@ class SingleCellImages(Step):
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
-            bounding_box_futures = handler.batched_map(
+            bounding_box_futures = handler.client.map(
                 self._get_registered_image_size,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
                 # One list will be the pandas series of every row
                 *zip(*list(dataset.iterrows())),
-                batch_size=80,
             )
 
             # Block until all complete
@@ -341,7 +339,7 @@ class SingleCellImages(Step):
             bounding_box = np.ceil(bounding_box)
 
             # Generate bounded arrays
-            futures = handler.batched_map(
+            futures = handler.client.map(
                 self._generate_single_cell_images,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
@@ -356,7 +354,6 @@ class SingleCellImages(Step):
                 [cell_images_2d_all_proj_dir for i in range(len(dataset))],
                 [cell_images_2d_yx_proj_dir for i in range(len(dataset))],
                 [overwrite for i in range(len(dataset))],
-                batch_size=80,
             )
 
             # Block until all complete
