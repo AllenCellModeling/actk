@@ -2,8 +2,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -13,12 +12,18 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -30,10 +35,6 @@
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
 </head>
@@ -49,7 +50,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> actk
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> actk
           
 
           
@@ -76,6 +77,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -118,6 +120,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -156,7 +159,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Index</li>
     
@@ -212,9 +215,13 @@
 </li>
       <li><a href="actk.steps.single_cell_features.html#module-actk.steps.single_cell_features">actk.steps.single_cell_features (module)</a>
 </li>
+      <li><a href="actk.steps.single_cell_features.html#module-actk.steps.single_cell_features.single_cell_features">actk.steps.single_cell_features.single_cell_features (module)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="actk.steps.single_cell_features.html#module-actk.steps.single_cell_features.single_cell_features">actk.steps.single_cell_features.single_cell_features (module)</a>
+      <li><a href="actk.steps.single_cell_images.html#module-actk.steps.single_cell_images">actk.steps.single_cell_images (module)</a>
+</li>
+      <li><a href="actk.steps.single_cell_images.html#module-actk.steps.single_cell_images.single_cell_images">actk.steps.single_cell_images.single_cell_images (module)</a>
 </li>
       <li><a href="actk.steps.standardize_fov_array.html#module-actk.steps.standardize_fov_array">actk.steps.standardize_fov_array (module)</a>
 </li>
@@ -244,24 +251,38 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="actk.steps.single_cell_features.html#actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesError.cell_id">cell_id() (actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesError property)</a>
+      <li><a href="actk.steps.single_cell_features.html#actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesError.cell_id">cell_id (actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesError attribute)</a>
 
       <ul>
-        <li><a href="actk.steps.single_cell_features.html#actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesResult.cell_id">(actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesResult property)</a>
+        <li><a href="actk.steps.single_cell_features.html#actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesResult.cell_id">(actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesResult attribute)</a>
+</li>
+        <li><a href="actk.steps.single_cell_images.html#actk.steps.single_cell_images.single_cell_images.CellImagesError.cell_id">(actk.steps.single_cell_images.single_cell_images.CellImagesError attribute)</a>
+</li>
+        <li><a href="actk.steps.single_cell_images.html#actk.steps.single_cell_images.single_cell_images.CellImagesResult.cell_id">(actk.steps.single_cell_images.single_cell_images.CellImagesResult attribute)</a>
 </li>
       </ul></li>
       <li><a href="actk.html#actk.constants.DatasetFields.CellFeaturesPath">CellFeaturesPath (actk.constants.DatasetFields attribute)</a>
 </li>
       <li><a href="actk.html#actk.constants.DatasetFields.CellId">CellId (actk.constants.DatasetFields attribute)</a>
 </li>
+      <li><a href="actk.html#actk.constants.DatasetFields.CellImage2DAllProjectionsPath">CellImage2DAllProjectionsPath (actk.constants.DatasetFields attribute)</a>
+</li>
+      <li><a href="actk.html#actk.constants.DatasetFields.CellImage2DYXProjectionPath">CellImage2DYXProjectionPath (actk.constants.DatasetFields attribute)</a>
+</li>
+      <li><a href="actk.html#actk.constants.DatasetFields.CellImage3DPath">CellImage3DPath (actk.constants.DatasetFields attribute)</a>
+</li>
+      <li><a href="actk.steps.single_cell_images.html#actk.steps.single_cell_images.single_cell_images.CellImagesError">CellImagesError (class in actk.steps.single_cell_images.single_cell_images)</a>
+</li>
+      <li><a href="actk.steps.single_cell_images.html#actk.steps.single_cell_images.single_cell_images.CellImagesResult">CellImagesResult (class in actk.steps.single_cell_images.single_cell_images)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="actk.html#actk.constants.DatasetFields.CellIndex">CellIndex (actk.constants.DatasetFields attribute)</a>
 </li>
       <li><a href="actk.html#actk.constants.DatasetFields.ChannelIndexBrightfield">ChannelIndexBrightfield (actk.constants.DatasetFields attribute)</a>
 </li>
       <li><a href="actk.html#actk.constants.DatasetFields.ChannelIndexDNA">ChannelIndexDNA (actk.constants.DatasetFields attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="actk.html#actk.constants.DatasetFields.ChannelIndexMembrane">ChannelIndexMembrane (actk.constants.DatasetFields attribute)</a>
 </li>
       <li><a href="actk.html#actk.constants.DatasetFields.ChannelIndexStructure">ChannelIndexStructure (actk.constants.DatasetFields attribute)</a>
@@ -298,10 +319,12 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="actk.steps.single_cell_features.html#actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesError.error">error() (actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesError property)</a>
+      <li><a href="actk.steps.single_cell_features.html#actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesError.error">error (actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesError attribute)</a>
 
       <ul>
-        <li><a href="actk.steps.standardize_fov_array.html#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError.error">(actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError property)</a>
+        <li><a href="actk.steps.single_cell_images.html#actk.steps.single_cell_images.single_cell_images.CellImagesError.error">(actk.steps.single_cell_images.single_cell_images.CellImagesError attribute)</a>
+</li>
+        <li><a href="actk.steps.standardize_fov_array.html#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError.error">(actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -310,10 +333,10 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="actk.steps.standardize_fov_array.html#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError.fov_id">fov_id() (actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError property)</a>
+      <li><a href="actk.steps.standardize_fov_array.html#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError.fov_id">fov_id (actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError attribute)</a>
 
       <ul>
-        <li><a href="actk.steps.standardize_fov_array.html#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult.fov_id">(actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult property)</a>
+        <li><a href="actk.steps.standardize_fov_array.html#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult.fov_id">(actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -368,14 +391,20 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="actk.steps.single_cell_features.html#actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesResult.path">path() (actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesResult property)</a>
+      <li><a href="actk.steps.single_cell_features.html#actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesResult.path">path (actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesResult attribute)</a>
 
       <ul>
-        <li><a href="actk.steps.standardize_fov_array.html#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult.path">(actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult property)</a>
+        <li><a href="actk.steps.standardize_fov_array.html#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult.path">(actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult attribute)</a>
 </li>
       </ul></li>
+      <li><a href="actk.steps.single_cell_images.html#actk.steps.single_cell_images.single_cell_images.CellImagesResult.path_2d_all_proj">path_2d_all_proj (actk.steps.single_cell_images.single_cell_images.CellImagesResult attribute)</a>
+</li>
+      <li><a href="actk.steps.single_cell_images.html#actk.steps.single_cell_images.single_cell_images.CellImagesResult.path_2d_yx_proj">path_2d_yx_proj (actk.steps.single_cell_images.single_cell_images.CellImagesResult attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="actk.steps.single_cell_images.html#actk.steps.single_cell_images.single_cell_images.CellImagesResult.path_3d">path_3d (actk.steps.single_cell_images.single_cell_images.CellImagesResult attribute)</a>
+</li>
       <li><a href="actk.utils.html#actk.utils.image_utils.prepare_image_for_feature_extraction">prepare_image_for_feature_extraction() (in module actk.utils.image_utils)</a>
 </li>
       <li><a href="actk.bin.html#actk.bin.all.All.pull">pull() (actk.bin.all.All method)</a>
@@ -395,7 +424,13 @@
 </li>
         <li><a href="actk.steps.single_cell_features.html#actk.steps.single_cell_features.SingleCellFeatures.run">(actk.steps.single_cell_features.SingleCellFeatures method)</a>
 </li>
+        <li><a href="actk.steps.single_cell_images.html#actk.steps.single_cell_images.single_cell_images.SingleCellImages.run">(actk.steps.single_cell_images.single_cell_images.SingleCellImages method)</a>
+</li>
+        <li><a href="actk.steps.single_cell_images.html#actk.steps.single_cell_images.SingleCellImages.run">(actk.steps.single_cell_images.SingleCellImages method)</a>
+</li>
         <li><a href="actk.steps.html#actk.steps.SingleCellFeatures.run">(actk.steps.SingleCellFeatures method)</a>
+</li>
+        <li><a href="actk.steps.html#actk.steps.SingleCellImages.run">(actk.steps.SingleCellImages method)</a>
 </li>
         <li><a href="actk.steps.standardize_fov_array.html#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray.run">(actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray method)</a>
 </li>
@@ -424,10 +459,18 @@
 </li>
       <li><a href="actk.steps.single_cell_features.html#actk.steps.single_cell_features.single_cell_features.SingleCellFeaturesResult">SingleCellFeaturesResult (class in actk.steps.single_cell_features.single_cell_features)</a>
 </li>
-      <li><a href="actk.html#actk.constants.DatasetFields.SourceReadPath">SourceReadPath (actk.constants.DatasetFields attribute)</a>
+      <li><a href="actk.steps.html#actk.steps.SingleCellImages">SingleCellImages (class in actk.steps)</a>
+
+      <ul>
+        <li><a href="actk.steps.single_cell_images.html#actk.steps.single_cell_images.SingleCellImages">(class in actk.steps.single_cell_images)</a>
 </li>
+        <li><a href="actk.steps.single_cell_images.html#actk.steps.single_cell_images.single_cell_images.SingleCellImages">(class in actk.steps.single_cell_images.single_cell_images)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="actk.html#actk.constants.DatasetFields.SourceReadPath">SourceReadPath (actk.constants.DatasetFields attribute)</a>
+</li>
       <li><a href="actk.html#actk.constants.DatasetFields.StandardizedFOVPath">StandardizedFOVPath (actk.constants.DatasetFields attribute)</a>
 </li>
       <li><a href="actk.steps.html#actk.steps.StandardizeFOVArray">StandardizeFOVArray (class in actk.steps)</a>
@@ -459,11 +502,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -474,7 +525,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

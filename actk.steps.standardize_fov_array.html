@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,12 +11,18 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -29,14 +34,10 @@
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="actk.utils package" href="actk.utils.html" />
-    <link rel="prev" title="actk.steps.single_cell_features package" href="actk.steps.single_cell_features.html" /> 
+    <link rel="prev" title="actk.steps.single_cell_images package" href="actk.steps.single_cell_images.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -50,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> actk
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> actk
           
 
           
@@ -77,6 +78,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -119,6 +121,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -157,7 +160,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="modules.html">actk</a> &raquo;</li>
         
@@ -184,7 +187,7 @@
         <a href="actk.utils.html" class="btn btn-neutral float-right" title="actk.utils package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="actk.steps.single_cell_features.html" class="btn btn-neutral float-left" title="actk.steps.single_cell_features package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="actk.steps.single_cell_images.html" class="btn btn-neutral float-left" title="actk.steps.single_cell_images package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -206,7 +209,7 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29), distributed_executor_address: Optional[str] = None, overwrite: bool = False, debug: bool = False, **kwargs</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29), distributed_executor_address: Optional[str] = None, overwrite: bool = False, **kwargs</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a dataset of raw FOV images and their nucleus and membrane
 segmentations, into a single, standard order and shape, and normalized image.</p>
 <dl class="field-list">
@@ -225,9 +228,6 @@ Default: None</p></li>
 <li><p><strong>overwrite</strong> (<em>bool</em>) – If this step has already partially or completely run, should it overwrite
 the previous files or not.
 Default: False (Do not overwrite or regenerate files)</p></li>
-<li><p><strong>debug</strong> (<em>bool</em>) – A debug flag for the developer to use to manipulate how much data runs,
-how it is processed, etc.
-Default: False (Do not debug)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -246,15 +246,15 @@ Default: False (Do not debug)</p></li>
 <em class="property">class </em><code class="sig-prename descclassname">actk.steps.standardize_fov_array.standardize_fov_array.</code><code class="sig-name descname">StandardizeFOVArrayError</code><span class="sig-paren">(</span><em class="sig-param">fov_id</em>, <em class="sig-param">error</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArrayError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
 <p>Create new instance of StandardizeFOVArrayError(fov_id, error)</p>
-<dl class="method">
+<dl class="attribute">
 <dt id="actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError.error">
-<em class="property">property </em><code class="sig-name descname">error</code><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError.error" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">error</code><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError.error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError.fov_id">
-<em class="property">property </em><code class="sig-name descname">fov_id</code><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError.fov_id" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fov_id</code><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayError.fov_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
@@ -265,15 +265,15 @@ Default: False (Do not debug)</p></li>
 <em class="property">class </em><code class="sig-prename descclassname">actk.steps.standardize_fov_array.standardize_fov_array.</code><code class="sig-name descname">StandardizeFOVArrayResult</code><span class="sig-paren">(</span><em class="sig-param">fov_id</em>, <em class="sig-param">path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArrayResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
 <p>Create new instance of StandardizeFOVArrayResult(fov_id, path)</p>
-<dl class="method">
+<dl class="attribute">
 <dt id="actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult.fov_id">
-<em class="property">property </em><code class="sig-name descname">fov_id</code><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult.fov_id" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fov_id</code><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult.fov_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult.path">
-<em class="property">property </em><code class="sig-name descname">path</code><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult.path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">path</code><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArrayResult.path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
@@ -288,7 +288,7 @@ Default: False (Do not debug)</p></li>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.standardize_fov_array.StandardizeFOVArray.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29), distributed_executor_address: Optional[str] = None, overwrite: bool = False, debug: bool = False, **kwargs</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.standardize_fov_array.StandardizeFOVArray.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29), distributed_executor_address: Optional[str] = None, overwrite: bool = False, **kwargs</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.standardize_fov_array.StandardizeFOVArray.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a dataset of raw FOV images and their nucleus and membrane
 segmentations, into a single, standard order and shape, and normalized image.</p>
 <dl class="field-list">
@@ -307,9 +307,6 @@ Default: None</p></li>
 <li><p><strong>overwrite</strong> (<em>bool</em>) – If this step has already partially or completely run, should it overwrite
 the previous files or not.
 Default: False (Do not overwrite or regenerate files)</p></li>
-<li><p><strong>debug</strong> (<em>bool</em>) – A debug flag for the developer to use to manipulate how much data runs,
-how it is processed, etc.
-Default: False (Do not debug)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -337,11 +334,19 @@ Default: False (Do not debug)</p></li>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Jackson Maxfield Brown
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -352,7 +357,6 @@ Default: False (Do not debug)</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
