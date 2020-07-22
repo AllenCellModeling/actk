@@ -183,7 +183,7 @@ class SingleCellFeatures(Step):
                 [cell_ceiling_adjustment for i in range(len(dataset))],
                 [features_dir for i in range(len(dataset))],
                 [overwrite for i in range(len(dataset))],
-                batch_size=100,
+                batch_size=80,
             )
 
         # Generate features paths rows
