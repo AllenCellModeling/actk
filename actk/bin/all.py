@@ -12,7 +12,6 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
-import dask.config
 from dask_jobqueue import SLURMCluster
 from distributed import LocalCluster
 from prefect import Flow
@@ -36,6 +35,7 @@ class All:
         self.step_list = [
             steps.StandardizeFOVArray(),
             steps.SingleCellFeatures(),
+            steps.SingleCellImages(),
         ]
 
     def run(
@@ -73,12 +73,13 @@ class All:
         # Initalize steps
         standardize_fov_array = steps.StandardizeFOVArray()
         single_cell_features = steps.SingleCellFeatures()
+        single_cell_images = steps.SingleCellImages()
 
         # Choose executor
         if debug:
             exe = LocalExecutor()
             distributed_executor_address = None
-            log.info(f"Debug flagged. Will use threads instead of Dask.")
+            log.info("Debug flagged. Will use threads instead of Dask.")
         else:
             if distributed:
                 # Create or get log dir
@@ -88,28 +89,20 @@ class All:
                 # Log dir settings
                 log_dir.mkdir(parents=True, exist_ok=True)
 
-                # Configure dask config
-                dask.config.set(
-                    {
-                        "scheduler.work-stealing": False,
-                        "logging.distributed.worker": "info",
-                    }
-                )
-
                 # Create cluster
                 log.info("Creating SLURMCluster")
                 cluster = SLURMCluster(
                     cores=4,
-                    memory="20GB",
+                    memory="40GB",
                     queue="aics_cpu_general",
                     walltime="10:00:00",
                     local_directory=str(log_dir),
                     log_directory=str(log_dir),
                 )
-                log.info("Created SLURMCluster")
 
-                # Scale cluster
-                cluster.scale(60)
+                # Spawn workers
+                cluster.scale(40)
+                log.info("Created SLURMCluster")
 
                 # Use the port from the created connector to set executor address
                 distributed_executor_address = cluster.scheduler_address
@@ -119,7 +112,7 @@ class All:
             else:
                 # Create local cluster
                 log.info("Creating LocalCluster")
-                cluster = LocalCluster()
+                cluster = LocalCluster(n_workers=2)
                 log.info("Created LocalCluster")
 
                 # Set distributed_executor_address
@@ -142,7 +135,7 @@ class All:
                 **kwargs,
             )
 
-            _ = single_cell_features(
+            single_cell_features_dataset = single_cell_features(
                 dataset=standardized_fov_paths_dataset,
                 distributed_executor_address=distributed_executor_address,
                 overwrite=overwrite,
@@ -151,11 +144,28 @@ class All:
                 **kwargs,
             )
 
-        # Run flow and get ending state
+            single_cell_images_dataset = single_cell_images(
+                dataset=single_cell_features_dataset,
+                distributed_executor_address=distributed_executor_address,
+                overwrite=overwrite,
+                debug=debug,
+                # Allows us to pass `--cell_ceiling_adjustment {int}`
+                **kwargs,
+            )
+
+        # Run flow and get ending state, log duration
+        start = datetime.now()
         state = flow.run(executor=exe)
+        duration = datetime.now() - start
+        log.info(
+            f"Total duration of pipeline: "
+            f"{duration.seconds // 60 // 60}:"
+            f"{duration.seconds // 60}:"
+            f"{duration.seconds % 60}"
+        )
 
         # Get and display any outputs you want to see on your local terminal
-        log.info(single_cell_features.get_result(state, flow))
+        log.info(single_cell_images_dataset.get_result(state, flow))
 
     def pull(self):
         """

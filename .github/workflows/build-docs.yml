@@ -13,10 +13,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
-        python-version: 3.7
+        python-version: 3.8
     - name: Install Dependencies
       run: |
         pip install --upgrade pip
+        pip install Cython
+        pip install numpy
         pip install .[dev]
     - name: Generate Docs
       run: |
@@ -29,4 +31,3 @@ jobs:
         BASE_BRANCH: master # The branch the action should deploy from.
         BRANCH: gh-pages # The branch the action should deploy to.
         FOLDER: docs/_build/html/ # The folder the action should deploy.
-

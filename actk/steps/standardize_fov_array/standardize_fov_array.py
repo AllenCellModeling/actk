@@ -6,13 +6,13 @@ import logging
 from pathlib import Path
 from typing import NamedTuple, Optional, Tuple, Union
 
+import aicsimageio
 import dask.dataframe as dd
 import pandas as pd
+from aics_dask_utils import DistributedHandler
 from aicsimageio import transforms
 from aicsimageio.writers import OmeTiffWriter
 from datastep import Step, log_run_params
-
-from aics_dask_utils import DistributedHandler
 
 from ...constants import DatasetFields
 from ...utils import dataset_utils, image_utils
@@ -36,7 +36,7 @@ REQUIRED_DATASET_FIELDS = [
 
 
 class StandardizeFOVArrayResult(NamedTuple):
-    fov_id: int
+    fov_id: Union[int, str]
     path: Path
 
 
@@ -59,17 +59,20 @@ class StandardizeFOVArray(Step):
         desired_pixel_sizes: Tuple[float],
         save_dir: Path,
         overwrite: bool,
-    ) -> StandardizeFOVArrayResult:
+    ) -> Union[StandardizeFOVArrayResult, StandardizeFOVArrayError]:
+        # Don't use dask for image reading
+        aicsimageio.use_dask(False)
+
         # Get the ultimate end save path for this cell
         save_path = save_dir / f"{row.FOVId}.ome.tiff"
 
         # Check skip
         if not overwrite and save_path.is_file():
-            print(f"Skipping Standardized FOV Generation for FOVId: {row.FOVId}")
+            log.info(f"Skipping standardized FOV generation for FOVId: {row.FOVId}")
             return StandardizeFOVArrayResult(row.FOVId, save_path)
 
         # Overwrite or didn't exist
-        print(f"Beginning Standardized FOV Generation for FOVId: {row.FOVId}")
+        log.info(f"Beginning standardized FOV generation for FOVId: {row.FOVId}")
 
         # Wrap errors for debugging later
         try:
@@ -97,13 +100,13 @@ class StandardizeFOVArray(Step):
                     pixels_physical_size=pixel_sizes,
                 )
 
-            print(f"Completed Standardized FOV Generation for FOVId: {row.FOVId}")
+            log.info(f"Completed standardized FOV generation for FOVId: {row.FOVId}")
             return StandardizeFOVArrayResult(row.FOVId, save_path)
 
         # Catch and return error
         except Exception as e:
-            print(
-                f"Failed Standardized FOV Generation for FOVId: {row.FOVId}. Error: {e}"
+            log.info(
+                f"Failed standardized FOV generation for FOVId: {row.FOVId}. Error: {e}"
             )
             return StandardizeFOVArrayError(row.FOVId, str(e))
 
@@ -114,7 +117,6 @@ class StandardizeFOVArray(Step):
         desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29),
         distributed_executor_address: Optional[str] = None,
         overwrite: bool = False,
-        debug: bool = False,
         **kwargs,
     ) -> Path:
         """
@@ -143,11 +145,6 @@ class StandardizeFOVArray(Step):
             If this step has already partially or completely run, should it overwrite
             the previous files or not.
             Default: False (Do not overwrite or regenerate files)
-
-        debug: bool
-            A debug flag for the developer to use to manipulate how much data runs,
-            how it is processed, etc.
-            Default: False (Do not debug)
 
         Returns
         -------
@@ -183,7 +180,7 @@ class StandardizeFOVArray(Step):
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
-            results = handler.batched_map(
+            futures = handler.client.map(
                 self._generate_standardized_fov_array,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
@@ -195,6 +192,7 @@ class StandardizeFOVArray(Step):
                 [fovs_dir for i in range(len(fov_dataset))],
                 [overwrite for i in range(len(dataset))],
             )
+            results = handler.gather(futures)
 
         # Generate fov paths rows
         standardized_fov_paths_dataset = []
@@ -225,7 +223,7 @@ class StandardizeFOVArray(Step):
         )
 
         # Save manifest to CSV
-        manifest_save_path = self.step_local_staging_dir / f"manifest.csv"
+        manifest_save_path = self.step_local_staging_dir / "manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
 
         # Save errored FOVs to JSON

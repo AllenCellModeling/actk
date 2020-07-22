@@ -32,6 +32,9 @@ class DatasetFields:
     ChannelIndexBrightfield = "ChannelIndexBrightfield"
     StandardizedFOVPath = "StandardizedFOVPath"
     CellFeaturesPath = "CellFeaturesPath"
+    CellImage3DPath = "CellImage3DPath"
+    CellImage2DAllProjectionsPath = "CellImage2DAllProjectionsPath"
+    CellImage2DYXProjectionPath = "CellImage2DYXProjectionPath"
     AllExpectedInputs = [
         CellId,
         CellIndex,

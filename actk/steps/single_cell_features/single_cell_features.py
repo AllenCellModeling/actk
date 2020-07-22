@@ -6,12 +6,12 @@ import logging
 from pathlib import Path
 from typing import NamedTuple, Optional, Union
 
+import aicsimageio
 import dask.dataframe as dd
 import pandas as pd
+from aics_dask_utils import DistributedHandler
 from aicsimageio import AICSImage
 from datastep import Step, log_run_params
-
-from aics_dask_utils import DistributedHandler
 
 from ...constants import DatasetFields
 from ...utils import dataset_utils, image_utils
@@ -32,7 +32,7 @@ REQUIRED_DATASET_FIELDS = [
 
 
 class SingleCellFeaturesResult(NamedTuple):
-    cell_id: int
+    cell_id: Union[int, str]
     path: Path
 
 
@@ -62,22 +62,28 @@ class SingleCellFeatures(Step):
         cell_ceiling_adjustment: int,
         save_dir: Path,
         overwrite: bool,
-    ) -> SingleCellFeaturesResult:
+    ) -> Union[SingleCellFeaturesResult, SingleCellFeaturesError]:
+        # Don't use dask for image reading
+        aicsimageio.use_dask(False)
+
         # Get the ultimate end save path for this cell
         save_path = save_dir / f"{row.CellId}.json"
 
         # Check skip
         if not overwrite and save_path.is_file():
-            print(f"Skipping Cell Feature Generate for Cell Id: {row.CellId}")
+            log.info(f"Skipping cell feature generation for Cell Id: {row.CellId}")
             return SingleCellFeaturesResult(row.CellId, save_path)
 
         # Overwrite or didn't exist
-        print(f"Beginning Cell Feature Generation for CellId: {row.CellId}")
+        log.info(f"Beginning cell feature generation for CellId: {row.CellId}")
 
         # Wrap errors for debugging later
         try:
             # Read the standardized FOV
             image = AICSImage(row.StandardizedFOVPath)
+
+            # Preload image data
+            image.data
 
             # Select and adjust cell shape ceiling for this cell
             adjusted = image_utils.select_and_adjust_segmentation_ceiling(
@@ -98,13 +104,13 @@ class SingleCellFeatures(Step):
             with open(save_path, "w") as write_out:
                 json.dump(features, write_out)
 
-            print(f"Completed Cell Feature Generation for CellId: {row.CellId}")
+            log.info(f"Completed cell feature generation for CellId: {row.CellId}")
             return SingleCellFeaturesResult(row.CellId, save_path)
 
         # Catch and return error
         except Exception as e:
-            print(
-                f"Failed Cell Feature Generation for CellId: {row.CellId}. Error: {e}"
+            log.info(
+                f"Failed cell feature generation for CellId: {row.CellId}. Error: {e}"
             )
             return SingleCellFeaturesError(row.CellId, str(e))
 
@@ -115,7 +121,6 @@ class SingleCellFeatures(Step):
         cell_ceiling_adjustment: int = 7,
         distributed_executor_address: Optional[str] = None,
         overwrite: bool = False,
-        debug: bool = False,
         **kwargs,
     ):
         """
@@ -126,7 +131,7 @@ class SingleCellFeatures(Step):
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame]
             The primary cell dataset to use for generating features JSON for each cell.
 
-            **Required dataset columns:** *["CellId", "CellIndex" "FOVId",
+            **Required dataset columns:** *["CellId", "CellIndex", "FOVId",
             "StandardizedFOVPath"]*
 
         cell_ceiling_adjustment: int
@@ -142,11 +147,6 @@ class SingleCellFeatures(Step):
             If this step has already partially or completely run, should it overwrite
             the previous files or not.
             Default: False (Do not overwrite or regenerate files)
-
-        debug: bool
-            A debug flag for the developer to use to manipulate how much data runs,
-            how it is processed, etc.
-            Default: False (Do not debug)
 
         Returns
         -------
@@ -172,7 +172,7 @@ class SingleCellFeatures(Step):
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
-            results = handler.batched_map(
+            futures = handler.client.map(
                 self._generate_single_cell_features,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
@@ -184,6 +184,7 @@ class SingleCellFeatures(Step):
                 [features_dir for i in range(len(dataset))],
                 [overwrite for i in range(len(dataset))],
             )
+            results = handler.gather(futures)
 
         # Generate features paths rows
         cell_features_dataset = []
@@ -212,7 +213,7 @@ class SingleCellFeatures(Step):
         self.manifest = dataset.merge(cell_features_dataset, on=DatasetFields.CellId)
 
         # Save manifest to CSV
-        manifest_save_path = self.step_local_staging_dir / f"manifest.csv"
+        manifest_save_path = self.step_local_staging_dir / "manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
 
         # Save errored cells to JSON
