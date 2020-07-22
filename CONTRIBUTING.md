@@ -35,7 +35,7 @@ virtualenv or anaconda environment):
    tests, including testing other Python versions with make:
 
     ```bash
-    make build
+    make python-build
     ```
 
 6. Commit your changes and push your branch to GitHub:

@@ -26,7 +26,7 @@ endef
 export PRINT_HELP_PYSCRIPT
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
-DOCKER_IMAGE_NAME := jacksonmaxfield/actk-python
+DOCKER_IMAGE_NAME := jacksonmaxfield/actk
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
@@ -62,9 +62,6 @@ docs: ## generate Sphinx HTML documentation, including API docs, and serve to br
 
 docker-build:  ## build the docker image
 	docker build -t $(DOCKER_IMAGE_NAME) .
-
-docker-push:  ## push the docker image to dockerhub
-	docker push $(DOCKER_IMAGE_NAME)
 
 docker-local:  ## spawn a bash session inside the docker image
 	docker run --rm -it $(DOCKER_IMAGE_NAME) bash

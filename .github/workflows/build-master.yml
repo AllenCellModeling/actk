@@ -59,3 +59,16 @@ jobs:
     - name: Check with black
       run: |
         black --check actk
+
+  build-docker:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v1
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v1
+        with:
+          username: jacksonmaxfield
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: jacksonmaxfield/actk
+          tag_with_ref: true
+          tag_with_sha: true

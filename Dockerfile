@@ -18,10 +18,7 @@ RUN                                             \
     ln -sf /usr/bin/python3.8 /usr/bin/python3 && \
     ln -sf /usr/bin/pip3 /usr/bin/pip
 
-# Upgrade pip version
-RUN pip install --upgrade pip
-
-# Copy library
+# Copy repo
 COPY . /actk/
 
 # Install library
