@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 class GetS3Dataset(Step):
     @log_run_params
     def run(self):
-        p = Package.browse("aics/pipeline_integrated_cell", "s3://allencell")
+        p = Package.browse("aics/pipeline_integrated_single_cell", "s3://allencell")
         manifest = p["metadata.csv"]().sample(10, random_state=12)
         manifest = manifest.rename(columns={
             "ChannelNumber405": DatasetFields.ChannelIndexDNA,
