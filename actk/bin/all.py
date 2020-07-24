@@ -33,6 +33,7 @@ class All:
         This is only used for data logging operations, not computation purposes.
         """
         self.step_list = [
+            steps.GetS3Dataset(),
             steps.StandardizeFOVArray(),
             steps.SingleCellFeatures(),
             steps.SingleCellImages(),
@@ -40,7 +41,6 @@ class All:
 
     def run(
         self,
-        dataset: str,
         distributed: bool = False,
         overwrite: bool = False,
         debug: bool = False,
@@ -51,9 +51,6 @@ class All:
 
         Parameters
         ----------
-        dataset: str
-            The dataset to use for the pipeline.
-
         distributed: bool
             A boolean option to determine if the jobs should be distributed to a SLURM
             cluster when possible.
@@ -71,6 +68,7 @@ class All:
             Default: False (Do not debug)
         """
         # Initalize steps
+        get_s3_dataset = steps.GetS3Dataset()
         standardize_fov_array = steps.StandardizeFOVArray()
         single_cell_features = steps.SingleCellFeatures()
         single_cell_images = steps.SingleCellImages()
@@ -112,7 +110,7 @@ class All:
             else:
                 # Create local cluster
                 log.info("Creating LocalCluster")
-                cluster = LocalCluster(n_workers=2)
+                cluster = LocalCluster(n_workers=4, threads_per_worker=1)
                 log.info("Created LocalCluster")
 
                 # Set distributed_executor_address
@@ -126,6 +124,7 @@ class All:
 
         # Configure your flow
         with Flow("actk") as flow:
+            dataset = get_s3_dataset()
             standardized_fov_paths_dataset = standardize_fov_array(
                 dataset=dataset,
                 distributed_executor_address=distributed_executor_address,
