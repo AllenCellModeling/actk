@@ -13,9 +13,11 @@ from aics_dask_utils import DistributedHandler
 from aicsimageio import transforms
 from aicsimageio.writers import OmeTiffWriter
 from datastep import Step, log_run_params
+from quilt3 import Bucket, Package
 
 from ...constants import DatasetFields
-from ...utils import dataset_utils, image_utils
+from ...utils import dataset_utils, image_utils, s3_utils
+from ..get_s3_dataset import GetS3Dataset
 
 ###############################################################################
 
@@ -50,7 +52,9 @@ class StandardizeFOVArrayError(NamedTuple):
 
 class StandardizeFOVArray(Step):
     def __init__(self, filepath_columns=[DatasetFields.StandardizedFOVPath]):
-        super().__init__(filepath_columns=filepath_columns)
+        super().__init__(
+            direct_upstream_tasks=[GetS3Dataset], filepath_columns=filepath_columns
+        )
 
     @staticmethod
     def _generate_standardized_fov_array(
@@ -64,23 +68,39 @@ class StandardizeFOVArray(Step):
         aicsimageio.use_dask(False)
 
         # Get the ultimate end save path for this cell
-        save_path = save_dir / f"{row.FOVId}.ome.tiff"
+        local_save_path = save_dir / f"{row.FOVId}.ome.tiff"
+        local_save_path.parent.mkdir(exist_ok=True, parents=True)
+        b = Bucket("s3://allencell-internal-quilt")
+        bucket_save_path = f"jacksonb/actk/{local_save_path}"
 
         # Check skip
-        if not overwrite and save_path.is_file():
+        if not overwrite and s3_utils.s3_file_exists(b, bucket_save_path):
             log.info(f"Skipping standardized FOV generation for FOVId: {row.FOVId}")
-            return StandardizeFOVArrayResult(row.FOVId, save_path)
+            return StandardizeFOVArrayResult(row.FOVId, bucket_save_path)
 
         # Overwrite or didn't exist
         log.info(f"Beginning standardized FOV generation for FOVId: {row.FOVId}")
 
         # Wrap errors for debugging later
         try:
+            # Download the images
+            local_base = "local_staging/raw"
+            p = Package.browse("aics/pipeline_integrated_cell", "s3://allencell")
+            source_path = Path(f"{local_base}/{row.SourceReadPath}")
+            nuc_seg_path = Path(f"{local_base}/{row.NucleusSegmentationReadPath}")
+            memb_seg_path = Path(f"{local_base}/{row.MembraneSegmentationReadPath}")
+            if not source_path.exists():
+                p[row.SourceReadPath].fetch(source_path)
+            if not nuc_seg_path.exists():
+                p[row.NucleusSegmentationReadPath].fetch(nuc_seg_path)
+            if not memb_seg_path.exists():
+                p[row.MembraneSegmentationReadPath].fetch(memb_seg_path)
+
             # Get normalized image array
             normalized_img, channels, pixel_sizes = image_utils.get_normed_image_array(
-                raw_image=row.SourceReadPath,
-                nucleus_seg_image=row.NucleusSegmentationReadPath,
-                membrane_seg_image=row.MembraneSegmentationReadPath,
+                raw_image=source_path,
+                nucleus_seg_image=nuc_seg_path,
+                membrane_seg_image=memb_seg_path,
                 dna_channel_index=row.ChannelIndexDNA,
                 membrane_channel_index=row.ChannelIndexMembrane,
                 structure_channel_index=row.ChannelIndexStructure,
@@ -92,7 +112,7 @@ class StandardizeFOVArray(Step):
             reshaped = transforms.transpose_to_dims(normalized_img, "CYXZ", "CZYX")
 
             # Save array as OME Tiff
-            with OmeTiffWriter(save_path, overwrite_file=True) as writer:
+            with OmeTiffWriter(local_save_path, overwrite_file=True) as writer:
                 writer.save(
                     data=reshaped,
                     dimension_order="CZYX",
@@ -100,8 +120,11 @@ class StandardizeFOVArray(Step):
                     pixels_physical_size=pixel_sizes,
                 )
 
+            # Upload FOV to Bucket
+            b.put_file(bucket_save_path, local_save_path)
+
             log.info(f"Completed standardized FOV generation for FOVId: {row.FOVId}")
-            return StandardizeFOVArrayResult(row.FOVId, save_path)
+            return StandardizeFOVArrayResult(row.FOVId, local_save_path)
 
         # Catch and return error
         except Exception as e:
@@ -160,8 +183,8 @@ class StandardizeFOVArray(Step):
                 dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
             )
 
-        # Read dataset
-        dataset = pd.read_csv(dataset)
+            # Read dataset
+            dataset = pd.read_csv(dataset)
 
         # Log original length of cell dataset
         log.info(f"Original dataset length: {len(dataset)}")
