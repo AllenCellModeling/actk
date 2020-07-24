@@ -112,7 +112,7 @@ class SingleCellFeatures(Step):
             with open(local_save_path, "w") as write_out:
                 json.dump(features, write_out)
 
-            b.put_file(f"jacksonb/actk/{local_save_path}", local_save_path)
+            b.put_file(bucket_save_path, local_save_path)
 
             log.info(f"Completed cell feature generation for CellId: {row.CellId}")
             return SingleCellFeaturesResult(row.CellId, local_save_path)
@@ -167,13 +167,13 @@ class SingleCellFeatures(Step):
         if isinstance(dataset, (str, Path)):
             dataset = Path(dataset).expanduser().resolve(strict=True)
 
-            # Check dataset and manifest have required fields
-            dataset_utils.check_required_fields(
-                dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
-            )
-
             # Read dataset
             dataset = pd.read_csv(dataset)
+
+        # Check dataset and manifest have required fields
+        dataset_utils.check_required_fields(
+            dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
+        )
 
         # Create features directory
         features_dir = self.step_local_staging_dir / "cell_features"
