@@ -12,9 +12,10 @@ import pandas as pd
 from aics_dask_utils import DistributedHandler
 from aicsimageio import AICSImage
 from datastep import Step, log_run_params
+from quilt3 import Bucket
 
 from ...constants import DatasetFields
-from ...utils import dataset_utils, image_utils
+from ...utils import dataset_utils, image_utils, s3_utils
 from ..standardize_fov_array import StandardizeFOVArray
 
 ###############################################################################
@@ -67,20 +68,27 @@ class SingleCellFeatures(Step):
         aicsimageio.use_dask(False)
 
         # Get the ultimate end save path for this cell
-        save_path = save_dir / f"{row.CellId}.json"
+        local_save_path = save_dir / f"{row.CellId}.json"
+        local_save_path.parent.mkdir(exist_ok=True, parents=True)
+        b = Bucket("s3://allencell-internal-quilt")
+        bucket_save_path = f"jacksonb/actk/{local_save_path}"
 
         # Check skip
-        if not overwrite and save_path.is_file():
+        if not overwrite and s3_utils.s3_file_exists(b, bucket_save_path):
             log.info(f"Skipping cell feature generation for Cell Id: {row.CellId}")
-            return SingleCellFeaturesResult(row.CellId, save_path)
+            return SingleCellFeaturesResult(row.CellId, local_save_path)
 
         # Overwrite or didn't exist
         log.info(f"Beginning cell feature generation for CellId: {row.CellId}")
 
         # Wrap errors for debugging later
         try:
+            standardize_fov_path = Path(row.StandardizedFOVPath)
+            if not standardize_fov_path.exists():
+                b.fetch(f"jacksonb/actk/{standardize_fov_path}", standardize_fov_path)
+
             # Read the standardized FOV
-            image = AICSImage(row.StandardizedFOVPath)
+            image = AICSImage(standardize_fov_path)
 
             # Preload image data
             image.data
@@ -101,11 +109,13 @@ class SingleCellFeatures(Step):
             features = image_utils.get_features_from_image(cropped)
 
             # Save to JSON
-            with open(save_path, "w") as write_out:
+            with open(local_save_path, "w") as write_out:
                 json.dump(features, write_out)
 
+            b.put_file(f"jacksonb/actk/{local_save_path}", local_save_path)
+
             log.info(f"Completed cell feature generation for CellId: {row.CellId}")
-            return SingleCellFeaturesResult(row.CellId, save_path)
+            return SingleCellFeaturesResult(row.CellId, local_save_path)
 
         # Catch and return error
         except Exception as e:
@@ -162,8 +172,8 @@ class SingleCellFeatures(Step):
                 dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
             )
 
-        # Read dataset
-        dataset = pd.read_csv(dataset)
+            # Read dataset
+            dataset = pd.read_csv(dataset)
 
         # Create features directory
         features_dir = self.step_local_staging_dir / "cell_features"
@@ -216,8 +226,14 @@ class SingleCellFeatures(Step):
         manifest_save_path = self.step_local_staging_dir / "manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
 
-        # Save errored cells to JSON
-        with open(self.step_local_staging_dir / "errors.json", "w") as write_out:
+        b = Bucket("s3://allencell-internal-quilt")
+        b.put_file(f"jacksonb/actk/{manifest_save_path}", manifest_save_path)
+
+        # Save errored FOVs to JSON
+        errors_save_path = self.step_local_staging_dir / "errors.json"
+        with open(errors_save_path, "w") as write_out:
             json.dump(errors, write_out)
+
+        b.put_file(f"jacksonb/actk/{errors_save_path}", errors_save_path)
 
         return manifest_save_path
