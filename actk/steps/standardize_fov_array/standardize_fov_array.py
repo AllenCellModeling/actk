@@ -76,7 +76,7 @@ class StandardizeFOVArray(Step):
         # Check skip
         if not overwrite and s3_utils.s3_file_exists(b, bucket_save_path):
             log.info(f"Skipping standardized FOV generation for FOVId: {row.FOVId}")
-            return StandardizeFOVArrayResult(row.FOVId, bucket_save_path)
+            return StandardizeFOVArrayResult(row.FOVId, local_save_path)
 
         # Overwrite or didn't exist
         log.info(f"Beginning standardized FOV generation for FOVId: {row.FOVId}")
@@ -249,8 +249,14 @@ class StandardizeFOVArray(Step):
         manifest_save_path = self.step_local_staging_dir / "manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
 
+        b = Bucket("s3://allencell-internal-quilt")
+        b.put_file(f"jacksonb/actk/{manifest_save_path}", manifest_save_path)
+
         # Save errored FOVs to JSON
-        with open(self.step_local_staging_dir / "errors.json", "w") as write_out:
+        errors_save_path = self.step_local_staging_dir / "errors.json"
+        with open(errors_save_path, "w") as write_out:
             json.dump(errors, write_out)
+
+        b.put_file(f"jacksonb/actk/{errors_save_path}", errors_save_path)
 
         return manifest_save_path
