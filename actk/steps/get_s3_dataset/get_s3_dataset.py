@@ -37,5 +37,6 @@ class GetS3Dataset(Step):
             DatasetFields.MembraneSegmentationReadPath,
         ]]
         cell_manifest = cell_manifest.merge(fov_manifest, on="FOVId", how="left")
+        cell_manifest = cell_manifest.drop_duplicates("CellId")
 
         return cell_manifest
