@@ -20,13 +20,22 @@ log = logging.getLogger(__name__)
 class GetS3Dataset(Step):
     @log_run_params
     def run(self):
-        p = Package.browse("aics/pipeline_integrated_single_cell", "s3://allencell")
-        manifest = p["metadata.csv"]().sample(10, random_state=12)
-        manifest = manifest.rename(columns={
+        cells = Package.browse("aics/pipeline_integrated_single_cell", "s3://allencell")
+        cell_manifest = cells["metadata.csv"]().sample(10, random_state=12)
+        cell_manifest = cell_manifest.rename(columns={
             "ChannelNumber405": DatasetFields.ChannelIndexDNA,
             "ChannelNumber638": DatasetFields.ChannelIndexMembrane,
             "ChannelNumberStruct": DatasetFields.ChannelIndexStructure,
             "ChannelNumberBrightfield": DatasetFields.ChannelIndexBrightfield,
         })
 
-        return manifest
+        fovs = Package.browse("aics/pipeline_integrated_cell", "s3://allencell")
+        fov_manifest = fovs["metadata.csv"]()
+        fov_manifest = fov_manifest[[
+            DatasetFields.FOVId, DatasetFields.SourceReadPath,
+            DatasetFields.NucleusSegmentationReadPath,
+            DatasetFields.MembraneSegmentationReadPath,
+        ]]
+        cell_manifest = cell_manifest.merge(fov_manifest, on="FOVId", how="left")
+
+        return cell_manifest
