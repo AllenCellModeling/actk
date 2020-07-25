@@ -16,9 +16,10 @@ from aicsimageio import AICSImage, transforms
 from aicsimageio.writers import OmeTiffWriter
 from datastep import Step, log_run_params
 from imageio import imwrite
+from quilt3 import Bucket
 
 from ...constants import Channels, DatasetFields
-from ...utils import dataset_utils, image_utils
+from ...utils import dataset_utils, image_utils, s3_utils
 from ..single_cell_features import SingleCellFeatures
 
 ###############################################################################
@@ -66,8 +67,13 @@ class SingleCellImages(Step):
 
     @staticmethod
     def _get_registered_image_size(row_index: int, row: pd.Series) -> List[int]:
+        b = Bucket("s3://allencell-internal-quilt")
+        cell_features_path = Path(row.CellFeaturesPath)
+        if not cell_features_path.exists():
+            b.fetch(f"jacksonb/actk/{cell_features_path}", cell_features_path)
+
         # Open cell features JSON
-        with open(row.CellFeaturesPath, "r") as read_in:
+        with open(cell_features_path, "r") as read_in:
             cell_features = json.load(read_in)
 
         # Return registered image size
@@ -89,12 +95,25 @@ class SingleCellImages(Step):
         aicsimageio.use_dask(False)
 
         # Get the ultimate end save paths for this cell
-        cell_image_3d_save_path = cell_images_3d_dir / f"{row.CellId}.ome.tiff"
-        cell_image_2d_all_proj_save_path = (
+        local_cell_image_3d_save_path = cell_images_3d_dir / f"{row.CellId}.ome.tiff"
+        local_cell_image_2d_all_proj_save_path = (
             cell_images_2d_all_proj_dir / f"{row.CellId}.png"
         )
-        cell_image_2d_yx_proj_save_path = (
+        local_cell_image_2d_yx_proj_save_path = (
             cell_images_2d_yx_proj_dir / f"{row.CellId}.png"
+        )
+        local_cell_image_3d_save_path.parent.mkdir(exist_ok=True, parents=True)
+        local_cell_image_2d_all_proj_save_path.parent.mkdir(exist_ok=True, parents=True)
+        local_cell_image_2d_yx_proj_save_path.parent.mkdir(exist_ok=True, parents=True)
+        b = Bucket("s3://allencell-internal-quilt")
+        bucket_cell_image_3d_save_path = (
+            f"jacksonb/actk/{local_cell_image_3d_save_path}"
+        )
+        bucket_cell_image_2d_all_proj_save_path = (
+            f"jacksonb/actk/{local_cell_image_2d_all_proj_save_path}"
+        )
+        bucket_cell_image_2d_yx_proj_save_path = (
+            f"jacksonb/actk/{local_cell_image_2d_yx_proj_save_path}"
         )
 
         # Check skip
@@ -102,20 +121,20 @@ class SingleCellImages(Step):
             not overwrite
             # Only skip if all images exist for this cell
             and all(
-                p.is_file()
-                for p in [
-                    cell_image_3d_save_path,
-                    cell_image_2d_all_proj_save_path,
-                    cell_image_2d_yx_proj_save_path,
+                s3_utils.s3_file_exists(b, k)
+                for k in [
+                    bucket_cell_image_3d_save_path,
+                    bucket_cell_image_2d_all_proj_save_path,
+                    bucket_cell_image_2d_yx_proj_save_path,
                 ]
             )
         ):
             log.info(f"Skipping single cell image generation for CellId: {row.CellId}")
             return CellImagesResult(
                 row.CellId,
-                cell_image_3d_save_path,
-                cell_image_2d_all_proj_save_path,
-                cell_image_2d_yx_proj_save_path,
+                local_cell_image_3d_save_path,
+                local_cell_image_2d_all_proj_save_path,
+                local_cell_image_2d_yx_proj_save_path,
             )
 
         # Overwrite or didn't exist
@@ -123,8 +142,12 @@ class SingleCellImages(Step):
 
         # Wrap errors for debugging later
         try:
+            standardize_fov_path = Path(row.StandardizedFOVPath)
+            if not standardize_fov_path.exists():
+                b.fetch(f"jacksonb/actk/{standardize_fov_path}", standardize_fov_path)
+
             # Initialize image object with standardized FOV
-            standardized_image = AICSImage(row.StandardizedFOVPath)
+            standardized_image = AICSImage(standardize_fov_path)
             channels = standardized_image.get_channel_names()
 
             # Preload image data
@@ -154,13 +177,16 @@ class SingleCellImages(Step):
             crop_3d = transforms.transpose_to_dims(crop_3d, "CYXZ", "CZYX")
 
             # Save to OME-TIFF
-            with OmeTiffWriter(cell_image_3d_save_path, overwrite_file=True) as writer:
+            with OmeTiffWriter(
+                local_cell_image_3d_save_path, overwrite_file=True
+            ) as writer:
                 writer.save(
                     crop_3d,
                     dimension_order="CZYX",
                     channel_names=standardized_image.get_channel_names(),
                     pixels_physical_size=standardized_image.get_physical_pixel_size(),
                 )
+            b.put_file(bucket_cell_image_3d_save_path, local_cell_image_3d_save_path)
 
             # Generate 2d image projections
             # Crop raw channels using segmentations
@@ -201,8 +227,11 @@ class SingleCellImages(Step):
             all_proj = all_proj.astype(np.uint8)
 
             # Save to PNG
-
-            imwrite(cell_image_2d_all_proj_save_path, all_proj)
+            imwrite(local_cell_image_2d_all_proj_save_path, all_proj)
+            b.put_file(
+                bucket_cell_image_2d_all_proj_save_path,
+                local_cell_image_2d_all_proj_save_path,
+            )
 
             # Get YX axes projection image
             yx_proj = proc.imgtoprojection(
@@ -221,16 +250,20 @@ class SingleCellImages(Step):
             yx_proj = yx_proj.astype(np.uint8)
 
             # Save to PNG
-            imwrite(cell_image_2d_yx_proj_save_path, yx_proj)
+            imwrite(local_cell_image_2d_yx_proj_save_path, yx_proj)
+            b.put_file(
+                bucket_cell_image_2d_yx_proj_save_path,
+                local_cell_image_2d_yx_proj_save_path,
+            )
 
             log.info(f"Completed single cell image generation for CellId: {row.CellId}")
 
             # Return ready to save image
             return CellImagesResult(
                 row.CellId,
-                cell_image_3d_save_path,
-                cell_image_2d_all_proj_save_path,
-                cell_image_2d_yx_proj_save_path,
+                local_cell_image_3d_save_path,
+                local_cell_image_2d_all_proj_save_path,
+                local_cell_image_2d_yx_proj_save_path,
             )
 
         # Catch and return error
@@ -398,8 +431,14 @@ class SingleCellImages(Step):
         manifest_save_path = self.step_local_staging_dir / "manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
 
+        b = Bucket("s3://allencell-internal-quilt")
+        b.put_file(f"jacksonb/actk/{manifest_save_path}", manifest_save_path)
+
         # Save errored cells to JSON
-        with open(self.step_local_staging_dir / "errors.json", "w") as write_out:
+        errors_save_path = self.step_local_staging_dir / "errors.json"
+        with open(errors_save_path, "w") as write_out:
             json.dump(errors, write_out)
+
+        b.put_file(f"jacksonb/actk/{errors_save_path}", errors_save_path)
 
         return manifest_save_path
