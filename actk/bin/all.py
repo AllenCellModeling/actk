@@ -12,12 +12,12 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
-from dask_jobqueue import SLURMCluster
 from distributed import LocalCluster
 from prefect import Flow
 from prefect.engine.executors import DaskExecutor, LocalExecutor
 
 from actk import steps
+from dask_cloudprovider import FargateCluster
 
 ###############################################################################
 
@@ -88,19 +88,16 @@ class All:
                 log_dir.mkdir(parents=True, exist_ok=True)
 
                 # Create cluster
-                log.info("Creating SLURMCluster")
-                cluster = SLURMCluster(
-                    cores=4,
-                    memory="40GB",
-                    queue="aics_cpu_general",
-                    walltime="10:00:00",
-                    local_directory=str(log_dir),
-                    log_directory=str(log_dir),
+                log.info("Creating FargateCluster")
+                cluster = FargateCluster(
+                    image="jacksonmaxfield/actk",
+                    worker_cpu=2048,
+                    worker_mem=8192,
                 )
 
                 # Spawn workers
-                cluster.scale(40)
-                log.info("Created SLURMCluster")
+                cluster.adapt(minimum=10, maximum=100)
+                log.info("Created FargateCluster")
 
                 # Use the port from the created connector to set executor address
                 distributed_executor_address = cluster.scheduler_address
