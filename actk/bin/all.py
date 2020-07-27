@@ -121,7 +121,8 @@ class All:
 
         # Configure your flow
         with Flow("actk") as flow:
-            dataset = get_s3_dataset()
+            # Allows us to pass `--n {int}`
+            dataset = get_s3_dataset(**kwargs)
             standardized_fov_paths_dataset = standardize_fov_array(
                 dataset=dataset,
                 distributed_executor_address=distributed_executor_address,
