@@ -12,12 +12,13 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
+from dask_cloudprovider import FargateCluster
 from distributed import LocalCluster
 from prefect import Flow
 from prefect.engine.executors import DaskExecutor, LocalExecutor
 
 from actk import steps
-from dask_cloudprovider import FargateCluster
+from actk.utils import s3_utils
 
 ###############################################################################
 
@@ -119,6 +120,9 @@ class All:
             # Use dask cluster
             exe = DaskExecutor(distributed_executor_address)
 
+        # Get credentials to use
+        aws_creds = s3_utils.get_aws_creds()
+
         # Configure your flow
         with Flow("actk") as flow:
             # Allows us to pass `--n {int}`
@@ -128,6 +132,7 @@ class All:
                 distributed_executor_address=distributed_executor_address,
                 overwrite=overwrite,
                 debug=debug,
+                aws_creds=aws_creds,
                 # Allows us to pass `--desired_pixel_sizes [{float},{float},{float}]`
                 **kwargs,
             )
@@ -137,6 +142,7 @@ class All:
                 distributed_executor_address=distributed_executor_address,
                 overwrite=overwrite,
                 debug=debug,
+                aws_creds=aws_creds,
                 # Allows us to pass `--cell_ceiling_adjustment {int}`
                 **kwargs,
             )
@@ -146,6 +152,7 @@ class All:
                 distributed_executor_address=distributed_executor_address,
                 overwrite=overwrite,
                 debug=debug,
+                aws_creds=aws_creds,
                 # Allows us to pass `--cell_ceiling_adjustment {int}`
                 **kwargs,
             )

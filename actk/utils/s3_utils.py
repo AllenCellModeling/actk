@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from typing import NamedTuple
+
+from boto3.session import Session
 from quilt3 import Bucket
 
 ###############################################################################
@@ -32,3 +35,14 @@ def s3_file_exists(b: Bucket, key: str) -> bool:
 
     # Check for file in contents
     return any(f["Key"] == key for f in contents)
+
+
+class AWSCreds(NamedTuple):
+    access_key: str
+    secret_key: str
+
+
+def get_aws_creds() -> AWSCreds:
+    s = Session()
+    c = s.get_credentials()
+    return AWSCreds(c.access_key, c.secret_key)

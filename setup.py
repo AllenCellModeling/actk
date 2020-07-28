@@ -41,6 +41,7 @@ step_workflow_requirements = [
     "aiobotocore[boto3]==0.12.0",
     "aics_dask_utils>=0.2.0",
     "bokeh>=2.1.0",
+    "boto3==1.12.3",
     "dask[bag]>=2.19.0",
     "dask_cloudprovider==0.1.1",
     "dask_jobqueue>=0.7.0",

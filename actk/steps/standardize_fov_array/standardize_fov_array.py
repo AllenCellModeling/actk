@@ -12,6 +12,7 @@ import pandas as pd
 from aics_dask_utils import DistributedHandler
 from aicsimageio import transforms
 from aicsimageio.writers import OmeTiffWriter
+from boto3.session import Session
 from datastep import Step, log_run_params
 from quilt3 import Bucket, Package
 
@@ -63,9 +64,14 @@ class StandardizeFOVArray(Step):
         desired_pixel_sizes: Tuple[float],
         save_dir: Path,
         overwrite: bool,
+        aws_creds: s3_utils.AWSCreds,
     ) -> Union[StandardizeFOVArrayResult, StandardizeFOVArrayError]:
         # Don't use dask for image reading
         aicsimageio.use_dask(False)
+        if aws_creds is not None:
+            session = Session(aws_creds.access_key, aws_creds.secret_key)
+        else:
+            session = Session()
 
         # Get the ultimate end save path for this cell
         local_save_path = save_dir / f"{row.FOVId}.ome.tiff"
@@ -140,6 +146,7 @@ class StandardizeFOVArray(Step):
         desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29),
         distributed_executor_address: Optional[str] = None,
         overwrite: bool = False,
+        aws_creds: Optional[s3_utils.AWSCreds] = None,
         **kwargs,
     ) -> Path:
         """
@@ -169,11 +176,20 @@ class StandardizeFOVArray(Step):
             the previous files or not.
             Default: False (Do not overwrite or regenerate files)
 
+        aws_creds: s3_utils.AWSCreds
+            Specific credentials to use for interaction with S3.
+            Default: None (No need for credentials)
+
         Returns
         -------
         manifest_save_path: Path
             Path to the produced manifest with the StandardizedFOVPath column added.
         """
+        if aws_creds is not None:
+            session = Session(aws_creds.access_key, aws_creds.secret_key)
+        else:
+            session = Session()
+
         # Handle dataset provided as string or path
         if isinstance(dataset, (str, Path)):
             dataset = Path(dataset).expanduser().resolve(strict=True)
@@ -214,6 +230,7 @@ class StandardizeFOVArray(Step):
                 [desired_pixel_sizes for i in range(len(fov_dataset))],
                 [fovs_dir for i in range(len(fov_dataset))],
                 [overwrite for i in range(len(dataset))],
+                [aws_creds for i in range(len(dataset))],
             )
             results = handler.gather(futures)
 
