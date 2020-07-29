@@ -10,6 +10,8 @@ from aicsfeature.extractor import cell, cell_nuc, dna
 from aicsimageio import AICSImage, transforms, types
 from scipy.ndimage import gaussian_filter as ndf
 from scipy.signal import fftconvolve as convolve
+import psutil
+import os
 
 from ..constants import Channels
 
@@ -80,15 +82,24 @@ def get_normed_image_array(
     The original version of this function can be found at:
     https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#9
     """
+    process = psutil.Process(os.getpid())
+    print(f"current memory used by process: {process.memory_info().rss / 2**30}")
+
     # Construct image objects
     raw = AICSImage(raw_image)
     nuc_seg = AICSImage(nucleus_seg_image)
     memb_seg = AICSImage(membrane_seg_image)
 
+    print("passed AICSImage object construction")
+    print(f"current memory used by process: {process.memory_info().rss / 2**30}")
+
     # Preload image data
     raw.data
     nuc_seg.data
     memb_seg.data
+
+    print("passed image preloads")
+    print(f"current memory used by process: {process.memory_info().rss / 2**30}")
 
     # Get default current and desired pixel sizes
     if current_pixel_sizes is None:
@@ -98,6 +109,8 @@ def get_normed_image_array(
     if desired_pixel_sizes is None:
         desired_pixel_sizes = current_pixel_sizes
 
+    print("passed pixel size calculation")
+
     # Select the channels
     channel_indices = [
         dna_channel_index,
@@ -106,11 +119,17 @@ def get_normed_image_array(
         brightfield_channel_index,
     ]
     selected_channels = [
-        raw.get_image_dask_data("YXZ", S=0, T=0, C=index) for index in channel_indices
+        raw.get_image_data("YXZ", S=0, T=0, C=index) for index in channel_indices
     ]
 
+    print("passed dask data selection")
+    print(f"current memory used by process: {process.memory_info().rss / 2**30}")
+
     # Combine selections and get numpy array
-    raw = da.stack(selected_channels).compute()
+    raw = np.stack(selected_channels)
+
+    print("passed true raw data selection")
+    print(f"current memory used by process: {process.memory_info().rss / 2**30}")
 
     # Convert pixel sizes to numpy arrays
     current_pixel_sizes = np.array(current_pixel_sizes)
@@ -125,6 +144,9 @@ def get_normed_image_array(
     nuc_seg = nuc_seg.get_image_data("YXZ", S=0, T=0, C=0)
     memb_seg = memb_seg.get_image_data("YXZ", S=0, T=0, C=0)
 
+    print("passed true segmentation data selection")
+    print(f"current memory used by process: {process.memory_info().rss / 2**30}")
+
     # We do not assume that the segmentations are the same size as the raw
     # Resize the segmentations to match the raw
     # We drop the channel dimension from the raw size retrieval
@@ -138,9 +160,13 @@ def get_normed_image_array(
     nuc_seg = proc.resize(nuc_seg, scale_nuc, method="nearest")
     memb_seg = proc.resize(memb_seg, scale_memb, method="nearest")
 
+    print("passed segmentation resizing")
+    print(f"current memory used by process: {process.memory_info().rss / 2**30}")
+
     # Normalize images
     normalized_images = []
     for i, index in enumerate(channel_indices):
+        print(f"starting normalization for index: {index}")
         if index == brightfield_channel_index:
             norm_method = "trans"
         else:
@@ -149,9 +175,15 @@ def get_normed_image_array(
         # Normalize and append
         normalized_images.append(proc.normalize_img(raw[i], method=norm_method))
 
+    print("passed image normalization")
+    print(f"current memory used by process: {process.memory_info().rss / 2**30}")
+
     # Stack all together
     img = np.stack([nuc_seg, memb_seg, *normalized_images])
     channel_names = Channels.DefaultOrderList
+
+    print("passed stacked array generation")
+    print(f"current memory used by process: {process.memory_info().rss / 2**30}")
 
     return img, channel_names, tuple(desired_pixel_sizes)
 
