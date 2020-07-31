@@ -137,7 +137,7 @@ def get_normed_image_array(
 
     # Only resize raw image if desired pixel sizes is different from current
     if not np.array_equal(current_pixel_sizes, desired_pixel_sizes):
-        scale_raw = current_pixel_sizes / desired_pixel_sizes
+        scale_raw = desired_pixel_sizes / current_pixel_sizes
         raw = np.stack([proc.resize(channel, scale_raw, "bilinear") for channel in raw])
 
     # Prep segmentations
