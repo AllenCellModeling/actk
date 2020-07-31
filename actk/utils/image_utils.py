@@ -10,8 +10,6 @@ from aicsfeature.extractor import cell, cell_nuc, dna
 from aicsimageio import AICSImage, transforms, types
 from scipy.ndimage import gaussian_filter as ndf
 from scipy.signal import fftconvolve as convolve
-import psutil
-import os
 
 from ..constants import Channels
 
@@ -82,7 +80,6 @@ def get_normed_image_array(
     The original version of this function can be found at:
     https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#9
     """
-    process = psutil.Process(os.getpid())
 
     # Construct image objects
     raw = AICSImage(raw_image)
