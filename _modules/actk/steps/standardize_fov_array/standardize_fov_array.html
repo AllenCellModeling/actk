@@ -199,6 +199,7 @@
 <span class="kn">from</span> <span class="nn">...constants</span> <span class="kn">import</span> <span class="n">DatasetFields</span>
 <span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">dataset_utils</span><span class="p">,</span> <span class="n">image_utils</span>
 
+
 <span class="c1">###############################################################################</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -238,7 +239,8 @@
     <span class="k">def</span> <span class="nf">_generate_standardized_fov_array</span><span class="p">(</span>
         <span class="n">row_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">row</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span>
-        <span class="n">desired_pixel_sizes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">current_pixel_sizes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
+        <span class="n">desired_pixel_sizes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
         <span class="n">save_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
         <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">StandardizeFOVArrayResult</span><span class="p">,</span> <span class="n">StandardizeFOVArrayError</span><span class="p">]:</span>
@@ -267,6 +269,7 @@
                 <span class="n">membrane_channel_index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">ChannelIndexMembrane</span><span class="p">,</span>
                 <span class="n">structure_channel_index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">ChannelIndexStructure</span><span class="p">,</span>
                 <span class="n">brightfield_channel_index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">ChannelIndexBrightfield</span><span class="p">,</span>
+                <span class="n">current_pixel_sizes</span><span class="o">=</span><span class="n">current_pixel_sizes</span><span class="p">,</span>
                 <span class="n">desired_pixel_sizes</span><span class="o">=</span><span class="n">desired_pixel_sizes</span><span class="p">,</span>
             <span class="p">)</span>
 
@@ -296,6 +299,11 @@
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">dataset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
+        <span class="n">current_pixel_sizes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mf">0.10833333333333332</span><span class="p">,</span>
+            <span class="mf">0.10833333333333332</span><span class="p">,</span>
+            <span class="mf">0.29</span><span class="p">,</span>
+        <span class="p">),</span>
         <span class="n">desired_pixel_sizes</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.29</span><span class="p">,</span> <span class="mf">0.29</span><span class="p">,</span> <span class="mf">0.29</span><span class="p">),</span>
         <span class="n">distributed_executor_address</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -314,6 +322,13 @@
 <span class="sd">            &quot;NucleusSegmentationReadPath&quot;, &quot;MembraneSegmentationReadPath&quot;,</span>
 <span class="sd">            &quot;ChannelIndexDNA&quot;, &quot;ChannelIndexMembrane&quot;, &quot;ChannelIndexStructure&quot;,</span>
 <span class="sd">            &quot;ChannelIndexBrightfield&quot;]*</span>
+
+
+<span class="sd">        current_pixel_sizes: Optional[Tuple[float]]</span>
+<span class="sd">            The current physical pixel sizes as a tuple of the raw image.</span>
+<span class="sd">            Default: (0.10833333333333332, 0.10833333333333332, 0.29), though if None,</span>
+<span class="sd">            uses (`aicsimageio.AICSImage.get_physical_pixel_size` on the raw image)</span>
+
 
 <span class="sd">        desired_pixel_sizes: Tuple[float]</span>
 <span class="sd">            The desired pixel size for to resize each image to in XYZ order.</span>
@@ -370,6 +385,7 @@
                 <span class="o">*</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">fov_dataset</span><span class="o">.</span><span class="n">iterrows</span><span class="p">())),</span>
                 <span class="c1"># Pass the other parameters as list of the same thing for each</span>
                 <span class="c1"># mapped function call</span>
+                <span class="p">[</span><span class="n">current_pixel_sizes</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fov_dataset</span><span class="p">))],</span>
                 <span class="p">[</span><span class="n">desired_pixel_sizes</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fov_dataset</span><span class="p">))],</span>
                 <span class="p">[</span><span class="n">fovs_dir</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fov_dataset</span><span class="p">))],</span>
                 <span class="p">[</span><span class="n">overwrite</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">))],</span>

@@ -265,32 +265,40 @@ Default: False (Do not overwrite or regenerate files)</p></li>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.StandardizeFOVArray.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29), distributed_executor_address: Optional[str] = None, overwrite: bool = False, **kwargs</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.StandardizeFOVArray.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], current_pixel_sizes: Optional[Tuple[float]] = (0.10833333333333332, 0.10833333333333332, 0.29), desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29), distributed_executor_address: Optional[str] = None, overwrite: bool = False, **kwargs</em><span class="sig-paren">)</span> &#x2192; pathlib.Path<a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.StandardizeFOVArray.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a dataset of raw FOV images and their nucleus and membrane
 segmentations, into a single, standard order and shape, and normalized image.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul>
-<li><p><strong>dataset</strong> (<em>Union[str, Path, pd.DataFrame, dd.DataFrame]</em>) – The dataset to use for generating standard order, normalized, image arrays.</p>
+<dd class="field-odd"><p><strong>dataset</strong> (<em>Union[str, Path, pd.DataFrame, dd.DataFrame]</em>) – The dataset to use for generating standard order, normalized, image arrays.</p>
 <p><strong>Required dataset columns:</strong> <em>[“FOVId”, “SourceReadPath”,
 “NucleusSegmentationReadPath”, “MembraneSegmentationReadPath”,
 “ChannelIndexDNA”, “ChannelIndexMembrane”, “ChannelIndexStructure”,
 “ChannelIndexBrightfield”]</em></p>
-</li>
-<li><p><strong>desired_pixel_sizes</strong> (<em>Tuple[float]</em>) – The desired pixel size for to resize each image to in XYZ order.
-Default: (0.29, 0.29, 0.29)</p></li>
-<li><p><strong>distributed_executor_address</strong> (<em>Optional[str]</em>) – An optional executor address to pass to some computation engine.
-Default: None</p></li>
-<li><p><strong>overwrite</strong> (<em>bool</em>) – If this step has already partially or completely run, should it overwrite
+</dd>
+</dl>
+<dl class="simple">
+<dt>current_pixel_sizes: Optional[Tuple[float]]</dt><dd><p>The current physical pixel sizes as a tuple of the raw image.
+Default: (0.10833333333333332, 0.10833333333333332, 0.29), though if None,
+uses (<cite>aicsimageio.AICSImage.get_physical_pixel_size</cite> on the raw image)</p>
+</dd>
+<dt>desired_pixel_sizes: Tuple[float]</dt><dd><p>The desired pixel size for to resize each image to in XYZ order.
+Default: (0.29, 0.29, 0.29)</p>
+</dd>
+<dt>distributed_executor_address: Optional[str]</dt><dd><p>An optional executor address to pass to some computation engine.
+Default: None</p>
+</dd>
+<dt>overwrite: bool</dt><dd><p>If this step has already partially or completely run, should it overwrite
 the previous files or not.
-Default: False (Do not overwrite or regenerate files)</p></li>
-</ul>
+Default: False (Do not overwrite or regenerate files)</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>manifest_save_path</strong> – Path to the produced manifest with the StandardizedFOVPath column added.</p>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>manifest_save_path</strong> – Path to the produced manifest with the StandardizedFOVPath column added.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Path</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Path</p>
 </dd>
 </dl>
 </dd></dl>
