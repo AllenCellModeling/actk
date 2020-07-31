@@ -17,6 +17,7 @@ from datastep import Step, log_run_params
 from ...constants import DatasetFields
 from ...utils import dataset_utils, image_utils
 
+
 ###############################################################################
 
 log = logging.getLogger(__name__)
@@ -56,7 +57,8 @@ class StandardizeFOVArray(Step):
     def _generate_standardized_fov_array(
         row_index: int,
         row: pd.Series,
-        desired_pixel_sizes: Tuple[float],
+        current_pixel_sizes: Optional[Tuple[float]],
+        desired_pixel_sizes: Optional[Tuple[float]],
         save_dir: Path,
         overwrite: bool,
     ) -> Union[StandardizeFOVArrayResult, StandardizeFOVArrayError]:
@@ -85,6 +87,7 @@ class StandardizeFOVArray(Step):
                 membrane_channel_index=row.ChannelIndexMembrane,
                 structure_channel_index=row.ChannelIndexStructure,
                 brightfield_channel_index=row.ChannelIndexBrightfield,
+                current_pixel_sizes=current_pixel_sizes,
                 desired_pixel_sizes=desired_pixel_sizes,
             )
 
@@ -114,6 +117,11 @@ class StandardizeFOVArray(Step):
     def run(
         self,
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
+        current_pixel_sizes: Optional[Tuple[float]] = (
+            0.10833333333333332,
+            0.10833333333333332,
+            0.29,
+        ),
         desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29),
         distributed_executor_address: Optional[str] = None,
         overwrite: bool = False,
@@ -132,6 +140,13 @@ class StandardizeFOVArray(Step):
             "NucleusSegmentationReadPath", "MembraneSegmentationReadPath",
             "ChannelIndexDNA", "ChannelIndexMembrane", "ChannelIndexStructure",
             "ChannelIndexBrightfield"]*
+
+
+        current_pixel_sizes: Optional[Tuple[float]]
+            The current physical pixel sizes as a tuple of the raw image.
+            Default: (0.10833333333333332, 0.10833333333333332, 0.29), though if None,
+            uses (`aicsimageio.AICSImage.get_physical_pixel_size` on the raw image)
+
 
         desired_pixel_sizes: Tuple[float]
             The desired pixel size for to resize each image to in XYZ order.
@@ -188,6 +203,7 @@ class StandardizeFOVArray(Step):
                 *zip(*list(fov_dataset.iterrows())),
                 # Pass the other parameters as list of the same thing for each
                 # mapped function call
+                [current_pixel_sizes for i in range(len(fov_dataset))],
                 [desired_pixel_sizes for i in range(len(fov_dataset))],
                 [fovs_dir for i in range(len(fov_dataset))],
                 [overwrite for i in range(len(dataset))],
