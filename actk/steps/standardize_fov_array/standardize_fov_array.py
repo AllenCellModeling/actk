@@ -118,7 +118,9 @@ class StandardizeFOVArray(Step):
         self,
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
         current_pixel_sizes: Optional[Tuple[float]] = (
-            0.10833333333333332, 0.10833333333333332, 0.29
+            0.10833333333333332,
+            0.10833333333333332,
+            0.29,
         ),
         desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29),
         distributed_executor_address: Optional[str] = None,

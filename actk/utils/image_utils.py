@@ -4,7 +4,6 @@
 from typing import Dict, List, Optional, Tuple
 
 import aicsimageprocessing as proc
-import dask.array as da
 import numpy as np
 from aicsfeature.extractor import cell, cell_nuc, dna
 from aicsimageio import AICSImage, transforms, types
