@@ -17,8 +17,6 @@ from datastep import Step, log_run_params
 from ...constants import DatasetFields
 from ...utils import dataset_utils, image_utils
 
-from memory_profiler import profile
-
 
 ###############################################################################
 
