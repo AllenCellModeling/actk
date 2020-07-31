@@ -4,6 +4,7 @@
 from typing import Dict, List, Optional, Tuple
 
 import aicsimageprocessing as proc
+import dask.array as da
 import numpy as np
 from aicsfeature.extractor import cell, cell_nuc, dna
 from aicsimageio import AICSImage, transforms, types
@@ -79,7 +80,6 @@ def get_normed_image_array(
     The original version of this function can be found at:
     https://aicsbitbucket.corp.alleninstitute.org/projects/MODEL/repos/image_processing_pipeline/browse/aics_single_cell_pipeline/utils.py#9
     """
-
     # Construct image objects
     raw = AICSImage(raw_image)
     nuc_seg = AICSImage(nucleus_seg_image)
@@ -106,11 +106,11 @@ def get_normed_image_array(
         brightfield_channel_index,
     ]
     selected_channels = [
-        raw.get_image_data("YXZ", S=0, T=0, C=index) for index in channel_indices
+        raw.get_image_dask_data("YXZ", S=0, T=0, C=index) for index in channel_indices
     ]
 
     # Combine selections and get numpy array
-    raw = np.stack(selected_channels)
+    raw = da.stack(selected_channels).compute()
 
     # Convert pixel sizes to numpy arrays
     current_pixel_sizes = np.array(current_pixel_sizes)
