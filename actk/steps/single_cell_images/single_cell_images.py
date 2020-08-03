@@ -328,7 +328,7 @@ class SingleCellImages(Step):
                 # One list will be row index
                 # One list will be the pandas series of every row
                 *zip(*list(dataset.iterrows())),
-                batch_size=10,
+                batch_size=64,
             )
 
             # Compute bounding box with percentile
