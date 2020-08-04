@@ -37,6 +37,7 @@ class All:
             steps.StandardizeFOVArray(),
             steps.SingleCellFeatures(),
             steps.SingleCellImages(),
+            steps.MakeDiagnosticSheet(),
         ]
 
     def run(
@@ -90,6 +91,7 @@ class All:
         standardize_fov_array = steps.StandardizeFOVArray()
         single_cell_features = steps.SingleCellFeatures()
         single_cell_images = steps.SingleCellImages()
+        make_diagnostic_sheet = steps.MakeDiagnosticSheet()
 
         # Choose executor
         if debug:
@@ -182,6 +184,16 @@ class All:
                 **kwargs,
             )
 
+            diagnostic_sheet_dataset = make_diagnostic_sheet(
+                dataset=single_cell_images_dataset,
+                distributed_executor_address=distributed_executor_address,
+                overwrite=overwrite,
+                # Allows us to pass `--group_by {str}`, 
+                # `--group_by_value {str}` , 
+                # `--feature_display {str}'`
+                **kwargs,
+                )
+
         # Run flow and get ending state, log duration
         start = datetime.now()
         state = flow.run(executor=exe)
@@ -195,6 +207,7 @@ class All:
 
         # Get and display any outputs you want to see on your local terminal
         log.info(single_cell_images_dataset.get_result(state, flow))
+        # log.info(diagnostic_sheet_dataset.get_result(state, flow))
 
     def pull(self):
         """
