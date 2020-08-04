@@ -271,7 +271,7 @@ class MakeDiagnosticSheet(Step):
 
         grouped_manifest = self.manifest.dropna().reset_index()
 
-        if group_by and group_by_value:
+        if group_by and group_by_value and len(grouped_manifest) > 0:
             self._make_group_plot(grouped_manifest, group_by, group_by_value, feature_display)
 
         # Save manifest to CSV
