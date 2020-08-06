@@ -181,6 +181,25 @@ class StandardizeFOVArray(Step):
         # Log original length of cell dataset
         log.info(f"Original dataset length: {len(dataset)}")
 
+        # Check assumption: all fields per FOV are constant
+        # except CellID and CellIndex
+        const_cols_per_fov = [
+            c for c in dataset.columns if c not in ["CellId", "CellIndex"]
+        ]
+        df_const_cols = dataset.groupby("FOVId")[const_cols_per_fov].nunique().eq(1)
+
+        for col_name, is_const in df_const_cols.all().iteritems():
+            try:
+                assert is_const
+            except AssertionError:
+                example = df_const_cols[~df_const_cols[col_name]].sample()
+                message = (
+                    f"{col_name} has multiple values per FOV. "
+                    f"Example: FOV {example.index.item()}"
+                )
+                logging.error(message, exc_info=True)
+                raise ValueError(message)
+
         # As there is an assumption that this dataset is for cells,
         # generate the FOV dataset by selecting unique FOV Ids
         fov_dataset = dataset.drop_duplicates(DatasetFields.FOVId)

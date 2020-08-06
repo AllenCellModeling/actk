@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
+import pytest
 
 import dask.dataframe as dd
 
@@ -35,3 +36,12 @@ def test_run(data_dir):
         Path(f).resolve(strict=True)
         for f in output_manifest[DatasetFields.StandardizedFOVPath]
     )
+
+
+def test_catch_nonconstant_segs_per_fov(data_dir):
+
+    # Initialize step
+    step = StandardizeFOVArray()
+
+    with pytest.raises(Exception):
+        assert step.run(data_dir / "example_BAD_dataset_seg_paths_vary_per_fov.csv")
