@@ -363,6 +363,25 @@
         <span class="c1"># Log original length of cell dataset</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original dataset length: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+        <span class="c1"># Check assumption: all fields per FOV are constant</span>
+        <span class="c1"># except CellID and CellIndex</span>
+        <span class="n">const_cols_per_fov</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CellId&quot;</span><span class="p">,</span> <span class="s2">&quot;CellIndex&quot;</span><span class="p">]</span>
+        <span class="p">]</span>
+        <span class="n">df_const_cols</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;FOVId&quot;</span><span class="p">)[</span><span class="n">const_cols_per_fov</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">is_const</span> <span class="ow">in</span> <span class="n">df_const_cols</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">is_const</span>
+            <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+                <span class="n">example</span> <span class="o">=</span> <span class="n">df_const_cols</span><span class="p">[</span><span class="o">~</span><span class="n">df_const_cols</span><span class="p">[</span><span class="n">col_name</span><span class="p">]]</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col_name</span><span class="si">}</span><span class="s2"> has multiple values per FOV. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Example: FOV </span><span class="si">{</span><span class="n">example</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
         <span class="c1"># As there is an assumption that this dataset is for cells,</span>
         <span class="c1"># generate the FOV dataset by selecting unique FOV Ids</span>
         <span class="n">fov_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">DatasetFields</span><span class="o">.</span><span class="n">FOVId</span><span class="p">)</span>
