@@ -193,8 +193,10 @@ class StandardizeFOVArray(Step):
                 assert is_const
             except AssertionError:
                 example = df_const_cols[~df_const_cols[col_name]].sample()
-                message = f"{col_name} has multiple values per FOV. "\
-                          f"Example: FOV {example.index.item()}"
+                message = (
+                    f"{col_name} has multiple values per FOV. "
+                    f"Example: FOV {example.index.item()}"
+                )
                 logging.error(message, exc_info=True)
                 raise ValueError(message)
 
