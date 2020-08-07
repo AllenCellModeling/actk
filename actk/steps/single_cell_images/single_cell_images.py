@@ -249,6 +249,7 @@ class SingleCellImages(Step):
         bounding_box_percentile: float = 95.0,
         projection_method: str = "max",
         distributed_executor_address: Optional[str] = None,
+        batch_size: Optional[int] = None,
         overwrite: bool = False,
         **kwargs,
     ):
@@ -284,6 +285,10 @@ class SingleCellImages(Step):
         distributed_executor_address: Optional[str]
             An optional executor address to pass to some computation engine.
             Default: None
+
+        batch_size: Optional[int]
+            An optional batch size to process n features at a time.
+            Default: None (Process all at once)
 
         overwrite: bool
             If this step has already partially or completely run, should it overwrite
@@ -322,16 +327,14 @@ class SingleCellImages(Step):
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
-            bounding_box_futures = handler.client.map(
+            bbox_results = handler.batched_map(
                 self._get_registered_image_size,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
                 # One list will be the pandas series of every row
                 *zip(*list(dataset.iterrows())),
+                batch_size=batch_size,
             )
-
-            # Block until all complete
-            bbox_results = handler.gather(bounding_box_futures)
 
             # Compute bounding box with percentile
             bbox_results = np.array(bbox_results)
@@ -339,7 +342,7 @@ class SingleCellImages(Step):
             bounding_box = np.ceil(bounding_box)
 
             # Generate bounded arrays
-            futures = handler.client.map(
+            results = handler.batched_map(
                 self._generate_single_cell_images,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
@@ -354,10 +357,8 @@ class SingleCellImages(Step):
                 [cell_images_2d_all_proj_dir for i in range(len(dataset))],
                 [cell_images_2d_yx_proj_dir for i in range(len(dataset))],
                 [overwrite for i in range(len(dataset))],
+                batch_size=batch_size,
             )
-
-            # Block until all complete
-            results = handler.gather(futures)
 
         # Generate single cell images dataset rows
         single_cell_images_dataset = []

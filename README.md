@@ -44,6 +44,14 @@ also for the entire pipeline with:
 actk all run --dataset {path to dataset} --cell_ceiling_adjustment {integer}
 ```
 
+To run in distributed mode across the SLURM cluster at AICS you can add the
+`--distributed` flag to the pipeline call.
+
+To set distributed cluster and worker parameters you can additionally add the flags:
+* `--n_workers {int}` (i.e. `--n_workers 100`)
+* `--worker_cpu {int}` (i.e. `--worker_cpu 2`)
+* `--worker_mem {str}` (i.e. `--worker_mem 100GB`)
+
 ### Individual Steps
 * `actk standardizefovarray run --dataset {path to dataset}`, Generate standardized,
 ordered, and normalized FOV images as OME-Tiffs.

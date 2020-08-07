@@ -17,7 +17,6 @@ from datastep import Step, log_run_params
 from ...constants import DatasetFields
 from ...utils import dataset_utils, image_utils
 
-
 ###############################################################################
 
 log = logging.getLogger(__name__)
@@ -124,6 +123,7 @@ class StandardizeFOVArray(Step):
         ),
         desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29),
         distributed_executor_address: Optional[str] = None,
+        batch_size: Optional[int] = None,
         overwrite: bool = False,
         **kwargs,
     ) -> Path:
@@ -155,6 +155,10 @@ class StandardizeFOVArray(Step):
         distributed_executor_address: Optional[str]
             An optional executor address to pass to some computation engine.
             Default: None
+
+        batch_size: Optional[int]
+            An optional batch size to process n features at a time.
+            Default: None (Process all at once)
 
         overwrite: bool
             If this step has already partially or completely run, should it overwrite
@@ -214,7 +218,7 @@ class StandardizeFOVArray(Step):
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
-            futures = handler.client.map(
+            results = handler.batched_map(
                 self._generate_standardized_fov_array,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
@@ -226,8 +230,8 @@ class StandardizeFOVArray(Step):
                 [desired_pixel_sizes for i in range(len(fov_dataset))],
                 [fovs_dir for i in range(len(fov_dataset))],
                 [overwrite for i in range(len(dataset))],
+                batch_size=batch_size,
             )
-            results = handler.gather(futures)
 
         # Generate fov paths rows
         standardized_fov_paths_dataset = []

@@ -47,6 +47,7 @@ step_workflow_requirements = [
     "docutils==0.15.2",  # needed for botocore (quilt dependency)
     "fire",
     "prefect>=0.12.1",
+    "psutil",
     "python-dateutil<=2.8.0",  # need <=2.8.0 for quilt3 in step
 ]
 
@@ -105,6 +106,6 @@ setup(
     url="https://github.com/AllenCellModeling/actk",
     # Do not edit this string manually, always use bumpversion
     # Details in CONTRIBUTING.rst
-    version="0.1.0",
+    version="0.0.0",
     zip_safe=False,
 )

@@ -120,6 +120,7 @@ class SingleCellFeatures(Step):
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
         cell_ceiling_adjustment: int = 7,
         distributed_executor_address: Optional[str] = None,
+        batch_size: Optional[int] = None,
         overwrite: bool = False,
         **kwargs,
     ):
@@ -142,6 +143,10 @@ class SingleCellFeatures(Step):
         distributed_executor_address: Optional[str]
             An optional executor address to pass to some computation engine.
             Default: None
+
+        batch_size: Optional[int]
+            An optional batch size to process n features at a time.
+            Default: None (Process all at once)
 
         overwrite: bool
             If this step has already partially or completely run, should it overwrite
@@ -172,7 +177,7 @@ class SingleCellFeatures(Step):
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
-            futures = handler.client.map(
+            results = handler.batched_map(
                 self._generate_single_cell_features,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
@@ -183,8 +188,8 @@ class SingleCellFeatures(Step):
                 [cell_ceiling_adjustment for i in range(len(dataset))],
                 [features_dir for i in range(len(dataset))],
                 [overwrite for i in range(len(dataset))],
+                batch_size=batch_size,
             )
-            results = handler.gather(futures)
 
         # Generate features paths rows
         cell_features_dataset = []
