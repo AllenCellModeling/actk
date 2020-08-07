@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>actk.steps.single_cell_features package &mdash; actk 0.1.0 documentation</title>
+  <title>actk.steps.single_cell_features package &mdash; actk 0.0.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.0.0
               </div>
             
           
@@ -209,7 +209,7 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.single_cell_features.single_cell_features.SingleCellFeatures.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], cell_ceiling_adjustment: int = 7, distributed_executor_address: Optional[str] = None, overwrite: bool = False, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_features/single_cell_features.html#SingleCellFeatures.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.single_cell_features.single_cell_features.SingleCellFeatures.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], cell_ceiling_adjustment: int = 7, distributed_executor_address: Optional[str] = None, batch_size: Optional[int] = None, overwrite: bool = False, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_features/single_cell_features.html#SingleCellFeatures.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.single_cell_features.single_cell_features.SingleCellFeatures.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provided a dataset generate a features JSON file for each cell.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -223,6 +223,8 @@ ignored and cell data will be selected but not adjusted.
 Default: 7</p></li>
 <li><p><strong>distributed_executor_address</strong> (<em>Optional[str]</em>) – An optional executor address to pass to some computation engine.
 Default: None</p></li>
+<li><p><strong>batch_size</strong> (<em>Optional[int]</em>) – An optional batch size to process n features at a time.
+Default: None (Process all at once)</p></li>
 <li><p><strong>overwrite</strong> (<em>bool</em>) – If this step has already partially or completely run, should it overwrite
 the previous files or not.
 Default: False (Do not overwrite or regenerate files)</p></li>
@@ -286,7 +288,7 @@ Default: False (Do not overwrite or regenerate files)</p></li>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.single_cell_features.SingleCellFeatures.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], cell_ceiling_adjustment: int = 7, distributed_executor_address: Optional[str] = None, overwrite: bool = False, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_features/single_cell_features.html#SingleCellFeatures.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.single_cell_features.SingleCellFeatures.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], cell_ceiling_adjustment: int = 7, distributed_executor_address: Optional[str] = None, batch_size: Optional[int] = None, overwrite: bool = False, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_features/single_cell_features.html#SingleCellFeatures.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.single_cell_features.SingleCellFeatures.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provided a dataset generate a features JSON file for each cell.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -300,6 +302,8 @@ ignored and cell data will be selected but not adjusted.
 Default: 7</p></li>
 <li><p><strong>distributed_executor_address</strong> (<em>Optional[str]</em>) – An optional executor address to pass to some computation engine.
 Default: None</p></li>
+<li><p><strong>batch_size</strong> (<em>Optional[int]</em>) – An optional batch size to process n features at a time.
+Default: None (Process all at once)</p></li>
 <li><p><strong>overwrite</strong> (<em>bool</em>) – If this step has already partially or completely run, should it overwrite
 the previous files or not.
 Default: False (Do not overwrite or regenerate files)</p></li>

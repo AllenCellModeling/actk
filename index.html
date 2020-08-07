@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to actk’s documentation! &mdash; actk 0.1.0 documentation</title>
+  <title>Welcome to actk’s documentation! &mdash; actk 0.0.0 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.0.0
               </div>
             
           
@@ -229,6 +229,14 @@ also for the entire pipeline with:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>actk all run --dataset <span class="o">{</span>path to dataset<span class="o">}</span> --cell_ceiling_adjustment <span class="o">{</span>integer<span class="o">}</span>
 </pre></div>
 </div>
+<p>To run in distributed mode across the SLURM cluster at AICS you can add the
+<code class="docutils literal notranslate"><span class="pre">--distributed</span></code> flag to the pipeline call.</p>
+<p>To set distributed cluster and worker parameters you can additionally add the flags:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--n_workers</span> <span class="pre">{int}</span></code> (i.e. <code class="docutils literal notranslate"><span class="pre">--n_workers</span> <span class="pre">100</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--worker_cpu</span> <span class="pre">{int}</span></code> (i.e. <code class="docutils literal notranslate"><span class="pre">--worker_cpu</span> <span class="pre">2</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--worker_mem</span> <span class="pre">{str}</span></code> (i.e. <code class="docutils literal notranslate"><span class="pre">--worker_mem</span> <span class="pre">100GB</span></code>)</p></li>
+</ul>
 </div>
 <div class="section" id="individual-steps">
 <h3>Individual Steps<a class="headerlink" href="#individual-steps" title="Permalink to this headline">¶</a></h3>

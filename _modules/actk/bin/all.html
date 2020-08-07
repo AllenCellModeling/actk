@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>actk.bin.all &mdash; actk 0.1.0 documentation</title>
+  <title>actk.bin.all &mdash; actk 0.0.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.0.0
               </div>
             
           
@@ -194,6 +194,7 @@
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
+<span class="kn">import</span> <span class="nn">psutil</span>
 <span class="kn">from</span> <span class="nn">dask_jobqueue</span> <span class="kn">import</span> <span class="n">SLURMCluster</span>
 <span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">LocalCluster</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span>
@@ -224,6 +225,9 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">distributed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">n_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">worker_cpu</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+        <span class="n">worker_mem</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;120GB&quot;</span><span class="p">,</span>
         <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
@@ -240,6 +244,18 @@
 <span class="sd">            A boolean option to determine if the jobs should be distributed to a SLURM</span>
 <span class="sd">            cluster when possible.</span>
 <span class="sd">            Default: False (Do not distribute)</span>
+
+<span class="sd">        n_workers: int</span>
+<span class="sd">            Number of workers to request (when distributed is enabled).</span>
+<span class="sd">            Default: 10</span>
+
+<span class="sd">        worker_cpu: int</span>
+<span class="sd">            Number of cores to provide per worker (when distributed is enabled).</span>
+<span class="sd">            Default: 8</span>
+
+<span class="sd">        worker_mem: str</span>
+<span class="sd">            Amount of memory to provide per worker (when distributed is enabled).</span>
+<span class="sd">            Default: 120GB</span>
 
 <span class="sd">        overwrite: bool</span>
 <span class="sd">            If this pipeline has already partially or completely run, should it</span>
@@ -261,6 +277,7 @@
         <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
             <span class="n">exe</span> <span class="o">=</span> <span class="n">LocalExecutor</span><span class="p">()</span>
             <span class="n">distributed_executor_address</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">batch_size</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Debug flagged. Will use threads instead of Dask.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">distributed</span><span class="p">:</span>
@@ -274,8 +291,8 @@
                 <span class="c1"># Create cluster</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating SLURMCluster&quot;</span><span class="p">)</span>
                 <span class="n">cluster</span> <span class="o">=</span> <span class="n">SLURMCluster</span><span class="p">(</span>
-                    <span class="n">cores</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-                    <span class="n">memory</span><span class="o">=</span><span class="s2">&quot;40GB&quot;</span><span class="p">,</span>
+                    <span class="n">cores</span><span class="o">=</span><span class="n">worker_cpu</span><span class="p">,</span>
+                    <span class="n">memory</span><span class="o">=</span><span class="n">worker_mem</span><span class="p">,</span>
                     <span class="n">queue</span><span class="o">=</span><span class="s2">&quot;aics_cpu_general&quot;</span><span class="p">,</span>
                     <span class="n">walltime</span><span class="o">=</span><span class="s2">&quot;10:00:00&quot;</span><span class="p">,</span>
                     <span class="n">local_directory</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">log_dir</span><span class="p">),</span>
@@ -283,22 +300,31 @@
                 <span class="p">)</span>
 
                 <span class="c1"># Spawn workers</span>
-                <span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+                <span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">n_workers</span><span class="p">)</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Created SLURMCluster&quot;</span><span class="p">)</span>
 
                 <span class="c1"># Use the port from the created connector to set executor address</span>
                 <span class="n">distributed_executor_address</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">scheduler_address</span>
+
+                <span class="c1"># Batch size is n_workers * worker_cpu * 0.75</span>
+                <span class="c1"># We could just do n_workers * worker_cpu but 3/4 of that is safer</span>
+                <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_workers</span> <span class="o">*</span> <span class="n">worker_cpu</span> <span class="o">*</span> <span class="mf">0.75</span><span class="p">)</span>
 
                 <span class="c1"># Log dashboard URI</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dask dashboard available at: </span><span class="si">{</span><span class="n">cluster</span><span class="o">.</span><span class="n">dashboard_link</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Create local cluster</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating LocalCluster&quot;</span><span class="p">)</span>
-                <span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">(</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">current_mem_gb</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">available</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">30</span>
+                <span class="n">n_workers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">current_mem_gb</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)</span>
+                <span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">(</span><span class="n">n_workers</span><span class="o">=</span><span class="n">n_workers</span><span class="p">)</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Created LocalCluster&quot;</span><span class="p">)</span>
 
                 <span class="c1"># Set distributed_executor_address</span>
                 <span class="n">distributed_executor_address</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">scheduler_address</span>
+
+                <span class="c1"># Batch size on local cluster</span>
+                <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="o">//</span> <span class="n">n_workers</span><span class="p">)</span>
 
                 <span class="c1"># Log dashboard URI</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dask dashboard available at: </span><span class="si">{</span><span class="n">cluster</span><span class="o">.</span><span class="n">dashboard_link</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -311,6 +337,7 @@
             <span class="n">standardized_fov_paths_dataset</span> <span class="o">=</span> <span class="n">standardize_fov_array</span><span class="p">(</span>
                 <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
                 <span class="n">distributed_executor_address</span><span class="o">=</span><span class="n">distributed_executor_address</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
                 <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
                 <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span>
                 <span class="c1"># Allows us to pass `--desired_pixel_sizes [{float},{float},{float}]`</span>
@@ -320,6 +347,7 @@
             <span class="n">single_cell_features_dataset</span> <span class="o">=</span> <span class="n">single_cell_features</span><span class="p">(</span>
                 <span class="n">dataset</span><span class="o">=</span><span class="n">standardized_fov_paths_dataset</span><span class="p">,</span>
                 <span class="n">distributed_executor_address</span><span class="o">=</span><span class="n">distributed_executor_address</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
                 <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
                 <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span>
                 <span class="c1"># Allows us to pass `--cell_ceiling_adjustment {int}`</span>
@@ -329,6 +357,7 @@
             <span class="n">single_cell_images_dataset</span> <span class="o">=</span> <span class="n">single_cell_images</span><span class="p">(</span>
                 <span class="n">dataset</span><span class="o">=</span><span class="n">single_cell_features_dataset</span><span class="p">,</span>
                 <span class="n">distributed_executor_address</span><span class="o">=</span><span class="n">distributed_executor_address</span><span class="p">,</span>
+                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
                 <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
                 <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span>
                 <span class="c1"># Allows us to pass `--cell_ceiling_adjustment {int}`</span>
