@@ -95,6 +95,7 @@ class All:
         if debug:
             exe = LocalExecutor()
             distributed_executor_address = None
+            batch_size = None
             log.info("Debug flagged. Will use threads instead of Dask.")
         else:
             if distributed:
@@ -123,18 +124,25 @@ class All:
                 # Use the port from the created connector to set executor address
                 distributed_executor_address = cluster.scheduler_address
 
+                # Batch size is n_workers * worker_cpu * 0.75
+                # We could just do n_workers * worker_cpu but 3/4 of that is safer
+                batch_size = int(n_workers * worker_cpu * 0.75)
+
                 # Log dashboard URI
                 log.info(f"Dask dashboard available at: {cluster.dashboard_link}")
             else:
                 # Create local cluster
                 log.info("Creating LocalCluster")
                 current_mem_gb = psutil.virtual_memory().available / 2 ** 30
-                n_workers = current_mem_gb // 4
-                cluster = LocalCluster(n_workers=n_workers, threads_per_worker=1)
+                n_workers = int(current_mem_gb // 4)
+                cluster = LocalCluster(n_workers=n_workers)
                 log.info("Created LocalCluster")
 
                 # Set distributed_executor_address
                 distributed_executor_address = cluster.scheduler_address
+
+                # Batch size on local cluster
+                batch_size = int(psutil.cpu_count() // n_workers)
 
                 # Log dashboard URI
                 log.info(f"Dask dashboard available at: {cluster.dashboard_link}")
@@ -147,6 +155,7 @@ class All:
             standardized_fov_paths_dataset = standardize_fov_array(
                 dataset=dataset,
                 distributed_executor_address=distributed_executor_address,
+                batch_size=batch_size,
                 overwrite=overwrite,
                 debug=debug,
                 # Allows us to pass `--desired_pixel_sizes [{float},{float},{float}]`
@@ -156,6 +165,7 @@ class All:
             single_cell_features_dataset = single_cell_features(
                 dataset=standardized_fov_paths_dataset,
                 distributed_executor_address=distributed_executor_address,
+                batch_size=batch_size,
                 overwrite=overwrite,
                 debug=debug,
                 # Allows us to pass `--cell_ceiling_adjustment {int}`
@@ -165,6 +175,7 @@ class All:
             single_cell_images_dataset = single_cell_images(
                 dataset=single_cell_features_dataset,
                 distributed_executor_address=distributed_executor_address,
+                batch_size=batch_size,
                 overwrite=overwrite,
                 debug=debug,
                 # Allows us to pass `--cell_ceiling_adjustment {int}`

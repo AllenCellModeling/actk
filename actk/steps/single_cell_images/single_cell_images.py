@@ -249,6 +249,7 @@ class SingleCellImages(Step):
         bounding_box_percentile: float = 95.0,
         projection_method: str = "max",
         distributed_executor_address: Optional[str] = None,
+        batch_size: Optional[int] = None,
         overwrite: bool = False,
         **kwargs,
     ):
@@ -284,6 +285,10 @@ class SingleCellImages(Step):
         distributed_executor_address: Optional[str]
             An optional executor address to pass to some computation engine.
             Default: None
+
+        batch_size: Optional[int]
+            An optional batch size to process n features at a time.
+            Default: None (Process all at once)
 
         overwrite: bool
             If this step has already partially or completely run, should it overwrite
@@ -328,7 +333,7 @@ class SingleCellImages(Step):
                 # One list will be row index
                 # One list will be the pandas series of every row
                 *zip(*list(dataset.iterrows())),
-                batch_size=64,
+                batch_size=batch_size,
             )
 
             # Compute bounding box with percentile
@@ -352,7 +357,7 @@ class SingleCellImages(Step):
                 [cell_images_2d_all_proj_dir for i in range(len(dataset))],
                 [cell_images_2d_yx_proj_dir for i in range(len(dataset))],
                 [overwrite for i in range(len(dataset))],
-                batch_size=10,
+                batch_size=batch_size,
             )
 
         # Generate single cell images dataset rows

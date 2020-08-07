@@ -123,6 +123,7 @@ class StandardizeFOVArray(Step):
         ),
         desired_pixel_sizes: Tuple[float] = (0.29, 0.29, 0.29),
         distributed_executor_address: Optional[str] = None,
+        batch_size: Optional[int] = None,
         overwrite: bool = False,
         **kwargs,
     ) -> Path:
@@ -154,6 +155,10 @@ class StandardizeFOVArray(Step):
         distributed_executor_address: Optional[str]
             An optional executor address to pass to some computation engine.
             Default: None
+
+        batch_size: Optional[int]
+            An optional batch size to process n features at a time.
+            Default: None (Process all at once)
 
         overwrite: bool
             If this step has already partially or completely run, should it overwrite
@@ -206,7 +211,7 @@ class StandardizeFOVArray(Step):
                 [desired_pixel_sizes for i in range(len(fov_dataset))],
                 [fovs_dir for i in range(len(fov_dataset))],
                 [overwrite for i in range(len(dataset))],
-                batch_size=64,
+                batch_size=batch_size,
             )
 
         # Generate fov paths rows
