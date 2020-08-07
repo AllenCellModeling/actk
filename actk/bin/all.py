@@ -12,6 +12,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
+import psutil
 from dask_jobqueue import SLURMCluster
 from distributed import LocalCluster
 from prefect import Flow
@@ -42,6 +43,9 @@ class All:
         self,
         dataset: str,
         distributed: bool = False,
+        n_workers: int = 10,
+        worker_cpu: int = 8,
+        worker_mem: str = "120GB",
         overwrite: bool = False,
         debug: bool = False,
         **kwargs,
@@ -58,6 +62,18 @@ class All:
             A boolean option to determine if the jobs should be distributed to a SLURM
             cluster when possible.
             Default: False (Do not distribute)
+
+        n_workers: int
+            Number of workers to request (when distributed is enabled).
+            Default: 10
+
+        worker_cpu: int
+            Number of cores to provide per worker (when distributed is enabled).
+            Default: 8
+
+        worker_mem: str
+            Amount of memory to provide per worker (when distributed is enabled).
+            Default: 120GB
 
         overwrite: bool
             If this pipeline has already partially or completely run, should it
@@ -92,8 +108,8 @@ class All:
                 # Create cluster
                 log.info("Creating SLURMCluster")
                 cluster = SLURMCluster(
-                    cores=8,
-                    memory="120GB",
+                    cores=worker_cpu,
+                    memory=worker_mem,
                     queue="aics_cpu_general",
                     walltime="10:00:00",
                     local_directory=str(log_dir),
@@ -101,7 +117,7 @@ class All:
                 )
 
                 # Spawn workers
-                cluster.scale(40)
+                cluster.scale(n_workers)
                 log.info("Created SLURMCluster")
 
                 # Use the port from the created connector to set executor address
@@ -112,7 +128,9 @@ class All:
             else:
                 # Create local cluster
                 log.info("Creating LocalCluster")
-                cluster = LocalCluster(n_workers=2)
+                current_mem_gb = psutil.virtual_memory().available / 2**30
+                n_workers = current_mem_gb // 4
+                cluster = LocalCluster(n_workers=n_workers, threads_per_worker=1)
                 log.info("Created LocalCluster")
 
                 # Set distributed_executor_address
