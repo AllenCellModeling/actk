@@ -7,33 +7,30 @@ from pathlib import Path
 from typing import List, NamedTuple, Optional, Union
 
 import aicsimageio
-import aicsimageprocessing as proc
 import dask.dataframe as dd
 import numpy as np
 import pandas as pd
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
-from aics_dask_utils import DistributedHandler
-from aicsimageio import AICSImage, transforms
-from aicsimageio.writers import OmeTiffWriter
-from datastep import Step, log_run_params
-from imageio import imwrite
+import matplotlib
 
-from ...constants import Channels, DatasetFields
-from ...utils import dataset_utils, image_utils
-from ..single_cell_features import SingleCellFeatures
+from aics_dask_utils import DistributedHandler
+from datastep import Step, log_run_params
+
+from ...constants import DatasetFields
+from ...utils import dataset_utils
 from ..single_cell_images import SingleCellImages
 
-plt.style.use('dark_background')
+plt.style.use("dark_background")
+
 ###############################################################################
 
 log = logging.getLogger(__name__)
 
 ###############################################################################
 
-REQUIRED_DATASET_FIELDS = [
-    DatasetFields.CellId
-]
+REQUIRED_DATASET_FIELDS = [DatasetFields.CellId]
+
 
 class DiagnosticSheetResult(NamedTuple):
     cell_id: Union[int, str]
@@ -49,112 +46,134 @@ class DiagnosticSheetError(NamedTuple):
 
 
 class MakeDiagnosticSheet(Step):
-    def __init__(
-        self,
-        direct_upstream_tasks: List["Step"] = [SingleCellImages]
-    ):
+    def __init__(self, direct_upstream_tasks: List["Step"] = [SingleCellImages]):
         super().__init__(direct_upstream_tasks=direct_upstream_tasks)
-
 
     @staticmethod
     def _make_group_plot(
-        dataset: pd.DataFrame,
-        group_by: str,
-        group_by_value: str,
-        feature_display: Optional[str] = None,
-        ):
+        dataset: pd.DataFrame, group_by: str, feature_display: Optional[str] = None,
+    ):
 
-        # Get rows and columns of figure
-        columns = int(np.sqrt(len(dataset)) + 0.5)
-        if np.sqrt(len(dataset)) != int(np.sqrt(len(dataset))):
-            rows = columns + 1
-        else:
-            rows = columns
+        # Get figure numbers, subplot numbers, and figure paths
+        figure_numbers = dataset[group_by].value_counts().index.to_numpy()
+        subplot_numbers = dataset[group_by].value_counts().values
+        figure_paths = dataset["DiagnosticSheetPath"].value_counts().index
 
-        # Set figure size
-        fig_size_width =  columns*5
-        fig_size_height = rows*3
-
-        fig, ax_array = plt.subplots(rows, columns,squeeze=False, figsize = (fig_size_height, fig_size_width))
+        # Index to help loop through figure numbers
         index = 0
 
-        try:
-            for i,ax_row in enumerate(ax_array):   
-                for j,axes in enumerate(ax_row):
-                    if index < len(dataset):
+        # Set font size
+        font = {"weight": "bold", "size": 11}
+        matplotlib.rc("font", **font)
+
+        # Loop through figure numbers
+        for i in range(len(figure_numbers)):
+
+            # Get rows and columns of figure
+            columns = int(np.sqrt(subplot_numbers[i]) + 0.5)
+            if np.sqrt(subplot_numbers[i]) != int(np.sqrt(subplot_numbers[i])):
+                rows = columns + 1
+            else:
+                rows = columns
+
+            # Set figure size
+            fig_size_width = columns * 7
+            fig_size_height = rows * 5
+
+            # Set subplots
+            fig, ax_array = plt.subplots(
+                rows, columns, squeeze=False, figsize=(fig_size_height, fig_size_width)
+            )
+
+            # Set title
+            fig.suptitle(f"Metadata {group_by}:{figure_numbers[i]}")
+
+            # Second index to check subplots
+            index2 = 0
+
+            for k, ax_row in enumerate(ax_array):
+                for j, axes in enumerate(ax_row):
+                    if index2 < subplot_numbers[i]:
                         # Load feature to plot if feature_display
                         if feature_display:
-                            with open(dataset[ "CellFeaturesPath"][index]) as f:
+                            with open(dataset["CellFeaturesPath"][index]) as f:
                                 this_cell_features = json.load(f)
-                            axes.set_title(f"{group_by}:{group_by_value} \n {feature_display}:{this_cell_features[feature_display]} ")
+                            title = "CellId: {0}, {1} {2}: {3}".format(
+                                dataset["CellId"][index],
+                                "\n",
+                                feature_display,
+                                this_cell_features[feature_display],
+                            )
+                            axes.set_title(title)
                         else:
-                            axes.set_title(f"{group_by}:{group_by_value}")
-                        axes.axis('off')
+                            axes.set_title(f"CellID: {dataset['CellId'][index]}")
+                        axes.axis("off")
                         # Read AllProjections Image
-                        img = mpimg.imread(dataset[ "CellImage2DAllProjectionsPath"][index])
+                        img = mpimg.imread(
+                            dataset["CellImage2DAllProjectionsPath"][index]
+                        )
                         axes.imshow(img)
                         axes.set_aspect(1)
                         index += 1
+                        index2 += 1
                     else:
-                        axes.axis('off')
-            log.info(f"Made diagnostic sheet for group: {group_by} and value: {group_by_value}")
-        # Catch and return error
-        except Exception as e:
-            log.info(
-                f"Failed to make diagnositc sheet for group: {group_by} and value: {group_by_value}. Error: {e}"
-            )
-        # Savefig, all rows will have the same diagnostic sheet path since they are merged, so choose any index
-        fig.savefig(dataset[ "DiagnosticSheetPath"][0])
+                        axes.axis("off")
+
+            log.info(f"Made diagnostic sheet for group: {group_by} ")
+
+            # Savefig
+            fig.savefig(figure_paths[i])
 
     @staticmethod
     def _collect_group(
-        row_index: int, 
+        row_index: int,
         row: pd.Series,
         diagnostic_sheet_dir: Path,
         overwrite: bool,
         group_by: str,
-        group_by_value: str
-        ) -> Union[DiagnosticSheetResult, DiagnosticSheetError]:
+    ) -> Union[DiagnosticSheetResult, DiagnosticSheetError]:
         # Don't use dask for image reading
         aicsimageio.use_dask(False)
 
         try:
             # Get the ultimate end save paths for grouped plot
-            if str(row[group_by]) == str(group_by_value):    
+            if row[str(group_by)]:
                 diagnostic_sheet_save_path = (
-                    diagnostic_sheet_dir / f"{group_by}:{group_by_value}.png"
+                    diagnostic_sheet_dir / f"{group_by}_{row[group_by]}.png"
                 )
             else:
                 # else no path to save
                 diagnostic_sheet_save_path = None
 
-            log.info(f"Retrieved the path for this group: {group_by}")
+            log.info(f"Retrieved the path for this cell ID: {row.CellId}")
+
+            # Check skip
+            if not overwrite and diagnostic_sheet_save_path.is_file():
+                log.info(
+                    f"Skipping diagnostic sheet generation for Cell Id: {row.CellId}"
+                )
+                return DiagnosticSheetResult(row.CellId, None)
 
             # Return ready to save image
-            return DiagnosticSheetResult(
-                row.CellId,
-                diagnostic_sheet_save_path
-            )
+            return DiagnosticSheetResult(row.CellId, diagnostic_sheet_save_path)
         # Catch and return error
         except Exception as e:
             log.info(
-                f"Failed to retrieve the path for this group: {group_by} "
+                f"Failed to retrieve the path for this cel ID: {row.CellId} "
                 "Error: {e}"
             )
-            return DiagnosticSheetError(row.CellId, str(e))    
-
+            return DiagnosticSheetError(row.CellId, str(e))
 
     @log_run_params
     def run(
-        self, 
-        dataset: Union[str, Path, pd.DataFrame, dd.DataFrame], 
+        self,
+        dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
         distributed_executor_address: Optional[str] = None,
         overwrite: bool = False,
         group_by: Optional[str] = None,
-        group_by_value: Optional[str] = None,
         feature_display: Optional[str] = None,
         **kwargs,
-        ):
+    ):
         """
         Run a pure function.
 
@@ -173,15 +192,13 @@ class MakeDiagnosticSheet(Step):
         Parameters
         ----------
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame]
-            The primary cell dataset to use for generating diagnistic sheet for a group of cells.
+            The primary cell dataset to use for generating 
+            diagnistic sheet for a group of cells.
 
             **Required dataset columns:** *["CellId"]*
 
         group_by: str
             The column name (metadata) to display information. For example, "FOVId"
-
-        group_by_value: str
-            The value of this metadata to display. For example, "1" (For group "FOVId", this is FOVId 1)
 
         feature_display: str
             The name of the single cell feature to display. For example, "imsize_orig"
@@ -221,8 +238,7 @@ class MakeDiagnosticSheet(Step):
                 *zip(*list(dataset.iterrows())),
                 [diagnostic_sheet_dir for i in range(len(dataset))],
                 [overwrite for i in range(len(dataset))],
-                [group_by for i in range(len(dataset))], 
-                [group_by_value for i in range(len(dataset))]
+                [group_by for i in range(len(dataset))],
             )
 
             # Block until all complete
@@ -236,15 +252,15 @@ class MakeDiagnosticSheet(Step):
                 diagnostic_sheet_result_dataset.append(
                     {
                         DatasetFields.CellId: r.cell_id,
-                        DatasetFields.DiagnosticSheetPath: r.diagnostic_sheet_save_path
+                        DatasetFields.DiagnosticSheetPath: r.diagnostic_sheet_save_path,
                     }
                 )
             else:
                 errors.append({DatasetFields.CellId: r.cell_id, "Error": r.error})
 
-        # Convert features paths rows to dataframe
+        # Convert diagnostic sheet paths rows to dataframe
         diagnostic_sheet_result_dataset = pd.DataFrame(diagnostic_sheet_result_dataset)
-        
+
         # Drop the various diagnostic sheet columns if they already exist
         drop_columns = []
         if DatasetFields.DiagnosticSheetPath in dataset.columns:
@@ -252,30 +268,25 @@ class MakeDiagnosticSheet(Step):
 
         dataset = dataset.drop(columns=drop_columns)
 
-        # Join original dataset to the fov paths
-        try:
+        if group_by and len(diagnostic_sheet_result_dataset) > 0:
+            # Join original dataset to the fov paths
             self.manifest = dataset.merge(
                 diagnostic_sheet_result_dataset, on=DatasetFields.CellId
             )
-            log.info(
-                f"Added paths of the saved diagnostic sheet to the manifest "
-                "Error: {e}"
-            )
-        # Catch and return error
-        except Exception as e:
-            log.info(
-                f"Failed to make diagnostic sheet dataset, no group input provided "
-                "Error: {e}"
-            )
-            return
 
-        grouped_manifest = self.manifest.dropna().reset_index()
-
-        if group_by and group_by_value and len(grouped_manifest) > 0:
-            self._make_group_plot(grouped_manifest, group_by, group_by_value, feature_display)
+            # Drop cell rows that dont have a saved path for the diagnostic sheet
+            self._make_group_plot(
+                self.manifest.dropna().reset_index(), group_by, feature_display
+            )
+        else:
+            self.manifest = dataset
 
         # Save manifest to CSV
         manifest_save_path = self.step_local_staging_dir / "manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
+
+        # Save errored cells to JSON
+        with open(self.step_local_staging_dir / "errors.json", "w") as write_out:
+            json.dump(errors, write_out)
 
         return manifest_save_path
