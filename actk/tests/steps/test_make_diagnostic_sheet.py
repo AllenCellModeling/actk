@@ -16,10 +16,12 @@ def test_run(data_dir):
     step = MakeDiagnosticSheet()
 
     # Ensure that it still runs
-    output_manifest = step.run(data_dir / "example_single_cell_images_dataset.csv", 
-                            group_by = "FOVId", 
-                            group_by_value = "1", 
-                            feature_display = "imsize_orig")
+    output_manifest = step.run(
+        data_dir / "example_single_cell_images_dataset.csv",
+        group_by="FOVId",
+        feature_display="imsize_orig",
+        overwrite=True,
+    )
     output_manifest = dd.read_csv(output_manifest)
 
     # Read input dataset
