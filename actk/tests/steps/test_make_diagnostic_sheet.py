@@ -18,8 +18,8 @@ def test_run(data_dir):
     # Ensure that it still runs
     output_manifest = step.run(
         data_dir / "example_single_cell_images_dataset.csv",
-        group_by="FOVId",
-        feature_display="imsize_orig",
+        metadata="FOVId",
+        feature="imsize_orig",
         overwrite=True,
     )
     output_manifest = dd.read_csv(output_manifest)
