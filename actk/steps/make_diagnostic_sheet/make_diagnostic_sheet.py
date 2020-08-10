@@ -51,12 +51,12 @@ class MakeDiagnosticSheet(Step):
 
     @staticmethod
     def _make_group_plot(
-        dataset: pd.DataFrame, group_by: str, feature_display: Optional[str] = None,
+        dataset: pd.DataFrame, metadata: str, feature: Optional[str] = None,
     ):
 
         # Get figure numbers, subplot numbers, and figure paths
-        figure_numbers = dataset[group_by].value_counts().index.to_numpy()
-        subplot_numbers = dataset[group_by].value_counts().values
+        figure_numbers = dataset[metadata].value_counts().index.to_numpy()
+        subplot_numbers = dataset[metadata].value_counts().values
         figure_paths = dataset["DiagnosticSheetPath"].value_counts().index
 
         # Index to help loop through figure numbers
@@ -86,7 +86,7 @@ class MakeDiagnosticSheet(Step):
             )
 
             # Set title
-            fig.suptitle(f"Metadata {group_by}:{figure_numbers[i]}")
+            fig.suptitle(f"{metadata}:{figure_numbers[i]}")
 
             # Second index to check subplots
             index2 = 0
@@ -94,15 +94,15 @@ class MakeDiagnosticSheet(Step):
             for k, ax_row in enumerate(ax_array):
                 for j, axes in enumerate(ax_row):
                     if index2 < subplot_numbers[i]:
-                        # Load feature to plot if feature_display
-                        if feature_display:
+                        # Load feature to plot if feature
+                        if feature:
                             with open(dataset["CellFeaturesPath"][index]) as f:
                                 this_cell_features = json.load(f)
                             title = "CellId: {0}, {1} {2}: {3}".format(
                                 dataset["CellId"][index],
                                 "\n",
-                                feature_display,
-                                this_cell_features[feature_display],
+                                feature,
+                                this_cell_features[feature],
                             )
                             axes.set_title(title)
                         else:
@@ -119,7 +119,9 @@ class MakeDiagnosticSheet(Step):
                     else:
                         axes.axis("off")
 
-            log.info(f"Made diagnostic sheet for group: {group_by} ")
+            log.info(
+                f"Completed diagnostic sheet for : {metadata} {figure_numbers[i]} "
+            )
 
             # Savefig
             fig.savefig(figure_paths[i])
@@ -130,28 +132,25 @@ class MakeDiagnosticSheet(Step):
         row: pd.Series,
         diagnostic_sheet_dir: Path,
         overwrite: bool,
-        group_by: str,
+        metadata: str,
     ) -> Union[DiagnosticSheetResult, DiagnosticSheetError]:
         # Don't use dask for image reading
         aicsimageio.use_dask(False)
 
         try:
             # Get the ultimate end save paths for grouped plot
-            if row[str(group_by)]:
+            if row[str(metadata)]:
                 diagnostic_sheet_save_path = (
-                    diagnostic_sheet_dir / f"{group_by}_{row[group_by]}.png"
+                    diagnostic_sheet_dir / f"{metadata}_{row[metadata]}.png"
                 )
+                log.info(f"Generating diagnostic sheet for cell ID: {row.CellId}")
             else:
                 # else no path to save
                 diagnostic_sheet_save_path = None
 
-            log.info(f"Retrieved the path for this cell ID: {row.CellId}")
-
             # Check skip
             if not overwrite and diagnostic_sheet_save_path.is_file():
-                log.info(
-                    f"Skipping diagnostic sheet generation for Cell Id: {row.CellId}"
-                )
+                log.info(f"Skipping diagnostic sheet for Cell Id: {row.CellId}")
                 return DiagnosticSheetResult(row.CellId, None)
 
             # Return ready to save image
@@ -159,8 +158,9 @@ class MakeDiagnosticSheet(Step):
         # Catch and return error
         except Exception as e:
             log.info(
-                f"Failed to retrieve the path for this cel ID: {row.CellId} "
-                "Error: {e}"
+                f"Failed to retrieve the diagnostic sheet path"
+                f"for cell ID: {row.CellId}"
+                f"Error: {e}"
             )
             return DiagnosticSheetError(row.CellId, str(e))
 
@@ -170,8 +170,8 @@ class MakeDiagnosticSheet(Step):
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
         distributed_executor_address: Optional[str] = None,
         overwrite: bool = False,
-        group_by: Optional[str] = None,
-        feature_display: Optional[str] = None,
+        metadata: Optional[str] = None,
+        feature: Optional[str] = None,
         **kwargs,
     ):
         """
@@ -197,10 +197,11 @@ class MakeDiagnosticSheet(Step):
 
             **Required dataset columns:** *["CellId"]*
 
-        group_by: str
-            The column name (metadata) to display information. For example, "FOVId"
+        metadata: str
+            The metadata to group cells and generate a diagnostic sheet. 
+            For example, "FOVId"
 
-        feature_display: str
+        feature: str
             The name of the single cell feature to display. For example, "imsize_orig"
 
         distributed_executor_address: Optional[str]
@@ -238,7 +239,7 @@ class MakeDiagnosticSheet(Step):
                 *zip(*list(dataset.iterrows())),
                 [diagnostic_sheet_dir for i in range(len(dataset))],
                 [overwrite for i in range(len(dataset))],
-                [group_by for i in range(len(dataset))],
+                [metadata for i in range(len(dataset))],
             )
 
             # Block until all complete
@@ -268,7 +269,7 @@ class MakeDiagnosticSheet(Step):
 
         dataset = dataset.drop(columns=drop_columns)
 
-        if group_by and len(diagnostic_sheet_result_dataset) > 0:
+        if metadata and len(diagnostic_sheet_result_dataset) > 0:
             # Join original dataset to the fov paths
             self.manifest = dataset.merge(
                 diagnostic_sheet_result_dataset, on=DatasetFields.CellId
@@ -276,7 +277,7 @@ class MakeDiagnosticSheet(Step):
 
             # Drop cell rows that dont have a saved path for the diagnostic sheet
             self._make_group_plot(
-                self.manifest.dropna().reset_index(), group_by, feature_display
+                self.manifest.dropna().reset_index(), metadata, feature
             )
         else:
             self.manifest = dataset
