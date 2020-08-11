@@ -25,5 +25,4 @@ class MissingDataError(Exception):
             f"Dataset provided does not have the required columns for this operation. "
             f"Dataset columns: {self.dataset.columns} "
             f"Required fields: {self.required_fields} "
-            f"Dataset head: {self.dataset.head()}"
         )
