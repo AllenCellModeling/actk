@@ -8,9 +8,9 @@ import traceback
 from pathlib import Path
 
 import pandas as pd
-from lkaccess import LabKey, contexts
 
 from actk.constants import DatasetFields
+from lkaccess import LabKey, contexts
 
 ###############################################################################
 
@@ -122,9 +122,14 @@ def download_aics_dataset(args: Args):
         data = data.rename(columns={
             "ChannelNumber405": DatasetFields.ChannelIndexDNA,
             "ChannelNumber638": DatasetFields.ChannelIndexMembrane,
-            "ChannelNumberStruct": DatasetFields.ChannelIndexStructure,
             "ChannelNumberBrightfield": DatasetFields.ChannelIndexBrightfield,
         })
+
+        # Add a ChannelIndexStructure column
+        # This merges two columns that have nans and values split between them.
+        data[DatasetFields.ChannelIndexStructure] = (
+            data.ChannelNumber488.combine_first(data.ChannelNumber561)
+        )
 
         # Save to CSV
         data.to_csv(args.save_path, index=False)
