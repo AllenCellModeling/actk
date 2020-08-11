@@ -139,14 +139,15 @@ class MakeDiagnosticSheet(Step):
 
         try:
             # Get the ultimate end save paths for grouped plot
-            if row[str(metadata)]:
-                diagnostic_sheet_save_path = (
-                    diagnostic_sheet_dir / f"{metadata}_{row[metadata]}.png"
-                )
-                log.info(f"Generating diagnostic sheet for cell ID: {row.CellId}")
-            else:
-                # else no path to save
-                diagnostic_sheet_save_path = None
+            if row["CellImage2DAllProjectionsPath"]:
+                if row[str(metadata)]:
+                    diagnostic_sheet_save_path = (
+                        diagnostic_sheet_dir / f"{metadata}_{row[metadata]}.png"
+                    )
+                    log.info(f"Generating diagnostic sheet for cell ID: {row.CellId}")
+                else:
+                    # else no path to save
+                    diagnostic_sheet_save_path = None
 
             # Check skip
             if not overwrite and diagnostic_sheet_save_path.is_file():
@@ -158,7 +159,7 @@ class MakeDiagnosticSheet(Step):
         # Catch and return error
         except Exception as e:
             log.info(
-                f"Failed to retrieve the diagnostic sheet path"
+                f"Failed to retrieve the CellImage2DAllProjectionsPath"
                 f"for cell ID: {row.CellId}"
                 f"Error: {e}"
             )
