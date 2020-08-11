@@ -132,7 +132,16 @@ def download_aics_dataset(args: Args):
         )
 
         # Temporary drop because differing values
-        data = data.drop(columns=["StructureSegmentationFileId"])
+        data = data.drop(columns=[
+            "StructureSegmentationAlgorithm",
+            "StructureSegmentationAlgorithmVersion",
+            "StructureSegmentationFileId",
+            "StructureSegmentationFilename",
+            "StructureSegmentationReadPath",
+            "StructureContourFilename",
+            "StructureContourReadPath",
+            "StructureContourFileId",
+        ])
 
         # Save to CSV
         data.to_csv(args.save_path, index=False)
