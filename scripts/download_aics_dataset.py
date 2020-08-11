@@ -131,6 +131,9 @@ def download_aics_dataset(args: Args):
             data.ChannelNumber488.combine_first(data.ChannelNumber561)
         )
 
+        # Temporary drop because differing values
+        data = data.drop(columns=["StructureSegmentationFileId"])
+
         # Save to CSV
         data.to_csv(args.save_path, index=False)
 
