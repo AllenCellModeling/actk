@@ -190,9 +190,9 @@ class StandardizeFOVArray(Step):
         const_cols_per_fov = [
             c for c in dataset.columns if c not in ["CellId", "CellIndex"]
         ]
-        df_const_cols = dataset.groupby("FOVId")[const_cols_per_fov]\
-            .nunique(dropna=False)\
-            .eq(1)
+        df_const_cols = (
+            dataset.groupby("FOVId")[const_cols_per_fov].nunique(dropna=False).eq(1)
+        )
 
         for col_name, is_const in df_const_cols.all().iteritems():
             try:
