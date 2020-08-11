@@ -138,9 +138,15 @@ def download_aics_dataset(args: Args):
             "StructureSegmentationFileId",
             "StructureSegmentationFilename",
             "StructureSegmentationReadPath",
+            "StructureContourFileId",
             "StructureContourFilename",
             "StructureContourReadPath",
-            "StructureContourFileId",
+            "MembraneContourFileId",
+            "MembraneContourFilename",
+            "MembraneContourReadPath",
+            "NucleusContourFileId",
+            "NucleusContourFilename",
+            "NucleusContourReadPath",
         ])
 
         # Save to CSV
