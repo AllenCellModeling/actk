@@ -23,5 +23,6 @@ def check_required_fields(
         dataset = dd.read_csv(dataset)
 
     # Check that all columns provided as required are in the dataset
-    if not all(required_col in dataset.columns for required_col in required_fields):
-        raise exceptions.MissingDataError(dataset, required_fields)
+    missing_fields = set(required_fields) - set(dataset.columns)
+    if len(missing_fields) > 0:
+        raise exceptions.MissingDataError(dataset, missing_fields)

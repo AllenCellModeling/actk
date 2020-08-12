@@ -8,9 +8,9 @@ import traceback
 from pathlib import Path
 
 import pandas as pd
-from lkaccess import LabKey, contexts
 
 from actk.constants import DatasetFields
+from lkaccess import LabKey, contexts
 
 ###############################################################################
 
@@ -119,12 +119,39 @@ def download_aics_dataset(args: Args):
             data = data.reset_index(drop=True)
 
         # Rename columns to match DatasetFields
-        data = data.rename(columns={
-            "ChannelNumber405": DatasetFields.ChannelIndexDNA,
-            "ChannelNumber638": DatasetFields.ChannelIndexMembrane,
-            "ChannelNumberStruct": DatasetFields.ChannelIndexStructure,
-            "ChannelNumberBrightfield": DatasetFields.ChannelIndexBrightfield,
-        })
+        data = data.rename(
+            columns={
+                "ChannelNumber405": DatasetFields.ChannelIndexDNA,
+                "ChannelNumber638": DatasetFields.ChannelIndexMembrane,
+                "ChannelNumberBrightfield": DatasetFields.ChannelIndexBrightfield,
+            }
+        )
+
+        # Add a ChannelIndexStructure column
+        # This merges two columns that have nans and values split between them.
+        data[DatasetFields.ChannelIndexStructure] = data.ChannelNumber488.combine_first(
+            data.ChannelNumber561
+        )
+
+        # Temporary drop because differing values
+        data = data.drop(
+            columns=[
+                "StructureSegmentationAlgorithm",
+                "StructureSegmentationAlgorithmVersion",
+                "StructureSegmentationFileId",
+                "StructureSegmentationFilename",
+                "StructureSegmentationReadPath",
+                "StructureContourFileId",
+                "StructureContourFilename",
+                "StructureContourReadPath",
+                "MembraneContourFileId",
+                "MembraneContourFilename",
+                "MembraneContourReadPath",
+                "NucleusContourFileId",
+                "NucleusContourFilename",
+                "NucleusContourReadPath",
+            ]
+        )
 
         # Save to CSV
         data.to_csv(args.save_path, index=False)
