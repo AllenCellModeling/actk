@@ -205,8 +205,9 @@
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">dd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 
     <span class="c1"># Check that all columns provided as required are in the dataset</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">required_col</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">required_col</span> <span class="ow">in</span> <span class="n">required_fields</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">MissingDataError</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">required_fields</span><span class="p">)</span></div>
+    <span class="n">missing_fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">required_fields</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_fields</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">MissingDataError</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">missing_fields</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

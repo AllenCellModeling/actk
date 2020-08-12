@@ -193,21 +193,19 @@
 
 <div class="viewcode-block" id="MissingDataError"><a class="viewcode-back" href="../../actk.html#actk.exceptions.MissingDataError">[docs]</a><span class="k">class</span> <span class="nc">MissingDataError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">required_fields</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">missing_fields</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="p">):</span>
         <span class="c1"># Run base exception init</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Store params for display</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span> <span class="o">=</span> <span class="n">required_fields</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">missing_fields</span> <span class="o">=</span> <span class="n">missing_fields</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Dataset provided does not have the required columns for this operation. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Dataset columns: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">columns</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Required fields: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">required_fields</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Dataset head: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Missing fields: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">missing_fields</span><span class="si">}</span><span class="s2"> &quot;</span>
         <span class="p">)</span></div>
 </pre></div>
 
