@@ -49,15 +49,20 @@ class MakeDiagnosticSheet(Step):
     def __init__(self, direct_upstream_tasks: List["Step"] = [SingleCellImages]):
         super().__init__(direct_upstream_tasks=direct_upstream_tasks)
 
-    @staticmethod
     def _make_group_plot(
-        dataset: pd.DataFrame, metadata: str, feature: Optional[str] = None,
+        self,
+        dataset: pd.DataFrame,
+        metadata: str,
+        max_cells: int = 1000,
+        feature: Optional[str] = None,
     ):
-
         # Get figure numbers, subplot numbers, and figure paths
+        # Number of unique metadata values
         figure_numbers = dataset[metadata].value_counts().index.to_numpy()
+        # Number of cells that have each unique metadata value
         subplot_numbers = dataset[metadata].value_counts().values
-        figure_paths = dataset["DiagnosticSheetPath"].value_counts().index
+        # Paths to save
+        figure_paths = dataset[DatasetFields.DiagnosticSheetPath].value_counts().index
 
         # Index to help loop through figure numbers
         index = 0
@@ -69,62 +74,127 @@ class MakeDiagnosticSheet(Step):
         # Loop through figure numbers
         for i in range(len(figure_numbers)):
 
-            # Get rows and columns of figure
-            columns = int(np.sqrt(subplot_numbers[i]) + 0.5)
-            if np.sqrt(subplot_numbers[i]) != int(np.sqrt(subplot_numbers[i])):
-                rows = columns + 1
+            this_figure_number = figure_numbers[i]
+            this_figure_subplots = subplot_numbers[i]
+            this_figure_path = figure_paths[i]
+
+            if this_figure_subplots < max_cells:
+                index = self._save_single_figure(
+                    dataset,
+                    this_figure_number,
+                    this_figure_subplots,
+                    index,
+                    metadata,
+                    this_figure_path,
+                    feature,
+                )
             else:
-                rows = columns
+                # If subplot numbers are more than a max cell number (1000),
+                # then make separate figures
+                subplot_split = [
+                    max_cells for i in range(int(this_figure_subplots / max_cells))
+                ] + [
+                    (
+                        this_figure_subplots
+                        - max_cells * int(this_figure_subplots / max_cells)
+                    )
+                ]
 
-            # Set figure size
-            fig_size_width = columns * 7
-            fig_size_height = rows * 5
+                # pop last element if 0 (figure subplots =
+                # max_cells * int(subplots/max_cells))
+                if subplot_split[-1] == 0:
+                    subplot_split.pop()
 
-            # Set subplots
-            fig, ax_array = plt.subplots(
-                rows, columns, squeeze=False, figsize=(fig_size_height, fig_size_width)
-            )
+                for j, sublot in enumerate(subplot_split):
+                    split_fig_path = Path(
+                        str(this_figure_path)[:-4] + "_" + str(j) + ".png"
+                    )
+                    log.info(f"Splitting this figure and saving to: {split_fig_path}")
 
-            # Set title
-            fig.suptitle(f"{metadata}:{figure_numbers[i]}")
-
-            # Second index to check subplots
-            index2 = 0
-
-            for k, ax_row in enumerate(ax_array):
-                for j, axes in enumerate(ax_row):
-                    if index2 < subplot_numbers[i]:
-                        # Load feature to plot if feature
-                        if feature:
-                            with open(dataset["CellFeaturesPath"][index]) as f:
-                                this_cell_features = json.load(f)
-                            title = "CellId: {0}, {1} {2}: {3}".format(
-                                dataset["CellId"][index],
-                                "\n",
-                                feature,
-                                this_cell_features[feature],
-                            )
-                            axes.set_title(title)
-                        else:
-                            axes.set_title(f"CellID: {dataset['CellId'][index]}")
-                        axes.axis("off")
-                        # Read AllProjections Image
-                        img = mpimg.imread(
-                            dataset["CellImage2DAllProjectionsPath"][index]
-                        )
-                        axes.imshow(img)
-                        axes.set_aspect(1)
-                        index += 1
-                        index2 += 1
-                    else:
-                        axes.axis("off")
+                    index, dataset = self._save_single_figure(
+                        dataset,
+                        this_figure_number,
+                        sublot,
+                        index,
+                        metadata,
+                        split_fig_path,
+                        feature,
+                    )
 
             log.info(
-                f"Completed diagnostic sheet for : {metadata} {figure_numbers[i]} "
+                f"Completed diagnostic sheet for : {metadata} {this_figure_number} "
             )
 
-            # Savefig
-            fig.savefig(figure_paths[i])
+        return dataset
+
+    @staticmethod
+    def _save_single_figure(
+        dataset: pd.DataFrame,
+        figure_number: Union[int, str],
+        number_of_subplots: int,
+        index: int,
+        metadata: str,
+        figure_path: Union[str, Path],
+        feature: Optional[str] = None,
+    ):
+        # Get rows and columns of figure
+        columns = int(np.sqrt(number_of_subplots) + 0.5)
+        if np.sqrt(number_of_subplots) != int(np.sqrt(number_of_subplots)):
+            rows = columns + 1
+        else:
+            rows = columns
+
+        # Set figure size
+        fig_size_width = columns * 7
+        fig_size_height = rows * 5
+
+        # Set subplots
+        fig, ax_array = plt.subplots(
+            rows, columns, squeeze=False, figsize=(fig_size_height, fig_size_width)
+        )
+
+        # Set title
+        fig.suptitle(f"{metadata}:{figure_number}")
+
+        # Second index to check subplots
+        index2 = 0
+
+        for k, ax_row in enumerate(ax_array):
+            for j, axes in enumerate(ax_row):
+                if index2 < number_of_subplots:
+                    # Load feature to plot if feature
+                    if feature:
+                        with open(dataset[DatasetFields.CellFeaturesPath][index]) as f:
+                            this_cell_features = json.load(f)
+                        title = "CellId: {0}, {1} {2}: {3}".format(
+                            dataset[DatasetFields.CellId][index],
+                            "\n",
+                            feature,
+                            this_cell_features[feature],
+                        )
+                        axes.set_title(title)
+                    else:
+                        axes.set_title(f"CellID: {[DatasetFields.CellId][index]}")
+                    axes.axis("off")
+                    # Read AllProjections Image
+                    img = mpimg.imread(
+                        dataset[DatasetFields.CellImage2DAllProjectionsPath][index]
+                    )
+                    axes.imshow(img)
+                    axes.set_aspect(1)
+
+                    # Update fig save path in dataset
+                    dataset.loc[index, DatasetFields.DiagnosticSheetPath] = figure_path
+
+                    index += 1
+                    index2 += 1
+                else:
+                    axes.axis("off")
+
+        # Savefig
+        fig.savefig(figure_path)
+
+        return index, dataset
 
     @staticmethod
     def _collect_group(
@@ -169,26 +239,17 @@ class MakeDiagnosticSheet(Step):
     def run(
         self,
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
+        max_cells: int = 1000,
         distributed_executor_address: Optional[str] = None,
+        batch_size: Optional[int] = None,
         overwrite: bool = False,
         metadata: Optional[str] = None,
         feature: Optional[str] = None,
         **kwargs,
     ):
         """
-        Run a pure function.
-
-        Protected Parameters
-        --------------------
-        distributed_executor_address: Optional[str]
-            An optional executor address to pass to some computation engine.
-        clean: bool
-            Should the local staging directory be cleaned prior to this run.
-            Default: False (Do not clean)
-        debug: bool
-            A debug flag for the developer to use to manipulate how much data runs,
-            how it is processed, etc.
-            Default: False (Do not debug)
+        Provided a dataset of single cell all projection images, generate a diagnostic
+        sheet grouped by desired metadata and feature
 
         Parameters
         ----------
@@ -197,6 +258,10 @@ class MakeDiagnosticSheet(Step):
             diagnistic sheet for a group of cells.
 
             **Required dataset columns:** *["CellId"]*
+
+        batch_size: Optional[int]
+            An optional batch size to process n features at a time.
+            Default: None (Process all at once)
 
         metadata: str
             The metadata to group cells and generate a diagnostic sheet. 
@@ -208,6 +273,15 @@ class MakeDiagnosticSheet(Step):
         distributed_executor_address: Optional[str]
             An optional executor address to pass to some computation engine.
             Default: None
+
+        clean: bool
+            Should the local staging directory be cleaned prior to this run.
+            Default: False (Do not clean)
+
+        debug: bool
+            A debug flag for the developer to use to manipulate how much data runs,
+            how it is processed, etc.
+            Default: False (Do not debug)
 
         Returns
         -------
@@ -232,7 +306,7 @@ class MakeDiagnosticSheet(Step):
         # Process each row
         with DistributedHandler(distributed_executor_address) as handler:
             # Start processing
-            diagnostic_sheet_futures = handler.client.map(
+            diagnostic_sheet_result = handler.batched_map(
                 self._collect_group,
                 # Convert dataframe iterrows into two lists of items to iterate over
                 # One list will be row index
@@ -241,10 +315,8 @@ class MakeDiagnosticSheet(Step):
                 [diagnostic_sheet_dir for i in range(len(dataset))],
                 [overwrite for i in range(len(dataset))],
                 [metadata for i in range(len(dataset))],
+                batch_size=batch_size,
             )
-
-            # Block until all complete
-            diagnostic_sheet_result = handler.gather(diagnostic_sheet_futures)
 
         # Generate diagnostic sheet dataset rows
         diagnostic_sheet_result_dataset = []
@@ -277,8 +349,8 @@ class MakeDiagnosticSheet(Step):
             )
 
             # Drop cell rows that dont have a saved path for the diagnostic sheet
-            self._make_group_plot(
-                self.manifest.dropna().reset_index(), metadata, feature
+            self.manifest = self._make_group_plot(
+                self.manifest.dropna().reset_index(), metadata, max_cells, feature
             )
         else:
             self.manifest = dataset
