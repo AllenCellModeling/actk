@@ -34,12 +34,22 @@ REQUIRED_DATASET_FIELDS = [DatasetFields.CellId]
 
 class DiagnosticSheetResult(NamedTuple):
     cell_id: Union[int, str]
-    diagnostic_sheet_save_path: Optional[Path] = None
+    save_path: Optional[Path] = None
 
 
 class DiagnosticSheetError(NamedTuple):
     cell_id: Union[int, str]
     error: str
+
+
+def flatten(x):
+    result = []
+    for el in x:
+        if hasattr(el, "__iter__") and not isinstance(el, str):
+            result.extend(flatten(el))
+        else:
+            result.append(el)
+    return result
 
 
 ###############################################################################
@@ -53,8 +63,11 @@ class MakeDiagnosticSheet(Step):
         self,
         dataset: pd.DataFrame,
         metadata: str,
+        all_metadata: Union[list, str],
         max_cells: int = 1000,
         feature: Optional[str] = None,
+        fig_width: Optional[int] = None,
+        fig_height: Optional[int] = None,
     ):
         # Get figure numbers, subplot numbers, and figure paths
         # Number of unique metadata values
@@ -62,7 +75,13 @@ class MakeDiagnosticSheet(Step):
         # Number of cells that have each unique metadata value
         subplot_numbers = dataset[metadata].value_counts().values
         # Paths to save
-        figure_paths = dataset[DatasetFields.DiagnosticSheetPath].value_counts().index
+        figure_paths = []
+        for fig_num in figure_numbers:
+            figure_paths.append(
+                dataset.loc[dataset[metadata] == fig_num][
+                    DatasetFields.DiagnosticSheetPath
+                ].values
+            )
 
         # Index to help loop through figure numbers
         index = 0
@@ -76,7 +95,19 @@ class MakeDiagnosticSheet(Step):
 
             this_figure_number = figure_numbers[i]
             this_figure_subplots = subplot_numbers[i]
-            this_figure_path = figure_paths[i]
+            # figure_paths[i] is a list of fig paths for all cell IDs
+            # that share the same metadata value. Lets choose
+            # figure_paths[i][0] as one of those paths (all are same)
+            this_figure_path = figure_paths[i][0]
+
+            # Get correct figure path if multiple metadata, i.e.
+            # len(figure_paths[i][0]) > 1
+            if metadata != all_metadata:
+                if isinstance(this_figure_path, list) and len(this_figure_path) > 1:
+                    multiple_paths = True
+                    this_figure_path = this_figure_path[all_metadata.index(metadata)]
+                else:
+                    multiple_paths = False
 
             if this_figure_subplots < max_cells:
                 index = self._save_single_figure(
@@ -85,8 +116,12 @@ class MakeDiagnosticSheet(Step):
                     this_figure_subplots,
                     index,
                     metadata,
+                    all_metadata,
+                    multiple_paths,
                     this_figure_path,
                     feature,
+                    fig_width,
+                    fig_height,
                 )
             else:
                 # If subplot numbers are more than a max cell number (1000),
@@ -106,6 +141,7 @@ class MakeDiagnosticSheet(Step):
                     subplot_split.pop()
 
                 for j, sublot in enumerate(subplot_split):
+                    # If split, add a "_{number}" before ".png" in path
                     split_fig_path = Path(
                         str(this_figure_path)[:-4] + "_" + str(j) + ".png"
                     )
@@ -117,12 +153,16 @@ class MakeDiagnosticSheet(Step):
                         sublot,
                         index,
                         metadata,
+                        all_metadata,
+                        multiple_paths,
                         split_fig_path,
                         feature,
+                        fig_width,
+                        fig_height,
                     )
 
             log.info(
-                f"Completed diagnostic sheet for : {metadata} {this_figure_number} "
+                f"Completed diagnostic sheet for: {metadata} {this_figure_number} "
             )
 
         return dataset
@@ -134,8 +174,12 @@ class MakeDiagnosticSheet(Step):
         number_of_subplots: int,
         index: int,
         metadata: str,
+        all_metadata: Union[str, list],
+        multiple_paths: bool,
         figure_path: Union[str, Path],
         feature: Optional[str] = None,
+        fig_width: Optional[int] = None,
+        fig_height: Optional[int] = None,
     ):
         # Get rows and columns of figure
         columns = int(np.sqrt(number_of_subplots) + 0.5)
@@ -145,12 +189,14 @@ class MakeDiagnosticSheet(Step):
             rows = columns
 
         # Set figure size
-        fig_size_width = columns * 7
-        fig_size_height = rows * 5
+        if not fig_width:
+            fig_width = columns * 7
+        if not fig_height:
+            fig_height = rows * 5
 
         # Set subplots
         fig, ax_array = plt.subplots(
-            rows, columns, squeeze=False, figsize=(fig_size_height, fig_size_width)
+            rows, columns, squeeze=False, figsize=(fig_height, fig_width)
         )
 
         # Set title
@@ -184,7 +230,16 @@ class MakeDiagnosticSheet(Step):
                     axes.set_aspect(1)
 
                     # Update fig save path in dataset
-                    dataset.loc[index, DatasetFields.DiagnosticSheetPath] = figure_path
+                    # If multiple paths, choose the correct index for
+                    # figure path
+                    if metadata != all_metadata and multiple_paths:
+                        dataset.loc[index, DatasetFields.DiagnosticSheetPath][
+                            all_metadata.index(metadata)
+                        ] = str(figure_path)
+                    else:
+                        dataset.loc[index, DatasetFields.DiagnosticSheetPath] = str(
+                            figure_path
+                        )
 
                     index += 1
                     index2 += 1
@@ -209,28 +264,38 @@ class MakeDiagnosticSheet(Step):
 
         try:
             # Get the ultimate end save paths for grouped plot
-            if row["CellImage2DAllProjectionsPath"]:
-                if row[str(metadata)]:
-                    diagnostic_sheet_save_path = (
-                        diagnostic_sheet_dir / f"{metadata}_{row[metadata]}.png"
-                    )
-                    log.info(f"Generating diagnostic sheet for cell ID: {row.CellId}")
-                else:
-                    # else no path to save
-                    diagnostic_sheet_save_path = None
+            if row[str(metadata)] or row[str(metadata)] == 0:
+                assert DatasetFields.CellImage2DAllProjectionsPath in row.index
+                save_path = (
+                    diagnostic_sheet_dir / f"{metadata}_{row[str(metadata)]}.png"
+                )
+                log.info(
+                    f"Generating diagnostic sheet path for cell ID: {row.CellId},"
+                    f"{metadata} {row[str(metadata)]}"
+                )
+            else:
+                # else no path to save
+                save_path = None
+                # diagnostic_sheet_save_path = (
+                #     diagnostic_sheet_dir / f"{metadata}_{row[str(metadata)]}.png"
+                # )
 
             # Check skip
-            if not overwrite and diagnostic_sheet_save_path.is_file():
-                log.info(f"Skipping diagnostic sheet for Cell Id: {row.CellId}")
+            if not overwrite and save_path.is_file():
+                log.info(
+                    f"Skipping diagnostic sheet path for cell ID: {row.CellId},"
+                    f"{metadata} {row[str(metadata)]}"
+                )
                 return DiagnosticSheetResult(row.CellId, None)
 
             # Return ready to save image
-            return DiagnosticSheetResult(row.CellId, diagnostic_sheet_save_path)
+            return DiagnosticSheetResult(row.CellId, str(save_path))
         # Catch and return error
         except Exception as e:
             log.info(
                 f"Failed to retrieve the CellImage2DAllProjectionsPath"
-                f"for cell ID: {row.CellId}"
+                f"for cell ID: {row.CellId},"
+                f"{metadata} {row[str(metadata)]}"
                 f"Error: {e}"
             )
             return DiagnosticSheetError(row.CellId, str(e))
@@ -243,8 +308,10 @@ class MakeDiagnosticSheet(Step):
         distributed_executor_address: Optional[str] = None,
         batch_size: Optional[int] = None,
         overwrite: bool = False,
-        metadata: Optional[str] = None,
         feature: Optional[str] = None,
+        metadata: Optional[Union[list, str]] = None,
+        fig_width: Optional[int] = None,
+        fig_height: Optional[int] = None,
         **kwargs,
     ):
         """
@@ -263,9 +330,9 @@ class MakeDiagnosticSheet(Step):
             An optional batch size to process n features at a time.
             Default: None (Process all at once)
 
-        metadata: str
+        metadata: Union[str, list, None]
             The metadata to group cells and generate a diagnostic sheet. 
-            For example, "FOVId"
+            For example, "FOVId" or "["FOVId", "ProteinDisplayName"]"
 
         feature: str
             The name of the single cell feature to display. For example, "imsize_orig"
@@ -303,64 +370,113 @@ class MakeDiagnosticSheet(Step):
         diagnostic_sheet_dir = self.step_local_staging_dir
         diagnostic_sheet_dir.mkdir(exist_ok=True)
 
-        # Process each row
-        with DistributedHandler(distributed_executor_address) as handler:
-            # Start processing
-            diagnostic_sheet_result = handler.batched_map(
-                self._collect_group,
-                # Convert dataframe iterrows into two lists of items to iterate over
-                # One list will be row index
-                # One list will be the pandas series of every row
-                *zip(*list(dataset.iterrows())),
-                [diagnostic_sheet_dir for i in range(len(dataset))],
-                [overwrite for i in range(len(dataset))],
-                [metadata for i in range(len(dataset))],
-                batch_size=batch_size,
-            )
+        # Check for metadata
+        if metadata:
+            # Make metadata a list
+            metadata = metadata if isinstance(metadata, list) else [metadata]
 
-        # Generate diagnostic sheet dataset rows
-        diagnostic_sheet_result_dataset = []
-        errors = []
-        for r in diagnostic_sheet_result:
-            if isinstance(r, DiagnosticSheetResult):
-                diagnostic_sheet_result_dataset.append(
-                    {
-                        DatasetFields.CellId: r.cell_id,
-                        DatasetFields.DiagnosticSheetPath: r.diagnostic_sheet_save_path,
-                    }
+            # Process each row
+            for j, this_metadata in enumerate(metadata):
+
+                # Create empty diagnostic sheet result dataset and errors
+                diagnostic_sheet_result_dataset = []
+                errors = []
+
+                with DistributedHandler(distributed_executor_address) as handler:
+                    # Start processing
+                    diagnostic_sheet_result = handler.batched_map(
+                        self._collect_group,
+                        # Convert dataframe iterrows into two lists of items to iterate
+                        # One list will be row index
+                        # One list will be the pandas series of every row
+                        *zip(*list(dataset.iterrows())),
+                        [diagnostic_sheet_dir for i in range(len(dataset))],
+                        [overwrite for i in range(len(dataset))],
+                        [this_metadata for i in range(len(dataset))],
+                        batch_size=batch_size,
+                    )
+                # Generate diagnostic sheet dataset rows
+                for r in diagnostic_sheet_result:
+                    if isinstance(r, DiagnosticSheetResult):
+                        diagnostic_sheet_result_dataset.append(
+                            {
+                                DatasetFields.CellId: r.cell_id,
+                                DatasetFields.DiagnosticSheetPath: r.save_path,
+                            }
+                        )
+                    else:
+                        errors.append(
+                            {DatasetFields.CellId: r.cell_id, "Error": r.error}
+                        )
+
+                # Convert diagnostic sheet paths rows to dataframe
+                diagnostic_sheet_result_dataset = pd.DataFrame(
+                    diagnostic_sheet_result_dataset
                 )
-            else:
-                errors.append({DatasetFields.CellId: r.cell_id, "Error": r.error})
 
-        # Convert diagnostic sheet paths rows to dataframe
-        diagnostic_sheet_result_dataset = pd.DataFrame(diagnostic_sheet_result_dataset)
+                # Drop the various diagnostic sheet columns if they already exist
+                # Check at j = 0 because the path will exist at j > 1 if
+                # multiple metadata
+                drop_columns = []
+                if DatasetFields.DiagnosticSheetPath in dataset.columns and j == 0:
+                    drop_columns.append(DatasetFields.DiagnosticSheetPath)
 
-        # Drop the various diagnostic sheet columns if they already exist
-        drop_columns = []
-        if DatasetFields.DiagnosticSheetPath in dataset.columns:
-            drop_columns.append(DatasetFields.DiagnosticSheetPath)
+                dataset = dataset.drop(columns=drop_columns)
 
-        dataset = dataset.drop(columns=drop_columns)
+                # Update manifest with these paths if there is data
+                if len(diagnostic_sheet_result_dataset) > 0:
 
-        if metadata and len(diagnostic_sheet_result_dataset) > 0:
-            # Join original dataset to the fov paths
-            self.manifest = dataset.merge(
-                diagnostic_sheet_result_dataset, on=DatasetFields.CellId
-            )
+                    # Join original dataset to the fov paths
+                    dataset = dataset.merge(
+                        diagnostic_sheet_result_dataset, on=DatasetFields.CellId
+                    )
 
-            # Drop cell rows that dont have a saved path for the diagnostic sheet
-            self.manifest = self._make_group_plot(
-                self.manifest.dropna().reset_index(), metadata, max_cells, feature
-            )
+                    # If j > 0 (i.e. multiple metadata), we will append new paths
+                    # to the same DiagnosticSheetPath column
+                    if j > 0:
+                        PathList = dataset[
+                            [
+                                DatasetFields.DiagnosticSheetPath + "_x",
+                                DatasetFields.DiagnosticSheetPath + "_y",
+                            ]
+                        ].values.tolist()
+
+                        # Flatten pathlist
+                        PathList = [list(flatten(ThisPath)) for ThisPath in PathList]
+                        dataset[DatasetFields.DiagnosticSheetPath] = PathList
+
+                        # Delete the _x and _y columns that are auto generated
+                        del dataset[DatasetFields.DiagnosticSheetPath + "_x"]
+                        del dataset[DatasetFields.DiagnosticSheetPath + "_y"]
+
+                if j == 0:
+                    dataset.dropna().reset_index(inplace=True)
+
+                # Call the group plotting function
+                dataset = self._make_group_plot(
+                    dataset,
+                    this_metadata,
+                    metadata,
+                    max_cells,
+                    feature,
+                    fig_width,
+                    fig_height,
+                )
+
+                # Update manifest
+                self.manifest = dataset
+
+                # Save errored cells to JSON
+                with open(
+                    self.step_local_staging_dir / "errors.json", "w"
+                ) as write_out:
+                    json.dump(errors, write_out)
         else:
+            # If no metadata, just return input manifest
             self.manifest = dataset
 
         # Save manifest to CSV
         manifest_save_path = self.step_local_staging_dir / "manifest.csv"
         self.manifest.to_csv(manifest_save_path, index=False)
-
-        # Save errored cells to JSON
-        with open(self.step_local_staging_dir / "errors.json", "w") as write_out:
-            json.dump(errors, write_out)
 
         return manifest_save_path
