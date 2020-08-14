@@ -59,11 +59,97 @@ class MakeDiagnosticSheet(Step):
     def __init__(self, direct_upstream_tasks: List["Step"] = [SingleCellImages]):
         super().__init__(direct_upstream_tasks=direct_upstream_tasks)
 
+    @staticmethod
+    def _save_single_figure(
+        dataset: pd.DataFrame,
+        figure_number: Union[int, str],
+        number_of_subplots: int,
+        index: int,
+        this_metadata: str,
+        metadata: Union[str, list],
+        multiple_paths: bool,
+        figure_path: Union[str, Path],
+        feature: Optional[str] = None,
+        fig_width: Optional[int] = None,
+        fig_height: Optional[int] = None,
+    ):
+        # Get rows and columns of figure
+        columns = int(np.sqrt(number_of_subplots) + 0.5)
+        if np.sqrt(number_of_subplots) != int(np.sqrt(number_of_subplots)):
+            rows = columns + 1
+        else:
+            rows = columns
+
+        # Set figure size
+        if not fig_width:
+            fig_width = columns * 7
+        if not fig_height:
+            fig_height = rows * 5
+
+        # Set subplots
+        fig, ax_array = plt.subplots(
+            rows, columns, squeeze=False, figsize=(fig_height, fig_width)
+        )
+
+        # Set title
+        fig.suptitle(f"{this_metadata}:{figure_number}")
+
+        # Second index to check subplots
+        index2 = 0
+
+        for k, ax_row in enumerate(ax_array):
+            for j, axes in enumerate(ax_row):
+                if index2 < number_of_subplots:
+                    # Load feature to plot if feature
+                    if feature:
+                        with open(dataset[DatasetFields.CellFeaturesPath][index]) as f:
+                            this_cell_features = json.load(f)
+                        title = "CellId: {0}, {1} {2}: {3}".format(
+                            dataset[DatasetFields.CellId][index],
+                            "\n",
+                            feature,
+                            this_cell_features[feature],
+                        )
+                        axes.set_title(title)
+                    else:
+                        axes.set_title(
+                            f"CellID: {dataset[DatasetFields.CellId][index]}"
+                        )
+                    axes.axis("off")
+                    # Read AllProjections Image
+                    img = mpimg.imread(
+                        dataset[DatasetFields.CellImage2DAllProjectionsPath][index]
+                    )
+                    axes.imshow(img)
+                    axes.set_aspect(1)
+
+                    # Update fig save path in dataset
+                    # If multiple paths, choose the correct index for
+                    # figure path
+                    if this_metadata != metadata and multiple_paths:
+                        dataset.loc[index, DatasetFields.DiagnosticSheetPath][
+                            metadata.index(this_metadata)
+                        ] = str(figure_path)
+                    else:
+                        dataset.loc[index, DatasetFields.DiagnosticSheetPath] = str(
+                            figure_path
+                        )
+
+                    index += 1
+                    index2 += 1
+                else:
+                    axes.axis("off")
+
+        # Savefig
+        fig.savefig(figure_path)
+
+        return index, dataset
+
     def _make_group_plot(
         self,
         dataset: pd.DataFrame,
-        metadata: str,
-        all_metadata: Union[list, str],
+        this_metadata: str,
+        metadata: Union[list, str],
         max_cells: int = 1000,
         feature: Optional[str] = None,
         fig_width: Optional[int] = None,
@@ -71,14 +157,14 @@ class MakeDiagnosticSheet(Step):
     ):
         # Get figure numbers, subplot numbers, and figure paths
         # Number of unique metadata values
-        figure_numbers = dataset[metadata].value_counts().index.to_numpy()
+        figure_numbers = dataset[this_metadata].value_counts().index.to_numpy()
         # Number of cells that have each unique metadata value
-        subplot_numbers = dataset[metadata].value_counts().values
+        subplot_numbers = dataset[this_metadata].value_counts().values
         # Paths to save
         figure_paths = []
         for fig_num in figure_numbers:
             figure_paths.append(
-                dataset.loc[dataset[metadata] == fig_num][
+                dataset.loc[dataset[this_metadata] == fig_num][
                     DatasetFields.DiagnosticSheetPath
                 ].values
             )
@@ -102,10 +188,10 @@ class MakeDiagnosticSheet(Step):
 
             # Get correct figure path if multiple metadata, i.e.
             # len(figure_paths[i][0]) > 1
-            if metadata != all_metadata:
+            if this_metadata != metadata:
                 if isinstance(this_figure_path, list) and len(this_figure_path) > 1:
                     multiple_paths = True
-                    this_figure_path = this_figure_path[all_metadata.index(metadata)]
+                    this_figure_path = this_figure_path[metadata.index(this_metadata)]
                 else:
                     multiple_paths = False
 
@@ -116,8 +202,8 @@ class MakeDiagnosticSheet(Step):
                     this_figure_number,
                     this_figure_subplots,
                     index,
+                    this_metadata,
                     metadata,
-                    all_metadata,
                     multiple_paths,
                     this_figure_path,
                     feature,
@@ -153,8 +239,8 @@ class MakeDiagnosticSheet(Step):
                         this_figure_number,
                         sublot,
                         index,
+                        this_metadata,
                         metadata,
-                        all_metadata,
                         multiple_paths,
                         split_fig_path,
                         feature,
@@ -163,96 +249,10 @@ class MakeDiagnosticSheet(Step):
                     )
 
             log.info(
-                f"Completed diagnostic sheet for: {metadata} {this_figure_number} "
+                f"Completed diagnostic sheet for: {this_metadata} {this_figure_number} "
             )
 
         return dataset
-
-    @staticmethod
-    def _save_single_figure(
-        dataset: pd.DataFrame,
-        figure_number: Union[int, str],
-        number_of_subplots: int,
-        index: int,
-        metadata: str,
-        all_metadata: Union[str, list],
-        multiple_paths: bool,
-        figure_path: Union[str, Path],
-        feature: Optional[str] = None,
-        fig_width: Optional[int] = None,
-        fig_height: Optional[int] = None,
-    ):
-        # Get rows and columns of figure
-        columns = int(np.sqrt(number_of_subplots) + 0.5)
-        if np.sqrt(number_of_subplots) != int(np.sqrt(number_of_subplots)):
-            rows = columns + 1
-        else:
-            rows = columns
-
-        # Set figure size
-        if not fig_width:
-            fig_width = columns * 7
-        if not fig_height:
-            fig_height = rows * 5
-
-        # Set subplots
-        fig, ax_array = plt.subplots(
-            rows, columns, squeeze=False, figsize=(fig_height, fig_width)
-        )
-
-        # Set title
-        fig.suptitle(f"{metadata}:{figure_number}")
-
-        # Second index to check subplots
-        index2 = 0
-
-        for k, ax_row in enumerate(ax_array):
-            for j, axes in enumerate(ax_row):
-                if index2 < number_of_subplots:
-                    # Load feature to plot if feature
-                    if feature:
-                        with open(dataset[DatasetFields.CellFeaturesPath][index]) as f:
-                            this_cell_features = json.load(f)
-                        title = "CellId: {0}, {1} {2}: {3}".format(
-                            dataset[DatasetFields.CellId][index],
-                            "\n",
-                            feature,
-                            this_cell_features[feature],
-                        )
-                        axes.set_title(title)
-                    else:
-                        axes.set_title(
-                            f"CellID: {dataset[DatasetFields.CellId][index]}"
-                        )
-                    axes.axis("off")
-                    # Read AllProjections Image
-                    img = mpimg.imread(
-                        dataset[DatasetFields.CellImage2DAllProjectionsPath][index]
-                    )
-                    axes.imshow(img)
-                    axes.set_aspect(1)
-
-                    # Update fig save path in dataset
-                    # If multiple paths, choose the correct index for
-                    # figure path
-                    if metadata != all_metadata and multiple_paths:
-                        dataset.loc[index, DatasetFields.DiagnosticSheetPath][
-                            all_metadata.index(metadata)
-                        ] = str(figure_path)
-                    else:
-                        dataset.loc[index, DatasetFields.DiagnosticSheetPath] = str(
-                            figure_path
-                        )
-
-                    index += 1
-                    index2 += 1
-                else:
-                    axes.axis("off")
-
-        # Savefig
-        fig.savefig(figure_path)
-
-        return index, dataset
 
     @staticmethod
     def _collect_group(
@@ -437,7 +437,7 @@ class MakeDiagnosticSheet(Step):
                     # If j > 0 (i.e. multiple metadata), we will append new paths
                     # to the same DiagnosticSheetPath column
                     if j > 0:
-                        PathList = dataset[
+                        path_list = dataset[
                             [
                                 DatasetFields.DiagnosticSheetPath + "_x",
                                 DatasetFields.DiagnosticSheetPath + "_y",
@@ -445,8 +445,10 @@ class MakeDiagnosticSheet(Step):
                         ].values.tolist()
 
                         # Flatten pathlist
-                        PathList = [list(flatten(ThisPath)) for ThisPath in PathList]
-                        dataset[DatasetFields.DiagnosticSheetPath] = PathList
+                        path_list = [
+                            list(flatten(this_path)) for this_path in path_list
+                        ]
+                        dataset[DatasetFields.DiagnosticSheetPath] = path_list
 
                         # Delete the _x and _y columns that are auto generated
                         del dataset[DatasetFields.DiagnosticSheetPath + "_x"]
