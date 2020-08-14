@@ -110,7 +110,8 @@ class MakeDiagnosticSheet(Step):
                     multiple_paths = False
 
             if this_figure_subplots < max_cells:
-                index = self._save_single_figure(
+
+                index, dataset = self._save_single_figure(
                     dataset,
                     this_figure_number,
                     this_figure_subplots,
@@ -220,7 +221,9 @@ class MakeDiagnosticSheet(Step):
                         )
                         axes.set_title(title)
                     else:
-                        axes.set_title(f"CellID: {[DatasetFields.CellId][index]}")
+                        axes.set_title(
+                            f"CellID: {dataset[DatasetFields.CellId][index]}"
+                        )
                     axes.axis("off")
                     # Read AllProjections Image
                     img = mpimg.imread(
