@@ -7,7 +7,6 @@ import dask.dataframe as dd
 
 from actk.constants import DatasetFields
 from actk.steps import MakeDiagnosticSheet
-import ast
 import pytest
 
 #######################################################################################
@@ -26,17 +25,13 @@ def test_run(data_dir):
     )
     output_manifest = dd.read_csv(output_manifest)
 
-    # Read input dataset
-    input_dataset = dd.read_csv(data_dir / "example_single_cell_images_dataset.csv")
-
     # Run asserts
     # Check expected columns
     assert all(
         expected_col in output_manifest.columns
-        for expected_col in [*input_dataset.columns, DatasetFields.DiagnosticSheetPath]
+        for expected_col in [DatasetFields.DiagnosticSheetPath]
     )
-    # Check output length
-    assert len(output_manifest) == len(input_dataset)
+
     # Check all expected files exist
     assert all(
         Path(f).resolve(strict=True)
@@ -71,17 +66,12 @@ def test_max_num_cells_per_sheet(data_dir):
 
     output_manifest = dd.read_csv(output_manifest)
 
-    # Read input dataset
-    input_dataset = dd.read_csv(data_dir / "example_single_cell_images_dataset.csv")
-
     # Run asserts
     # Check expected columns
     assert all(
         expected_col in output_manifest.columns
-        for expected_col in [*input_dataset.columns]
+        for expected_col in [DatasetFields.DiagnosticSheetPath]
     )
-    # Check output length
-    assert len(output_manifest) == len(input_dataset)
 
     # Check all expected files exist
     assert all(
@@ -108,18 +98,15 @@ def test_multiple_metadata_and_fig_size(data_dir):
 
     output_manifest = dd.read_csv(output_manifest)
 
-    # Read input dataset
-    input_dataset = dd.read_csv(data_dir / "example_single_cell_images_dataset.csv")
-
     # Run asserts
     # Check expected columns
     assert all(
         expected_col in output_manifest.columns
-        for expected_col in [*input_dataset.columns]
+        for expected_col in [DatasetFields.DiagnosticSheetPath]
     )
-    # Check output length
-    assert len(output_manifest) == len(input_dataset)
 
     # Check all expected files exist
-    for f in output_manifest[DatasetFields.DiagnosticSheetPath]:
-        assert all(Path(ff).resolve(strict=True) for ff in ast.literal_eval(f))
+    assert all(
+        Path(f).resolve(strict=True)
+        for f in output_manifest[DatasetFields.DiagnosticSheetPath]
+    )

@@ -388,6 +388,9 @@ class MakeDiagnosticSheet(Step):
         diagnostic_sheet_dir = self.step_local_staging_dir
         diagnostic_sheet_dir.mkdir(exist_ok=True)
 
+        # Create empty manifest
+        manifest = {"Metadata": [], "MetadataValue": [], "DiagnosticSheetPath": []}
+
         # Check for metadata
         if metadata:
             # Make metadata a list
@@ -483,14 +486,26 @@ class MakeDiagnosticSheet(Step):
                     fig_height,
                 )
 
-                # Update manifest
-                self.manifest = dataset
+                for cell_index, row in dataset.iterrows():
+                    if j > 0:
+                        this_path = row["DiagnosticSheetPath"][
+                            metadata.index(this_metadata)
+                        ]
+                    else:
+                        this_path = row["DiagnosticSheetPath"]
+
+                    if this_path not in manifest["DiagnosticSheetPath"]:
+                        manifest["Metadata"].append(this_metadata)
+                        manifest["MetadataValue"].append(row[this_metadata])
+                        manifest["DiagnosticSheetPath"].append(this_path)
 
                 # Save errored cells to JSON
                 with open(
                     self.step_local_staging_dir / "errors.json", "w"
                 ) as write_out:
                     json.dump(errors, write_out)
+
+            self.manifest = pd.DataFrame(manifest)
         else:
             # If no metadata, just return input manifest
             self.manifest = dataset
