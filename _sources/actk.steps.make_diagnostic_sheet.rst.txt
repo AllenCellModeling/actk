@@ -1,0 +1,22 @@
+actk.steps.make\_diagnostic\_sheet package
+==========================================
+
+Submodules
+----------
+
+actk.steps.make\_diagnostic\_sheet.make\_diagnostic\_sheet module
+-----------------------------------------------------------------
+
+.. automodule:: actk.steps.make_diagnostic_sheet.make_diagnostic_sheet
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: actk.steps.make_diagnostic_sheet
+   :members:
+   :undoc-members:
+   :show-inheritance:

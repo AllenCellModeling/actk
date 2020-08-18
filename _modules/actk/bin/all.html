@@ -219,6 +219,7 @@
             <span class="n">steps</span><span class="o">.</span><span class="n">StandardizeFOVArray</span><span class="p">(),</span>
             <span class="n">steps</span><span class="o">.</span><span class="n">SingleCellFeatures</span><span class="p">(),</span>
             <span class="n">steps</span><span class="o">.</span><span class="n">SingleCellImages</span><span class="p">(),</span>
+            <span class="n">steps</span><span class="o">.</span><span class="n">MakeDiagnosticSheet</span><span class="p">(),</span>
         <span class="p">]</span>
 
 <div class="viewcode-block" id="All.run"><a class="viewcode-back" href="../../../actk.bin.html#actk.bin.all.All.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
@@ -272,6 +273,7 @@
         <span class="n">standardize_fov_array</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">StandardizeFOVArray</span><span class="p">()</span>
         <span class="n">single_cell_features</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">SingleCellFeatures</span><span class="p">()</span>
         <span class="n">single_cell_images</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">SingleCellImages</span><span class="p">()</span>
+        <span class="n">make_diagnostic_sheet</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">MakeDiagnosticSheet</span><span class="p">()</span>
 
         <span class="c1"># Choose executor</span>
         <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
@@ -361,6 +363,15 @@
                 <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
                 <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span>
                 <span class="c1"># Allows us to pass `--cell_ceiling_adjustment {int}`</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="n">make_diagnostic_sheet</span><span class="p">(</span>
+                <span class="n">dataset</span><span class="o">=</span><span class="n">single_cell_images_dataset</span><span class="p">,</span>
+                <span class="n">distributed_executor_address</span><span class="o">=</span><span class="n">distributed_executor_address</span><span class="p">,</span>
+                <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+                <span class="c1"># Allows us to pass `--metadata {str}`,</span>
+                <span class="c1"># `--feature {str}&#39;`</span>
                 <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
             <span class="p">)</span>
 
