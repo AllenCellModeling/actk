@@ -280,7 +280,7 @@ class MakeDiagnosticSheet(Step):
             if row[str(metadata)] or row[str(metadata)] == 0:
                 assert DatasetFields.CellImage2DAllProjectionsPath in row.index
                 save_path = (
-                    diagnostic_sheet_dir / f"{metadata}_{row[str(metadata)]}.png"
+                    diagnostic_sheet_dir / f"{metadata}-{row[str(metadata)]}.png"
                 )
                 log.info(
                     f"Generating diagnostic sheet path for cell ID: {row.CellId},"
@@ -289,9 +289,6 @@ class MakeDiagnosticSheet(Step):
             else:
                 # else no path to save
                 save_path = None
-                # diagnostic_sheet_save_path = (
-                #     diagnostic_sheet_dir / f"{metadata}_{row[str(metadata)]}.png"
-                # )
 
             # Check skip
             if not overwrite and save_path.is_file():
@@ -389,7 +386,11 @@ class MakeDiagnosticSheet(Step):
         diagnostic_sheet_dir.mkdir(exist_ok=True)
 
         # Create empty manifest
-        manifest = {"Metadata": [], "MetadataValue": [], "DiagnosticSheetPath": []}
+        manifest = {
+            "Metadata": [],
+            "MetadataValue": [],
+            DatasetFields.DiagnosticSheetPath: [],
+        }
 
         # Check for metadata
         if metadata:
@@ -488,16 +489,16 @@ class MakeDiagnosticSheet(Step):
 
                 for cell_index, row in dataset.iterrows():
                     if j > 0:
-                        this_path = row["DiagnosticSheetPath"][
+                        this_path = row[DatasetFields.DiagnosticSheetPath][
                             metadata.index(this_metadata)
                         ]
                     else:
-                        this_path = row["DiagnosticSheetPath"]
+                        this_path = row[DatasetFields.DiagnosticSheetPath]
 
-                    if this_path not in manifest["DiagnosticSheetPath"]:
+                    if this_path not in manifest[DatasetFields.DiagnosticSheetPath]:
                         manifest["Metadata"].append(this_metadata)
                         manifest["MetadataValue"].append(row[this_metadata])
-                        manifest["DiagnosticSheetPath"].append(this_path)
+                        manifest[DatasetFields.DiagnosticSheetPath].append(this_path)
 
                 # Save errored cells to JSON
                 with open(
