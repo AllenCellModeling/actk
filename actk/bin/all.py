@@ -37,6 +37,7 @@ class All:
             steps.StandardizeFOVArray(),
             steps.SingleCellFeatures(),
             steps.SingleCellImages(),
+            steps.MakeDiagnosticSheet(),
         ]
 
     def run(
@@ -90,6 +91,7 @@ class All:
         standardize_fov_array = steps.StandardizeFOVArray()
         single_cell_features = steps.SingleCellFeatures()
         single_cell_images = steps.SingleCellImages()
+        make_diagnostic_sheet = steps.MakeDiagnosticSheet()
 
         # Choose executor
         if debug:
@@ -179,6 +181,15 @@ class All:
                 overwrite=overwrite,
                 debug=debug,
                 # Allows us to pass `--cell_ceiling_adjustment {int}`
+                **kwargs,
+            )
+
+            make_diagnostic_sheet(
+                dataset=single_cell_images_dataset,
+                distributed_executor_address=distributed_executor_address,
+                overwrite=overwrite,
+                # Allows us to pass `--metadata {str}`,
+                # `--feature {str}'`
                 **kwargs,
             )
 

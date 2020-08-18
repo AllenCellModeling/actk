@@ -35,6 +35,7 @@ class DatasetFields:
     CellImage3DPath = "CellImage3DPath"
     CellImage2DAllProjectionsPath = "CellImage2DAllProjectionsPath"
     CellImage2DYXProjectionPath = "CellImage2DYXProjectionPath"
+    DiagnosticSheetPath = "DiagnosticSheetPath"
     AllExpectedInputs = [
         CellId,
         CellIndex,
