@@ -188,8 +188,8 @@ class All:
                 dataset=single_cell_images_dataset,
                 distributed_executor_address=distributed_executor_address,
                 overwrite=overwrite,
-                # Allows us to pass `--group_by {str}`,
-                # `--feature_display {str}'`
+                # Allows us to pass `--metadata {str}`,
+                # `--feature {str}'`
                 **kwargs,
             )
 

@@ -29,7 +29,10 @@ log = logging.getLogger(__name__)
 
 ###############################################################################
 
-REQUIRED_DATASET_FIELDS = [DatasetFields.CellId]
+REQUIRED_DATASET_FIELDS = [
+    DatasetFields.CellId,
+    DatasetFields.CellImage2DAllProjectionsPath,
+]
 
 
 class DiagnosticSheetResult(NamedTuple):
@@ -56,8 +59,15 @@ def flatten(x):
 
 
 class MakeDiagnosticSheet(Step):
-    def __init__(self, direct_upstream_tasks: List["Step"] = [SingleCellImages]):
-        super().__init__(direct_upstream_tasks=direct_upstream_tasks)
+    def __init__(
+        self,
+        direct_upstream_tasks: List["Step"] = [SingleCellImages],
+        filepath_columns=[DatasetFields.DiagnosticSheetPath],
+    ):
+        super().__init__(
+            direct_upstream_tasks=direct_upstream_tasks,
+            filepath_columns=filepath_columns,
+        )
 
     @staticmethod
     def _save_single_figure(
@@ -308,13 +318,13 @@ class MakeDiagnosticSheet(Step):
         self,
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
         max_cells: int = 1000,
+        metadata: Optional[Union[list, str]] = None,
+        feature: Optional[str] = None,
+        fig_width: Optional[int] = None,
+        fig_height: Optional[int] = None,
         distributed_executor_address: Optional[str] = None,
         batch_size: Optional[int] = None,
         overwrite: bool = False,
-        feature: Optional[str] = None,
-        metadata: Optional[Union[list, str]] = None,
-        fig_width: Optional[int] = None,
-        fig_height: Optional[int] = None,
         **kwargs,
     ):
         """
@@ -327,31 +337,36 @@ class MakeDiagnosticSheet(Step):
             The primary cell dataset to use for generating 
             diagnistic sheet for a group of cells.
 
-            **Required dataset columns:** *["CellId"]*
+            **Required dataset columns:** *["CellId", "CellImage2DAllProjectionsPath"]*
 
-        batch_size: Optional[int]
-            An optional batch size to process n features at a time.
-            Default: None (Process all at once)
+        max_cells: int
+            The maximum number of cells to display on a single diagnostic sheet.
+            Deafult: 1000
 
-        metadata: Union[str, list, None]
+        metadata: Optional[Union[list, str]]
             The metadata to group cells and generate a diagnostic sheet. 
             For example, "FOVId" or "["FOVId", "ProteinDisplayName"]"
 
-        feature: str
+        feature: Optional[str]
             The name of the single cell feature to display. For example, "imsize_orig"
+
+        fig_width: Optional[int]
+            Width of the diagnostic sheet figure      
+        fig_height: Optional[int]
+            Height of the diagnostic sheet figure
 
         distributed_executor_address: Optional[str]
             An optional executor address to pass to some computation engine.
             Default: None
 
-        clean: bool
-            Should the local staging directory be cleaned prior to this run.
-            Default: False (Do not clean)
+        batch_size: Optional[int]
+            An optional batch size to process n features at a time.
+            Default: None (Process all at once)
 
-        debug: bool
-            A debug flag for the developer to use to manipulate how much data runs,
-            how it is processed, etc.
-            Default: False (Do not debug)
+        overwrite: bool
+            If this step has already partially or completely run, should it overwrite
+            the previous files or not.
+            Default: False (Do not overwrite or regenerate files)
 
         Returns
         -------
