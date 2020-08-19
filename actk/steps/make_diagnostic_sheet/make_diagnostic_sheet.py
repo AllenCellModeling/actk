@@ -37,7 +37,7 @@ REQUIRED_DATASET_FIELDS = [
 
 class DiagnosticSheetResult(NamedTuple):
     cell_id: Union[int, str]
-    diagnostic_sheet_save_path: Optional[Path] = None
+    save_path: Optional[Path] = None
 
 
 class DiagnosticSheetError(NamedTuple):
