@@ -55,10 +55,11 @@ requirements = [
     *step_workflow_requirements,
     # project requires
     "aicsfeature==0.2.1",
-    "aicsimageio==3.2.3",
+    "aicsimageio>=3.2.3",
     "aicsimageprocessing==0.7.4",
-    "numpy==1.18.2",
-    "pandas==1.0.3",
+    "matplotlib>=3.2.0",
+    "numpy>=1.18.2",
+    "pandas>=1.0.3",
 ]
 
 aics_data_requirements = [
