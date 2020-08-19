@@ -34,6 +34,7 @@ class All:
         This is only used for data logging operations, not computation purposes.
         """
         self.step_list = [
+            steps.Raw(),
             steps.StandardizeFOVArray(),
             steps.SingleCellFeatures(),
             steps.SingleCellImages(),
@@ -43,6 +44,7 @@ class All:
     def run(
         self,
         dataset: str,
+        include_raw: bool = False,
         distributed: bool = False,
         n_workers: int = 10,
         worker_cpu: int = 8,
@@ -58,6 +60,11 @@ class All:
         ----------
         dataset: str
             The dataset to use for the pipeline.
+
+        include_raw: bool
+            A boolean option to determine if the raw data should be included in the
+            Quilt package.
+            Default: False (Do not include the raw data)
 
         distributed: bool
             A boolean option to determine if the jobs should be distributed to a SLURM
@@ -88,6 +95,7 @@ class All:
             Default: False (Do not debug)
         """
         # Initalize steps
+        raw = steps.Raw()
         standardize_fov_array = steps.StandardizeFOVArray()
         single_cell_features = steps.SingleCellFeatures()
         single_cell_images = steps.SingleCellImages()
@@ -154,6 +162,9 @@ class All:
 
         # Configure your flow
         with Flow("actk") as flow:
+            if include_raw:
+                dataset = raw(dataset, **kwargs)
+
             standardized_fov_paths_dataset = standardize_fov_array(
                 dataset=dataset,
                 distributed_executor_address=distributed_executor_address,
