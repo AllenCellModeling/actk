@@ -123,14 +123,9 @@ def download_aics_dataset(args: Args):
             columns={
                 "ChannelNumber405": DatasetFields.ChannelIndexDNA,
                 "ChannelNumber638": DatasetFields.ChannelIndexMembrane,
+                "ChannelNumberStruct": DatasetFields.ChannelIndexStructure,
                 "ChannelNumberBrightfield": DatasetFields.ChannelIndexBrightfield,
             }
-        )
-
-        # Add a ChannelIndexStructure column
-        # This merges two columns that have nans and values split between them.
-        data[DatasetFields.ChannelIndexStructure] = data.ChannelNumber488.combine_first(
-            data.ChannelNumber561
         )
 
         # Temporary drop because differing values
