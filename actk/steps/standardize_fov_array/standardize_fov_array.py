@@ -49,8 +49,8 @@ class StandardizeFOVArrayError(NamedTuple):
 
 
 class StandardizeFOVArray(Step):
-    def __init__(self, filepath_columns=[DatasetFields.StandardizedFOVPath]):
-        super().__init__(filepath_columns=filepath_columns)
+    def __init__(self, filepath_columns=[DatasetFields.StandardizedFOVPath], **kwargs):
+        super().__init__(filepath_columns=filepath_columns, **kwargs)
 
     @staticmethod
     def _generate_standardized_fov_array(

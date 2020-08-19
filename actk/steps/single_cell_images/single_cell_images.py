@@ -58,10 +58,12 @@ class SingleCellImages(Step):
             DatasetFields.CellImage2DAllProjectionsPath,
             DatasetFields.CellImage2DYXProjectionPath,
         ],
+        **kwargs,
     ):
         super().__init__(
             direct_upstream_tasks=direct_upstream_tasks,
             filepath_columns=filepath_columns,
+            **kwargs,
         )
 
     @staticmethod

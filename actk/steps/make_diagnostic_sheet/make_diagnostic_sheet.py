@@ -63,10 +63,12 @@ class MakeDiagnosticSheet(Step):
         self,
         direct_upstream_tasks: List["Step"] = [SingleCellImages],
         filepath_columns=[DatasetFields.DiagnosticSheetPath],
+        **kwargs,
     ):
         super().__init__(
             direct_upstream_tasks=direct_upstream_tasks,
             filepath_columns=filepath_columns,
+            **kwargs,
         )
 
     @staticmethod

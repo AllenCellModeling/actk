@@ -49,10 +49,12 @@ class SingleCellFeatures(Step):
         self,
         direct_upstream_tasks=[StandardizeFOVArray],
         filepath_columns=[DatasetFields.CellFeaturesPath],
+        **kwargs,
     ):
         super().__init__(
             direct_upstream_tasks=direct_upstream_tasks,
             filepath_columns=filepath_columns,
+            **kwargs,
         )
 
     @staticmethod
