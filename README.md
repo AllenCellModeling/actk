@@ -47,6 +47,37 @@ actk all run --dataset {path to dataset} --cell_ceiling_adjustment {integer}
 See the [steps module in our documentation](https://AllenCellModeling.github.io/actk/actk.steps.html)
 for a full list of parameters for each step
 
+#### Pipeline Config
+
+A configuration file can be provided to the underlying `datastep` library that manages
+the data storage and upload of the steps in this workflow.
+
+The config file should simply be called `workflow_config.json` and be available from
+whichever directory you run `actk` from. If this config is not found in the current
+working directory, defaults are selected by the `datastep` package.
+
+Here is an example of our production config:
+
+```json
+{
+    "quilt_storage_bucket": "s3://allencell",
+    "project_local_staging_dir": "/allen/aics/modeling/jacksonb/results/actk",
+}
+```
+
+You can even additionally attach step-specific configuration in this file by using the
+name of the step like so:
+
+```json
+{
+    "quilt_storage_bucket": "s3://example_config_7",
+    "project_local_staging_dir": "example/config/7",
+    "example": {
+        "step_local_staging_dir": "example/step/local/staging/"
+    }
+}
+```
+
 #### AICS Distributed Computing
 
 For members of the AICS team, to run in distributed mode across the SLURM cluster add
