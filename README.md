@@ -44,8 +44,13 @@ also for the entire pipeline with:
 actk all run --dataset {path to dataset} --cell_ceiling_adjustment {integer}
 ```
 
-To run in distributed mode across the SLURM cluster at AICS you can add the
-`--distributed` flag to the pipeline call.
+See the [steps module in our documentation](https://AllenCellModeling.github.io/actk/actk.steps.html)
+for a full list of parameters for each step
+
+#### AICS Distributed Computing
+
+For members of the AICS team, to run in distributed mode across the SLURM cluster add
+the `--distributed` flag to the pipeline call.
 
 To set distributed cluster and worker parameters you can additionally add the flags:
 * `--n_workers {int}` (i.e. `--n_workers 100`)
@@ -57,6 +62,10 @@ To set distributed cluster and worker parameters you can additionally add the fl
 ordered, and normalized FOV images as OME-Tiffs.
 * `actk singlecellfeatures run --dataset {path to dataset}`, Generate a features JSON
 file for each cell in the dataset.
+* `actk singlecellimages run --dataset {path to dataset}`, Generate bounded 3D images
+and 2D projections for each cell in the dataset.
+* `actk makediagnosticsheet run --dataset {path to dataset}`, Generate diagnostic sheets
+for single cell images. Useful for quality control.
 
 ## Installation
 **Install Requires:** The python package, `numpy`, must be installed prior to the

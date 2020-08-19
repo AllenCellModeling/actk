@@ -279,7 +279,9 @@ class SingleCellImages(Step):
             Default: 95.0
 
         bbox: tuple, list, dict
-        Hard coded ZYX dimensions to set the bounding box. For example, (64, 168, 104)
+            Hard coded ZYX dimensions to set the bounding box.
+            Note: This overrides the `bounding_box_percentile` parameter.
+            Example: (64, 168, 104)
 
         projection_method: str
             The method to use for generating the flat projection.
