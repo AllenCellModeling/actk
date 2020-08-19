@@ -101,11 +101,13 @@ class All:
         single_cell_images = steps.SingleCellImages()
         make_diagnostic_sheet = steps.MakeDiagnosticSheet()
 
+        # Cluster / distributed defaults
+        distributed_executor_address = None
+        batch_size = None
+
         # Choose executor
         if debug:
             exe = LocalExecutor()
-            distributed_executor_address = None
-            batch_size = None
             log.info("Debug flagged. Will use threads instead of Dask.")
         else:
             if distributed:
@@ -145,14 +147,11 @@ class All:
                 log.info("Creating LocalCluster")
                 current_mem_gb = psutil.virtual_memory().available / 2 ** 30
                 n_workers = int(current_mem_gb // 4)
-                cluster = LocalCluster(n_workers=n_workers)
+                cluster = LocalCluster(n_workers=n_workers, threads_per_worker=1)
                 log.info("Created LocalCluster")
 
                 # Set distributed_executor_address
                 distributed_executor_address = cluster.scheduler_address
-
-                # Batch size on local cluster
-                batch_size = int(psutil.cpu_count() // n_workers)
 
                 # Log dashboard URI
                 log.info(f"Dask dashboard available at: {cluster.dashboard_link}")
