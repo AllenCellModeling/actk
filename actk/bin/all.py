@@ -145,9 +145,7 @@ class All:
             else:
                 # Create local cluster
                 log.info("Creating LocalCluster")
-                current_mem_gb = psutil.virtual_memory().available / 2 ** 30
-                n_workers = int(current_mem_gb // 4)
-                cluster = LocalCluster(n_workers=n_workers, threads_per_worker=1)
+                cluster = LocalCluster()
                 log.info("Created LocalCluster")
 
                 # Set distributed_executor_address
