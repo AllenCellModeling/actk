@@ -42,7 +42,7 @@ step_workflow_requirements = [
     "bokeh>=2.1.0",
     "dask[bag]>=2.19.0",
     "dask_jobqueue>=0.7.0",
-    "datastep>=0.1.6",
+    "datastep>=0.1.8",
     "distributed>=2.19.0",
     "docutils==0.15.2",  # needed for botocore (quilt dependency)
     "fire",
