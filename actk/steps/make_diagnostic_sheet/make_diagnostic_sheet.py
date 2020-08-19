@@ -316,7 +316,7 @@ class MakeDiagnosticSheet(Step):
         self,
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
         max_cells: int = 1000,
-        metadata: Optional[Union[list, str]] = None,
+        metadata: Optional[Union[list, str]] = DatasetFields.FOVId,
         feature: Optional[str] = None,
         fig_width: Optional[int] = None,
         fig_height: Optional[int] = None,
@@ -344,6 +344,7 @@ class MakeDiagnosticSheet(Step):
         metadata: Optional[Union[list, str]]
             The metadata to group cells and generate a diagnostic sheet.
             For example, "FOVId" or "["FOVId", "ProteinDisplayName"]"
+            Default: "FOVId"
 
         feature: Optional[str]
             The name of the single cell feature to display. For example, "imsize_orig".
