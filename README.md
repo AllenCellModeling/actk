@@ -61,7 +61,7 @@ Here is an example of our production config:
 ```json
 {
     "quilt_storage_bucket": "s3://allencell",
-    "project_local_staging_dir": "/allen/aics/modeling/jacksonb/results/actk",
+    "project_local_staging_dir": "/allen/aics/modeling/jacksonb/results/actk"
 }
 ```
 
