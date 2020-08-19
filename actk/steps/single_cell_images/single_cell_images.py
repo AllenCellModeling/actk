@@ -251,6 +251,7 @@ class SingleCellImages(Step):
         distributed_executor_address: Optional[str] = None,
         batch_size: Optional[int] = None,
         overwrite: bool = False,
+        bbox: Union[tuple, list, dict] = None,
         **kwargs,
     ):
         """
@@ -274,6 +275,9 @@ class SingleCellImages(Step):
             A float used to generate the actual bounding box for all cells by finding
             provided percentile of all cell image sizes.
             Default: 95.0
+
+        bbox: tuple, list, dict
+        Hard coded ZYX dimensions to set the bounding box. For example, (64, 168, 104)
 
         projection_method: str
             The method to use for generating the flat projection.
@@ -335,6 +339,12 @@ class SingleCellImages(Step):
                 *zip(*list(dataset.iterrows())),
                 batch_size=batch_size,
             )
+
+            if bbox:
+                num_of_channels = bbox_results[0][0]
+                bbox = [num_of_channels] + list(bbox)
+                bbox_results = [bbox for i in range(len(bbox_results))]
+                log.info(f"Using hard coded bounding box with ZYX dimensions: {bbox}.")
 
             # Compute bounding box with percentile
             bbox_results = np.array(bbox_results)
