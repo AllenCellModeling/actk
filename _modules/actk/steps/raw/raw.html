@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>actk.steps.raw.raw &mdash; actk 0.1.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> actk
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#stable-release">Stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#from-sources">From sources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Package modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../actk.html">actk package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../actk.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../actk.bin.html">actk.bin package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../actk.steps.html">actk.steps package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../actk.utils.html">actk.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../actk.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../actk.html#module-actk.constants">actk.constants module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../actk.html#module-actk.exceptions">actk.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../actk.html#module-actk">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../contributing.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">actk</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../../actk.html">actk</a> &raquo;</li>
+        
+      <li>actk.steps.raw.raw</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for actk.steps.raw.raw</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">datastep</span> <span class="kn">import</span> <span class="n">Step</span><span class="p">,</span> <span class="n">log_run_params</span>
+
+<span class="kn">from</span> <span class="nn">...constants</span> <span class="kn">import</span> <span class="n">DatasetFields</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">dataset_utils</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+
+<span class="c1"># This is the merge of all other steps required fields.</span>
+<span class="c1"># Reasoning here is that the user will only want to upload the raw</span>
+<span class="c1"># if the user is doing a full pipeline run</span>
+<span class="n">REQUIRED_DATASET_FIELDS</span> <span class="o">=</span> <span class="n">DatasetFields</span><span class="o">.</span><span class="n">AllExpectedInputs</span>
+
+<span class="c1">###############################################################################</span>
+
+
+<div class="viewcode-block" id="Raw"><a class="viewcode-back" href="../../../../actk.steps.raw.html#actk.steps.Raw">[docs]</a><span class="k">class</span> <span class="nc">Raw</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">filepath_columns</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">DatasetFields</span><span class="o">.</span><span class="n">SourceReadPath</span><span class="p">,</span>
+            <span class="n">DatasetFields</span><span class="o">.</span><span class="n">NucleusSegmentationReadPath</span><span class="p">,</span>
+            <span class="n">DatasetFields</span><span class="o">.</span><span class="n">MembraneSegmentationReadPath</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="n">metadata_columns</span><span class="o">=</span><span class="p">[</span><span class="n">DatasetFields</span><span class="o">.</span><span class="n">FOVId</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">filepath_columns</span><span class="o">=</span><span class="n">filepath_columns</span><span class="p">,</span>
+            <span class="n">metadata_columns</span><span class="o">=</span><span class="n">metadata_columns</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Raw.run"><a class="viewcode-back" href="../../../../actk.steps.raw.html#actk.steps.Raw.run">[docs]</a>    <span class="nd">@log_run_params</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simple passthrough to store the dataset in local_staging/raw.</span>
+<span class="sd">        This does not copy any the image files to local_staging/raw, only the manifest.</span>
+<span class="sd">        This is an optional step that will only run if you want to upload the raw data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dataset: Union[str, Path, pd.DataFrame, dd.DataFrame]</span>
+<span class="sd">            The dataset to use for the rest of the pipeline run.</span>
+
+<span class="sd">            **Required dataset columns:** *[&quot;CellId&quot;, &quot;CellIndex&quot;, &quot;FOVId&quot;,</span>
+<span class="sd">            &quot;SourceReadPath&quot;, &quot;NucleusSegmentationReadPath&quot;,</span>
+<span class="sd">            &quot;MembraneSegmentationReadPath&quot;, &quot;ChannelIndexDNA&quot;, &quot;ChannelIndexMembrane&quot;,</span>
+<span class="sd">            &quot;ChannelIndexStructure&quot;, &quot;ChannelIndexBrightfield&quot;]*</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        manifest_save_path: Path</span>
+<span class="sd">            The path to the manifest in local_staging with the raw data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># Read dataset</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+        <span class="c1"># Check dataset and manifest have required fields</span>
+        <span class="n">dataset_utils</span><span class="o">.</span><span class="n">check_required_fields</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">required_fields</span><span class="o">=</span><span class="n">REQUIRED_DATASET_FIELDS</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Save manifest to CSV</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span> <span class="o">=</span> <span class="n">dataset</span>
+        <span class="n">manifest_save_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_local_staging_dir</span> <span class="o">/</span> <span class="s2">&quot;manifest.csv&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manifest</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">manifest_save_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">manifest_save_path</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Jackson Maxfield Brown
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

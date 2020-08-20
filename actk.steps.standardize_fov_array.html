@@ -110,7 +110,28 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
@@ -205,7 +226,7 @@
 <span id="actk-steps-standardize-fov-array-standardize-fov-array-module"></span><h2>actk.steps.standardize_fov_array.standardize_fov_array module<a class="headerlink" href="#module-actk.steps.standardize_fov_array.standardize_fov_array" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray">
-<em class="property">class </em><code class="sig-prename descclassname">actk.steps.standardize_fov_array.standardize_fov_array.</code><code class="sig-name descname">StandardizeFOVArray</code><span class="sig-paren">(</span><em class="sig-param">filepath_columns=['StandardizedFOVPath']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.standardize_fov_array.standardize_fov_array.</code><code class="sig-name descname">StandardizeFOVArray</code><span class="sig-paren">(</span><em class="sig-param">filepath_columns=['StandardizedFOVPath'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray.run">
@@ -295,7 +316,7 @@ Default: False (Do not overwrite or regenerate files)</p>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-actk.steps.standardize_fov_array" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="actk.steps.standardize_fov_array.StandardizeFOVArray">
-<em class="property">class </em><code class="sig-prename descclassname">actk.steps.standardize_fov_array.</code><code class="sig-name descname">StandardizeFOVArray</code><span class="sig-paren">(</span><em class="sig-param">filepath_columns=['StandardizedFOVPath']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.standardize_fov_array.StandardizeFOVArray" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.standardize_fov_array.</code><code class="sig-name descname">StandardizeFOVArray</code><span class="sig-paren">(</span><em class="sig-param">filepath_columns=['StandardizedFOVPath'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.standardize_fov_array.StandardizeFOVArray" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.standardize_fov_array.StandardizeFOVArray.run">

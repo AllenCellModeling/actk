@@ -108,7 +108,28 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
@@ -206,6 +227,8 @@
     <span class="n">membrane_channel_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">structure_channel_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">brightfield_channel_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">nucleus_seg_channel_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">membrane_seg_channel_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">current_pixel_sizes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">desired_pixel_sizes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
@@ -237,6 +260,14 @@
 <span class="sd">    brightfield_channel_index: int</span>
 <span class="sd">        The index in the channel dimension in the raw image that stores the brightfield</span>
 <span class="sd">        data.</span>
+
+<span class="sd">    nucleus_seg_channel_index: int</span>
+<span class="sd">        The index in the channel dimension in the nucleus segmentation image that stores</span>
+<span class="sd">        the segmentation.</span>
+
+<span class="sd">    membrane_seg_channel_index: int</span>
+<span class="sd">        The index in the channel dimension in the membrane segmentation image that</span>
+<span class="sd">        stores the segmentation.</span>
 
 <span class="sd">    current_pixel_sizes: Optioal[Tuple[float]]</span>
 <span class="sd">        The current physical pixel sizes as a tuple of the raw image.</span>
@@ -304,8 +335,8 @@
         <span class="n">raw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">proc</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">scale_raw</span><span class="p">,</span> <span class="s2">&quot;bilinear&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">])</span>
 
     <span class="c1"># Prep segmentations</span>
-    <span class="n">nuc_seg</span> <span class="o">=</span> <span class="n">nuc_seg</span><span class="o">.</span><span class="n">get_image_data</span><span class="p">(</span><span class="s2">&quot;YXZ&quot;</span><span class="p">,</span> <span class="n">S</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">memb_seg</span> <span class="o">=</span> <span class="n">memb_seg</span><span class="o">.</span><span class="n">get_image_data</span><span class="p">(</span><span class="s2">&quot;YXZ&quot;</span><span class="p">,</span> <span class="n">S</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">nuc_seg</span> <span class="o">=</span> <span class="n">nuc_seg</span><span class="o">.</span><span class="n">get_image_data</span><span class="p">(</span><span class="s2">&quot;YXZ&quot;</span><span class="p">,</span> <span class="n">S</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">nucleus_seg_channel_index</span><span class="p">)</span>
+    <span class="n">memb_seg</span> <span class="o">=</span> <span class="n">memb_seg</span><span class="o">.</span><span class="n">get_image_data</span><span class="p">(</span><span class="s2">&quot;YXZ&quot;</span><span class="p">,</span> <span class="n">S</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">membrane_seg_channel_index</span><span class="p">)</span>
 
     <span class="c1"># We do not assume that the segmentations are the same size as the raw</span>
     <span class="c1"># Resize the segmentations to match the raw</span>

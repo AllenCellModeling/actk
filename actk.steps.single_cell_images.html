@@ -110,7 +110,28 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
@@ -255,7 +276,7 @@
 
 <dl class="class">
 <dt id="actk.steps.single_cell_images.single_cell_images.SingleCellImages">
-<em class="property">class </em><code class="sig-prename descclassname">actk.steps.single_cell_images.single_cell_images.</code><code class="sig-name descname">SingleCellImages</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.single_cell_features.single_cell_features.SingleCellFeatures'&gt;], filepath_columns=['CellImage3DPath', 'CellImage2DAllProjectionsPath', 'CellImage2DYXProjectionPath']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_images/single_cell_images.html#SingleCellImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.single_cell_images.single_cell_images.SingleCellImages" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.single_cell_images.single_cell_images.</code><code class="sig-name descname">SingleCellImages</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.single_cell_features.single_cell_features.SingleCellFeatures'&gt;], filepath_columns=['CellImage3DPath', 'CellImage2DAllProjectionsPath', 'CellImage2DYXProjectionPath'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_images/single_cell_images.html#SingleCellImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.single_cell_images.single_cell_images.SingleCellImages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.single_cell_images.single_cell_images.SingleCellImages.run">
@@ -275,8 +296,9 @@ Default: 7</p></li>
 <li><p><strong>bounding_box_percentile</strong> (<em>float</em>) – A float used to generate the actual bounding box for all cells by finding
 provided percentile of all cell image sizes.
 Default: 95.0</p></li>
-<li><p><strong>bbox</strong> (<em>tuple, list, dict</em>)</p></li>
-<li><p><strong>Hard coded ZYX dimensions to set the bounding box. For example, (64, 168, 104)</strong></p></li>
+<li><p><strong>bbox</strong> (<em>tuple, list, dict</em>) – Hard coded ZYX dimensions to set the bounding box.
+Note: This overrides the <cite>bounding_box_percentile</cite> parameter.
+Example: (64, 168, 104)</p></li>
 <li><p><strong>projection_method</strong> (<em>str</em>) – The method to use for generating the flat projection.
 Default: max</p>
 <p>More details:
@@ -307,7 +329,7 @@ Default: False (Do not overwrite or regenerate files)</p></li>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-actk.steps.single_cell_images" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="actk.steps.single_cell_images.SingleCellImages">
-<em class="property">class </em><code class="sig-prename descclassname">actk.steps.single_cell_images.</code><code class="sig-name descname">SingleCellImages</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.single_cell_features.single_cell_features.SingleCellFeatures'&gt;], filepath_columns=['CellImage3DPath', 'CellImage2DAllProjectionsPath', 'CellImage2DYXProjectionPath']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_images/single_cell_images.html#SingleCellImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.single_cell_images.SingleCellImages" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.single_cell_images.</code><code class="sig-name descname">SingleCellImages</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.single_cell_features.single_cell_features.SingleCellFeatures'&gt;], filepath_columns=['CellImage3DPath', 'CellImage2DAllProjectionsPath', 'CellImage2DYXProjectionPath'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_images/single_cell_images.html#SingleCellImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.single_cell_images.SingleCellImages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.single_cell_images.SingleCellImages.run">
@@ -327,8 +349,9 @@ Default: 7</p></li>
 <li><p><strong>bounding_box_percentile</strong> (<em>float</em>) – A float used to generate the actual bounding box for all cells by finding
 provided percentile of all cell image sizes.
 Default: 95.0</p></li>
-<li><p><strong>bbox</strong> (<em>tuple, list, dict</em>)</p></li>
-<li><p><strong>Hard coded ZYX dimensions to set the bounding box. For example, (64, 168, 104)</strong></p></li>
+<li><p><strong>bbox</strong> (<em>tuple, list, dict</em>) – Hard coded ZYX dimensions to set the bounding box.
+Note: This overrides the <cite>bounding_box_percentile</cite> parameter.
+Example: (64, 168, 104)</p></li>
 <li><p><strong>projection_method</strong> (<em>str</em>) – The method to use for generating the flat projection.
 Default: max</p>
 <p>More details:

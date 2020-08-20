@@ -110,7 +110,28 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
@@ -206,6 +227,12 @@
 <li class="toctree-l2"><a class="reference internal" href="actk.steps.make_diagnostic_sheet.html#module-actk.steps.make_diagnostic_sheet">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="actk.steps.raw.html">actk.steps.raw package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.raw.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.raw.html#module-actk.steps.raw.raw">actk.steps.raw.raw module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.raw.html#module-actk.steps.raw">Module contents</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="actk.steps.single_cell_features.html">actk.steps.single_cell_features package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="actk.steps.single_cell_features.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="actk.steps.single_cell_features.html#module-actk.steps.single_cell_features.single_cell_features">actk.steps.single_cell_features.single_cell_features module</a></li>
@@ -230,8 +257,37 @@
 <div class="section" id="module-actk.steps">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-actk.steps" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
+<dt id="actk.steps.Raw">
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">Raw</code><span class="sig-paren">(</span><em class="sig-param">filepath_columns=['SourceReadPath', 'NucleusSegmentationReadPath', 'MembraneSegmentationReadPath'], metadata_columns=['FOVId'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/raw/raw.html#Raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.Raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
+<dl class="method">
+<dt id="actk.steps.Raw.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/raw/raw.html#Raw.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.Raw.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple passthrough to store the dataset in local_staging/raw.
+This does not copy any the image files to local_staging/raw, only the manifest.
+This is an optional step that will only run if you want to upload the raw data.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dataset</strong> (<em>Union[str, Path, pd.DataFrame, dd.DataFrame]</em>) – The dataset to use for the rest of the pipeline run.</p>
+<p><strong>Required dataset columns:</strong> <em>[“CellId”, “CellIndex”, “FOVId”,
+“SourceReadPath”, “NucleusSegmentationReadPath”,
+“MembraneSegmentationReadPath”, “ChannelIndexDNA”, “ChannelIndexMembrane”,
+“ChannelIndexStructure”, “ChannelIndexBrightfield”]</em></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>manifest_save_path</strong> – The path to the manifest in local_staging with the raw data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="actk.steps.SingleCellFeatures">
-<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">SingleCellFeatures</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray'&gt;], filepath_columns=['CellFeaturesPath']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_features/single_cell_features.html#SingleCellFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.SingleCellFeatures" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">SingleCellFeatures</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray'&gt;], filepath_columns=['CellFeaturesPath'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_features/single_cell_features.html#SingleCellFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.SingleCellFeatures" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.SingleCellFeatures.run">
@@ -269,7 +325,7 @@ Default: False (Do not overwrite or regenerate files)</p></li>
 
 <dl class="class">
 <dt id="actk.steps.StandardizeFOVArray">
-<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">StandardizeFOVArray</code><span class="sig-paren">(</span><em class="sig-param">filepath_columns=['StandardizedFOVPath']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.StandardizeFOVArray" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">StandardizeFOVArray</code><span class="sig-paren">(</span><em class="sig-param">filepath_columns=['StandardizedFOVPath'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/standardize_fov_array/standardize_fov_array.html#StandardizeFOVArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.StandardizeFOVArray" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.StandardizeFOVArray.run">
@@ -318,7 +374,7 @@ Default: False (Do not overwrite or regenerate files)</p>
 
 <dl class="class">
 <dt id="actk.steps.SingleCellImages">
-<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">SingleCellImages</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.single_cell_features.single_cell_features.SingleCellFeatures'&gt;], filepath_columns=['CellImage3DPath', 'CellImage2DAllProjectionsPath', 'CellImage2DYXProjectionPath']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_images/single_cell_images.html#SingleCellImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.SingleCellImages" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">SingleCellImages</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.single_cell_features.single_cell_features.SingleCellFeatures'&gt;], filepath_columns=['CellImage3DPath', 'CellImage2DAllProjectionsPath', 'CellImage2DYXProjectionPath'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_images/single_cell_images.html#SingleCellImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.SingleCellImages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.SingleCellImages.run">
@@ -338,8 +394,9 @@ Default: 7</p></li>
 <li><p><strong>bounding_box_percentile</strong> (<em>float</em>) – A float used to generate the actual bounding box for all cells by finding
 provided percentile of all cell image sizes.
 Default: 95.0</p></li>
-<li><p><strong>bbox</strong> (<em>tuple, list, dict</em>)</p></li>
-<li><p><strong>Hard coded ZYX dimensions to set the bounding box. For example, (64, 168, 104)</strong></p></li>
+<li><p><strong>bbox</strong> (<em>tuple, list, dict</em>) – Hard coded ZYX dimensions to set the bounding box.
+Note: This overrides the <cite>bounding_box_percentile</cite> parameter.
+Example: (64, 168, 104)</p></li>
 <li><p><strong>projection_method</strong> (<em>str</em>) – The method to use for generating the flat projection.
 Default: max</p>
 <p>More details:
@@ -367,11 +424,11 @@ Default: False (Do not overwrite or regenerate files)</p></li>
 
 <dl class="class">
 <dt id="actk.steps.MakeDiagnosticSheet">
-<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">MakeDiagnosticSheet</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks: List[Step] = [&lt;class 'actk.steps.single_cell_images.single_cell_images.SingleCellImages'&gt;], filepath_columns=['DiagnosticSheetPath']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/make_diagnostic_sheet/make_diagnostic_sheet.html#MakeDiagnosticSheet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.MakeDiagnosticSheet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">MakeDiagnosticSheet</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks: List[Step] = [&lt;class 'actk.steps.single_cell_images.single_cell_images.SingleCellImages'&gt;], filepath_columns=['DiagnosticSheetPath'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/make_diagnostic_sheet/make_diagnostic_sheet.html#MakeDiagnosticSheet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.MakeDiagnosticSheet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.MakeDiagnosticSheet.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], max_cells: int = 1000, metadata: Union[list, str, None] = None, feature: Optional[str] = None, fig_width: Optional[int] = None, fig_height: Optional[int] = None, distributed_executor_address: Optional[str] = None, batch_size: Optional[int] = None, overwrite: bool = False, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/make_diagnostic_sheet/make_diagnostic_sheet.html#MakeDiagnosticSheet.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.MakeDiagnosticSheet.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], max_cells: int = 1000, metadata: Union[list, str, None] = 'FOVId', feature: Optional[str] = None, fig_width: Optional[int] = None, fig_height: Optional[int] = None, distributed_executor_address: Optional[str] = None, batch_size: Optional[int] = None, overwrite: bool = False, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/make_diagnostic_sheet/make_diagnostic_sheet.html#MakeDiagnosticSheet.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.MakeDiagnosticSheet.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provided a dataset of single cell all projection images, generate a diagnostic
 sheet grouped by desired metadata and feature</p>
 <dl class="field-list">
@@ -384,10 +441,11 @@ diagnistic sheet for a group of cells.</p>
 <li><p><strong>max_cells</strong> (<em>int</em>) – The maximum number of cells to display on a single diagnostic sheet.
 Deafult: 1000</p></li>
 <li><p><strong>metadata</strong> (<em>Optional[Union[list, str]]</em>) – The metadata to group cells and generate a diagnostic sheet.
-For example, “FOVId” or “[“FOVId”, “ProteinDisplayName”]”</p></li>
-<li><p><strong>feature</strong> (<em>Optional[str]</em>) – The name of the single cell feature to display. For example, “imsize_orig”</p></li>
-<li><p><strong>fig_width</strong> (<em>Optional[int]</em>) – Width of the diagnostic sheet figure</p></li>
-<li><p><strong>fig_height</strong> (<em>Optional[int]</em>) – Height of the diagnostic sheet figure</p></li>
+For example, “FOVId” or “[“FOVId”, “ProteinDisplayName”]”
+Default: “FOVId”</p></li>
+<li><p><strong>feature</strong> (<em>Optional[str]</em>) – The name of the single cell feature to display. For example, “imsize_orig”.</p></li>
+<li><p><strong>fig_width</strong> (<em>Optional[int]</em>) – Width of the diagnostic sheet figure.</p></li>
+<li><p><strong>fig_height</strong> (<em>Optional[int]</em>) – Height of the diagnostic sheet figure.</p></li>
 <li><p><strong>distributed_executor_address</strong> (<em>Optional[str]</em>) – An optional executor address to pass to some computation engine.
 Default: None</p></li>
 <li><p><strong>batch_size</strong> (<em>Optional[int]</em>) – An optional batch size to process n features at a time.

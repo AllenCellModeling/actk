@@ -108,7 +108,28 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../contributing.html#deploying">Deploying</a></li>
@@ -193,8 +214,8 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
-<span class="kn">import</span> <span class="nn">psutil</span>
 <span class="kn">from</span> <span class="nn">dask_jobqueue</span> <span class="kn">import</span> <span class="n">SLURMCluster</span>
 <span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">LocalCluster</span>
 <span class="kn">from</span> <span class="nn">prefect</span> <span class="kn">import</span> <span class="n">Flow</span>
@@ -216,6 +237,7 @@
 <span class="sd">        This is only used for data logging operations, not computation purposes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">step_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">steps</span><span class="o">.</span><span class="n">Raw</span><span class="p">(),</span>
             <span class="n">steps</span><span class="o">.</span><span class="n">StandardizeFOVArray</span><span class="p">(),</span>
             <span class="n">steps</span><span class="o">.</span><span class="n">SingleCellFeatures</span><span class="p">(),</span>
             <span class="n">steps</span><span class="o">.</span><span class="n">SingleCellImages</span><span class="p">(),</span>
@@ -225,6 +247,8 @@
 <div class="viewcode-block" id="All.run"><a class="viewcode-back" href="../../../actk.bin.html#actk.bin.all.All.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">include_raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">distributed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">n_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
         <span class="n">worker_cpu</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
@@ -240,6 +264,15 @@
 <span class="sd">        ----------</span>
 <span class="sd">        dataset: str</span>
 <span class="sd">            The dataset to use for the pipeline.</span>
+
+<span class="sd">        include_raw: bool</span>
+<span class="sd">            A boolean option to determine if the raw data should be included in the</span>
+<span class="sd">            Quilt package.</span>
+<span class="sd">            Default: False (Do not include the raw data)</span>
+
+<span class="sd">        batch_size: Optional[int]</span>
+<span class="sd">            An optional batch size to provide to each step for processing their items.</span>
+<span class="sd">            Default: None (auto batch size depending on CPU / threads available)</span>
 
 <span class="sd">        distributed: bool</span>
 <span class="sd">            A boolean option to determine if the jobs should be distributed to a SLURM</span>
@@ -270,16 +303,18 @@
 <span class="sd">            Default: False (Do not debug)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initalize steps</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">Raw</span><span class="p">()</span>
         <span class="n">standardize_fov_array</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">StandardizeFOVArray</span><span class="p">()</span>
         <span class="n">single_cell_features</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">SingleCellFeatures</span><span class="p">()</span>
         <span class="n">single_cell_images</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">SingleCellImages</span><span class="p">()</span>
         <span class="n">make_diagnostic_sheet</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">MakeDiagnosticSheet</span><span class="p">()</span>
 
+        <span class="c1"># Cluster / distributed defaults</span>
+        <span class="n">distributed_executor_address</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="c1"># Choose executor</span>
         <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
             <span class="n">exe</span> <span class="o">=</span> <span class="n">LocalExecutor</span><span class="p">()</span>
-            <span class="n">distributed_executor_address</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">batch_size</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Debug flagged. Will use threads instead of Dask.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">distributed</span><span class="p">:</span>
@@ -308,25 +343,22 @@
                 <span class="c1"># Use the port from the created connector to set executor address</span>
                 <span class="n">distributed_executor_address</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">scheduler_address</span>
 
-                <span class="c1"># Batch size is n_workers * worker_cpu * 0.75</span>
-                <span class="c1"># We could just do n_workers * worker_cpu but 3/4 of that is safer</span>
-                <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_workers</span> <span class="o">*</span> <span class="n">worker_cpu</span> <span class="o">*</span> <span class="mf">0.75</span><span class="p">)</span>
+                <span class="c1"># Only auto batch size if it is not None</span>
+                <span class="k">if</span> <span class="n">batch_size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># Batch size is n_workers * worker_cpu * 0.75</span>
+                    <span class="c1"># We could just do n_workers * worker_cpu but 3/4 of that is safer</span>
+                    <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_workers</span> <span class="o">*</span> <span class="n">worker_cpu</span> <span class="o">*</span> <span class="mf">0.75</span><span class="p">)</span>
 
                 <span class="c1"># Log dashboard URI</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dask dashboard available at: </span><span class="si">{</span><span class="n">cluster</span><span class="o">.</span><span class="n">dashboard_link</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Create local cluster</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating LocalCluster&quot;</span><span class="p">)</span>
-                <span class="n">current_mem_gb</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">available</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">30</span>
-                <span class="n">n_workers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">current_mem_gb</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)</span>
-                <span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">(</span><span class="n">n_workers</span><span class="o">=</span><span class="n">n_workers</span><span class="p">)</span>
+                <span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">()</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Created LocalCluster&quot;</span><span class="p">)</span>
 
                 <span class="c1"># Set distributed_executor_address</span>
                 <span class="n">distributed_executor_address</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">scheduler_address</span>
-
-                <span class="c1"># Batch size on local cluster</span>
-                <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="o">//</span> <span class="n">n_workers</span><span class="p">)</span>
 
                 <span class="c1"># Log dashboard URI</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dask dashboard available at: </span><span class="si">{</span><span class="n">cluster</span><span class="o">.</span><span class="n">dashboard_link</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -336,6 +368,9 @@
 
         <span class="c1"># Configure your flow</span>
         <span class="k">with</span> <span class="n">Flow</span><span class="p">(</span><span class="s2">&quot;actk&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">flow</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">include_raw</span><span class="p">:</span>
+                <span class="n">dataset</span> <span class="o">=</span> <span class="n">raw</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
             <span class="n">standardized_fov_paths_dataset</span> <span class="o">=</span> <span class="n">standardize_fov_array</span><span class="p">(</span>
                 <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
                 <span class="n">distributed_executor_address</span><span class="o">=</span><span class="n">distributed_executor_address</span><span class="p">,</span>

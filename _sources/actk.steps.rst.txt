@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
 
    actk.steps.make_diagnostic_sheet
+   actk.steps.raw
    actk.steps.single_cell_features
    actk.steps.single_cell_images
    actk.steps.standardize_fov_array

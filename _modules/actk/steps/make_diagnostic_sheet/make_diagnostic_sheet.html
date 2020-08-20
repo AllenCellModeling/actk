@@ -108,7 +108,28 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../contributing.html#deploying">Deploying</a></li>
@@ -190,12 +211,11 @@
 
 <span class="kn">import</span> <span class="nn">aicsimageio</span>
 <span class="kn">import</span> <span class="nn">dask.dataframe</span> <span class="k">as</span> <span class="nn">dd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="k">as</span> <span class="nn">mpimg</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span>
-
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">aics_dask_utils</span> <span class="kn">import</span> <span class="n">DistributedHandler</span>
 <span class="kn">from</span> <span class="nn">datastep</span> <span class="kn">import</span> <span class="n">Step</span><span class="p">,</span> <span class="n">log_run_params</span>
 
@@ -245,10 +265,12 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">direct_upstream_tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">SingleCellImages</span><span class="p">],</span>
         <span class="n">filepath_columns</span><span class="o">=</span><span class="p">[</span><span class="n">DatasetFields</span><span class="o">.</span><span class="n">DiagnosticSheetPath</span><span class="p">],</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">direct_upstream_tasks</span><span class="o">=</span><span class="n">direct_upstream_tasks</span><span class="p">,</span>
             <span class="n">filepath_columns</span><span class="o">=</span><span class="n">filepath_columns</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
@@ -497,7 +519,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">dataset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
         <span class="n">max_cells</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
-        <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">DatasetFields</span><span class="o">.</span><span class="n">FOVId</span><span class="p">,</span>
         <span class="n">feature</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">fig_width</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">fig_height</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -513,7 +535,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        dataset: Union[str, Path, pd.DataFrame, dd.DataFrame]</span>
-<span class="sd">            The primary cell dataset to use for generating </span>
+<span class="sd">            The primary cell dataset to use for generating</span>
 <span class="sd">            diagnistic sheet for a group of cells.</span>
 
 <span class="sd">            **Required dataset columns:** *[&quot;CellId&quot;, &quot;CellImage2DAllProjectionsPath&quot;]*</span>
@@ -523,16 +545,18 @@
 <span class="sd">            Deafult: 1000</span>
 
 <span class="sd">        metadata: Optional[Union[list, str]]</span>
-<span class="sd">            The metadata to group cells and generate a diagnostic sheet. </span>
+<span class="sd">            The metadata to group cells and generate a diagnostic sheet.</span>
 <span class="sd">            For example, &quot;FOVId&quot; or &quot;[&quot;FOVId&quot;, &quot;ProteinDisplayName&quot;]&quot;</span>
+<span class="sd">            Default: &quot;FOVId&quot;</span>
 
 <span class="sd">        feature: Optional[str]</span>
-<span class="sd">            The name of the single cell feature to display. For example, &quot;imsize_orig&quot;</span>
+<span class="sd">            The name of the single cell feature to display. For example, &quot;imsize_orig&quot;.</span>
 
 <span class="sd">        fig_width: Optional[int]</span>
-<span class="sd">            Width of the diagnostic sheet figure      </span>
+<span class="sd">            Width of the diagnostic sheet figure.</span>
+
 <span class="sd">        fig_height: Optional[int]</span>
-<span class="sd">            Height of the diagnostic sheet figure</span>
+<span class="sd">            Height of the diagnostic sheet figure.</span>
 
 <span class="sd">        distributed_executor_address: Optional[str]</span>
 <span class="sd">            An optional executor address to pass to some computation engine.</span>

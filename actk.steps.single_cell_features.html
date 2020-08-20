@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="actk.steps.single_cell_images package" href="actk.steps.single_cell_images.html" />
-    <link rel="prev" title="actk.steps.make_diagnostic_sheet package" href="actk.steps.make_diagnostic_sheet.html" /> 
+    <link rel="prev" title="actk.steps.raw package" href="actk.steps.raw.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -110,7 +110,28 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
@@ -187,7 +208,7 @@
         <a href="actk.steps.single_cell_images.html" class="btn btn-neutral float-right" title="actk.steps.single_cell_images package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="actk.steps.make_diagnostic_sheet.html" class="btn btn-neutral float-left" title="actk.steps.make_diagnostic_sheet package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="actk.steps.raw.html" class="btn btn-neutral float-left" title="actk.steps.raw package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -205,7 +226,7 @@
 <span id="actk-steps-single-cell-features-single-cell-features-module"></span><h2>actk.steps.single_cell_features.single_cell_features module<a class="headerlink" href="#module-actk.steps.single_cell_features.single_cell_features" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="actk.steps.single_cell_features.single_cell_features.SingleCellFeatures">
-<em class="property">class </em><code class="sig-prename descclassname">actk.steps.single_cell_features.single_cell_features.</code><code class="sig-name descname">SingleCellFeatures</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray'&gt;], filepath_columns=['CellFeaturesPath']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_features/single_cell_features.html#SingleCellFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.single_cell_features.single_cell_features.SingleCellFeatures" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.single_cell_features.single_cell_features.</code><code class="sig-name descname">SingleCellFeatures</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray'&gt;], filepath_columns=['CellFeaturesPath'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_features/single_cell_features.html#SingleCellFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.single_cell_features.single_cell_features.SingleCellFeatures" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.single_cell_features.single_cell_features.SingleCellFeatures.run">
@@ -284,7 +305,7 @@ Default: False (Do not overwrite or regenerate files)</p></li>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-actk.steps.single_cell_features" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="actk.steps.single_cell_features.SingleCellFeatures">
-<em class="property">class </em><code class="sig-prename descclassname">actk.steps.single_cell_features.</code><code class="sig-name descname">SingleCellFeatures</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray'&gt;], filepath_columns=['CellFeaturesPath']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_features/single_cell_features.html#SingleCellFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.single_cell_features.SingleCellFeatures" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.single_cell_features.</code><code class="sig-name descname">SingleCellFeatures</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks=[&lt;class 'actk.steps.standardize_fov_array.standardize_fov_array.StandardizeFOVArray'&gt;], filepath_columns=['CellFeaturesPath'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/single_cell_features/single_cell_features.html#SingleCellFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.single_cell_features.SingleCellFeatures" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
 <dt id="actk.steps.single_cell_features.SingleCellFeatures.run">

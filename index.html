@@ -109,7 +109,28 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
@@ -229,14 +250,45 @@ also for the entire pipeline with:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>actk all run --dataset <span class="o">{</span>path to dataset<span class="o">}</span> --cell_ceiling_adjustment <span class="o">{</span>integer<span class="o">}</span>
 </pre></div>
 </div>
-<p>To run in distributed mode across the SLURM cluster at AICS you can add the
-<code class="docutils literal notranslate"><span class="pre">--distributed</span></code> flag to the pipeline call.</p>
+<p>See the <a class="reference external" href="https://AllenCellModeling.github.io/actk/actk.steps.html">steps module in our documentation</a>
+for a full list of parameters for each step</p>
+<div class="section" id="pipeline-config">
+<h4>Pipeline Config<a class="headerlink" href="#pipeline-config" title="Permalink to this headline">¶</a></h4>
+<p>A configuration file can be provided to the underlying <code class="docutils literal notranslate"><span class="pre">datastep</span></code> library that manages
+the data storage and upload of the steps in this workflow.</p>
+<p>The config file should simply be called <code class="docutils literal notranslate"><span class="pre">workflow_config.json</span></code> and be available from
+whichever directory you run <code class="docutils literal notranslate"><span class="pre">actk</span></code> from. If this config is not found in the current
+working directory, defaults are selected by the <code class="docutils literal notranslate"><span class="pre">datastep</span></code> package.</p>
+<p>Here is an example of our production config:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;quilt_storage_bucket&quot;</span><span class="p">:</span> <span class="s2">&quot;s3://allencell&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;project_local_staging_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;/allen/aics/modeling/jacksonb/results/actk&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You can even additionally attach step-specific configuration in this file by using the
+name of the step like so:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;quilt_storage_bucket&quot;</span><span class="p">:</span> <span class="s2">&quot;s3://example_config_7&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;project_local_staging_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;example/config/7&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;step_local_staging_dir&quot;</span><span class="p">:</span> <span class="s2">&quot;example/step/local/staging/&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="aics-distributed-computing">
+<h4>AICS Distributed Computing<a class="headerlink" href="#aics-distributed-computing" title="Permalink to this headline">¶</a></h4>
+<p>For members of the AICS team, to run in distributed mode across the SLURM cluster add
+the <code class="docutils literal notranslate"><span class="pre">--distributed</span></code> flag to the pipeline call.</p>
 <p>To set distributed cluster and worker parameters you can additionally add the flags:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">--n_workers</span> <span class="pre">{int}</span></code> (i.e. <code class="docutils literal notranslate"><span class="pre">--n_workers</span> <span class="pre">100</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--worker_cpu</span> <span class="pre">{int}</span></code> (i.e. <code class="docutils literal notranslate"><span class="pre">--worker_cpu</span> <span class="pre">2</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--worker_mem</span> <span class="pre">{str}</span></code> (i.e. <code class="docutils literal notranslate"><span class="pre">--worker_mem</span> <span class="pre">100GB</span></code>)</p></li>
 </ul>
+</div>
 </div>
 <div class="section" id="individual-steps">
 <h3>Individual Steps<a class="headerlink" href="#individual-steps" title="Permalink to this headline">¶</a></h3>
@@ -245,6 +297,10 @@ also for the entire pipeline with:</p>
 ordered, and normalized FOV images as OME-Tiffs.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">actk</span> <span class="pre">singlecellfeatures</span> <span class="pre">run</span> <span class="pre">--dataset</span> <span class="pre">{path</span> <span class="pre">to</span> <span class="pre">dataset}</span></code>, Generate a features JSON
 file for each cell in the dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">actk</span> <span class="pre">singlecellimages</span> <span class="pre">run</span> <span class="pre">--dataset</span> <span class="pre">{path</span> <span class="pre">to</span> <span class="pre">dataset}</span></code>, Generate bounded 3D images
+and 2D projections for each cell in the dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">actk</span> <span class="pre">makediagnosticsheet</span> <span class="pre">run</span> <span class="pre">--dataset</span> <span class="pre">{path</span> <span class="pre">to</span> <span class="pre">dataset}</span></code>, Generate diagnostic sheets
+for single cell images. Useful for quality control.</p></li>
 </ul>
 </div>
 </div>

@@ -108,7 +108,28 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../contributing.html#deploying">Deploying</a></li>
@@ -214,6 +235,8 @@
     <span class="n">DatasetFields</span><span class="o">.</span><span class="n">ChannelIndexMembrane</span><span class="p">,</span>
     <span class="n">DatasetFields</span><span class="o">.</span><span class="n">ChannelIndexStructure</span><span class="p">,</span>
     <span class="n">DatasetFields</span><span class="o">.</span><span class="n">ChannelIndexBrightfield</span><span class="p">,</span>
+    <span class="n">DatasetFields</span><span class="o">.</span><span class="n">ChannelIndexNucleusSegmentation</span><span class="p">,</span>
+    <span class="n">DatasetFields</span><span class="o">.</span><span class="n">ChannelIndexMembraneSegmentation</span><span class="p">,</span>
 <span class="p">]</span>
 
 
@@ -231,8 +254,8 @@
 
 
 <div class="viewcode-block" id="StandardizeFOVArray"><a class="viewcode-back" href="../../../../actk.steps.standardize_fov_array.html#actk.steps.StandardizeFOVArray">[docs]</a><span class="k">class</span> <span class="nc">StandardizeFOVArray</span><span class="p">(</span><span class="n">Step</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath_columns</span><span class="o">=</span><span class="p">[</span><span class="n">DatasetFields</span><span class="o">.</span><span class="n">StandardizedFOVPath</span><span class="p">]):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">filepath_columns</span><span class="o">=</span><span class="n">filepath_columns</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath_columns</span><span class="o">=</span><span class="p">[</span><span class="n">DatasetFields</span><span class="o">.</span><span class="n">StandardizedFOVPath</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">filepath_columns</span><span class="o">=</span><span class="n">filepath_columns</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_generate_standardized_fov_array</span><span class="p">(</span>
@@ -268,6 +291,8 @@
                 <span class="n">membrane_channel_index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">ChannelIndexMembrane</span><span class="p">,</span>
                 <span class="n">structure_channel_index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">ChannelIndexStructure</span><span class="p">,</span>
                 <span class="n">brightfield_channel_index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">ChannelIndexBrightfield</span><span class="p">,</span>
+                <span class="n">nucleus_seg_channel_index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">ChannelIndexNucleusSegmentation</span><span class="p">,</span>
+                <span class="n">membrane_seg_channel_index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">ChannelIndexMembraneSegmentation</span><span class="p">,</span>
                 <span class="n">current_pixel_sizes</span><span class="o">=</span><span class="n">current_pixel_sizes</span><span class="p">,</span>
                 <span class="n">desired_pixel_sizes</span><span class="o">=</span><span class="n">desired_pixel_sizes</span><span class="p">,</span>
             <span class="p">)</span>
@@ -356,13 +381,13 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
             <span class="n">dataset</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-            <span class="c1"># Check the dataset for the required columns</span>
-            <span class="n">dataset_utils</span><span class="o">.</span><span class="n">check_required_fields</span><span class="p">(</span>
-                <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">required_fields</span><span class="o">=</span><span class="n">REQUIRED_DATASET_FIELDS</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="c1"># Read dataset</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 
-        <span class="c1"># Read dataset</span>
-        <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="c1"># Check the dataset for the required columns</span>
+        <span class="n">dataset_utils</span><span class="o">.</span><span class="n">check_required_fields</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">required_fields</span><span class="o">=</span><span class="n">REQUIRED_DATASET_FIELDS</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># Log original length of cell dataset</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original dataset length: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>

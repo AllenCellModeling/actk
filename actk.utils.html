@@ -110,7 +110,28 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
@@ -268,7 +289,7 @@ function is simply handed the output from the original version of the function
 
 <dl class="function">
 <dt id="actk.utils.image_utils.get_normed_image_array">
-<code class="sig-prename descclassname">actk.utils.image_utils.</code><code class="sig-name descname">get_normed_image_array</code><span class="sig-paren">(</span><em class="sig-param">raw_image: Union[str, pathlib.Path, bytes, io.BufferedIOBase, numpy.ndarray, dask.array.core.Array], nucleus_seg_image: Union[str, pathlib.Path, bytes, io.BufferedIOBase, numpy.ndarray, dask.array.core.Array], membrane_seg_image: Union[str, pathlib.Path, bytes, io.BufferedIOBase, numpy.ndarray, dask.array.core.Array], dna_channel_index: int, membrane_channel_index: int, structure_channel_index: int, brightfield_channel_index: int, current_pixel_sizes: Optional[Tuple[float]] = None, desired_pixel_sizes: Optional[Tuple[float]] = None</em><span class="sig-paren">)</span> &#x2192; Tuple[numpy.ndarray, List[str], Tuple[float]]<a class="reference internal" href="_modules/actk/utils/image_utils.html#get_normed_image_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.utils.image_utils.get_normed_image_array" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">actk.utils.image_utils.</code><code class="sig-name descname">get_normed_image_array</code><span class="sig-paren">(</span><em class="sig-param">raw_image: Union[str, pathlib.Path, bytes, io.BufferedIOBase, numpy.ndarray, dask.array.core.Array], nucleus_seg_image: Union[str, pathlib.Path, bytes, io.BufferedIOBase, numpy.ndarray, dask.array.core.Array], membrane_seg_image: Union[str, pathlib.Path, bytes, io.BufferedIOBase, numpy.ndarray, dask.array.core.Array], dna_channel_index: int, membrane_channel_index: int, structure_channel_index: int, brightfield_channel_index: int, nucleus_seg_channel_index: int, membrane_seg_channel_index: int, current_pixel_sizes: Optional[Tuple[float]] = None, desired_pixel_sizes: Optional[Tuple[float]] = None</em><span class="sig-paren">)</span> &#x2192; Tuple[numpy.ndarray, List[str], Tuple[float]]<a class="reference internal" href="_modules/actk/utils/image_utils.html#get_normed_image_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.utils.image_utils.get_normed_image_array" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provided the original raw image, and a nucleus and membrane segmentation, construct
 a standardized, ordered, and normalized array of the images.</p>
 <dl class="field-list simple">
@@ -283,6 +304,10 @@ channels for DNA, Membrane, Structure, and Transmitted Light.</p></li>
 <li><p><strong>structure_channel_index</strong> (<em>int</em>) – The index in the channel dimension in the raw image that stores structure data.</p></li>
 <li><p><strong>brightfield_channel_index</strong> (<em>int</em>) – The index in the channel dimension in the raw image that stores the brightfield
 data.</p></li>
+<li><p><strong>nucleus_seg_channel_index</strong> (<em>int</em>) – The index in the channel dimension in the nucleus segmentation image that stores
+the segmentation.</p></li>
+<li><p><strong>membrane_seg_channel_index</strong> (<em>int</em>) – The index in the channel dimension in the membrane segmentation image that
+stores the segmentation.</p></li>
 <li><p><strong>current_pixel_sizes</strong> (<em>Optioal[Tuple[float]]</em>) – The current physical pixel sizes as a tuple of the raw image.
 Default: None (<cite>aicsimageio.AICSImage.get_physical_pixel_size</cite> on the raw image)</p></li>
 <li><p><strong>desired_pixel_sizes</strong> (<em>Optional[Tuple[float]]</em>) – The desired physical pixel sizes as a tuple to scale all images to.

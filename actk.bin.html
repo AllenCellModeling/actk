@@ -110,7 +110,28 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
@@ -236,12 +257,17 @@ This is only used for data logging operations, not computation purposes.</p>
 
 <dl class="method">
 <dt id="actk.bin.all.All.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: str</em>, <em class="sig-param">distributed: bool = False</em>, <em class="sig-param">n_workers: int = 10</em>, <em class="sig-param">worker_cpu: int = 8</em>, <em class="sig-param">worker_mem: str = '120GB'</em>, <em class="sig-param">overwrite: bool = False</em>, <em class="sig-param">debug: bool = False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/bin/all.html#All.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.bin.all.All.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: str</em>, <em class="sig-param">include_raw: bool = False</em>, <em class="sig-param">batch_size: Optional[int] = None</em>, <em class="sig-param">distributed: bool = False</em>, <em class="sig-param">n_workers: int = 10</em>, <em class="sig-param">worker_cpu: int = 8</em>, <em class="sig-param">worker_mem: str = '120GB'</em>, <em class="sig-param">overwrite: bool = False</em>, <em class="sig-param">debug: bool = False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/bin/all.html#All.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.bin.all.All.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run a flow with your steps.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<em>str</em>) – The dataset to use for the pipeline.</p></li>
+<li><p><strong>include_raw</strong> (<em>bool</em>) – A boolean option to determine if the raw data should be included in the
+Quilt package.
+Default: False (Do not include the raw data)</p></li>
+<li><p><strong>batch_size</strong> (<em>Optional[int]</em>) – An optional batch size to provide to each step for processing their items.
+Default: None (auto batch size depending on CPU / threads available)</p></li>
 <li><p><strong>distributed</strong> (<em>bool</em>) – A boolean option to determine if the jobs should be distributed to a SLURM
 cluster when possible.
 Default: False (Do not distribute)</p></li>

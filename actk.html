@@ -110,7 +110,28 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_fields.html">Dataset fields</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellid">CellId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellindex">CellIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#fovid">FOVId</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#sourcereadpath">SourceReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#nucleussegmentationreadpath">NucleusSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#membranesegmentationreadpath">MembraneSegmentationReadPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexdna">ChannelIndexDNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembrane">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#id1">ChannelIndexMembrane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexstructure">ChannelIndexStructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexbrightfield">ChannelIndexBrightfield</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexnucleussegmentation">ChannelIndexNucleusSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#channelindexmembranesegmentation">ChannelIndexMembraneSegmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#standardizedfovpath">StandardizedFOVPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellfeaturespath">CellFeaturesPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage3dpath">CellImage3DPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dallprojectionspath">CellImage2DAllProjectionsPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#cellimage2dyxprojectionpath">CellImage2DYXProjectionPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataset_fields.html#diagnosticsheetpath">DiagnosticSheetPath</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributing.html#deploying">Deploying</a></li>
@@ -213,6 +234,12 @@
 <li class="toctree-l4"><a class="reference internal" href="actk.steps.make_diagnostic_sheet.html#module-actk.steps.make_diagnostic_sheet">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="actk.steps.raw.html">actk.steps.raw package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="actk.steps.raw.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="actk.steps.raw.html#module-actk.steps.raw.raw">actk.steps.raw.raw module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="actk.steps.raw.html#module-actk.steps.raw">Module contents</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="actk.steps.single_cell_features.html">actk.steps.single_cell_features package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="actk.steps.single_cell_features.html#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="actk.steps.single_cell_features.html#module-actk.steps.single_cell_features.single_cell_features">actk.steps.single_cell_features.single_cell_features module</a></li>
@@ -298,7 +325,7 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="attribute">
 <dt id="actk.constants.DatasetFields.AllExpectedInputs">
-<code class="sig-name descname">AllExpectedInputs</code><em class="property"> = ['CellId', 'CellIndex', 'FOVId', 'SourceReadPath', 'NucleusSegmentationReadPath', 'MembraneSegmentationReadPath', 'ChannelIndexDNA', 'ChannelIndexMembrane', 'ChannelIndexStructure', 'ChannelIndexBrightfield']</em><a class="headerlink" href="#actk.constants.DatasetFields.AllExpectedInputs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">AllExpectedInputs</code><em class="property"> = ['CellId', 'CellIndex', 'FOVId', 'SourceReadPath', 'NucleusSegmentationReadPath', 'MembraneSegmentationReadPath', 'ChannelIndexDNA', 'ChannelIndexMembrane', 'ChannelIndexStructure', 'ChannelIndexBrightfield', 'ChannelIndexNucleusSegmentation', 'ChannelIndexMembraneSegmentation']</em><a class="headerlink" href="#actk.constants.DatasetFields.AllExpectedInputs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -344,6 +371,16 @@
 <dl class="attribute">
 <dt id="actk.constants.DatasetFields.ChannelIndexMembrane">
 <code class="sig-name descname">ChannelIndexMembrane</code><em class="property"> = 'ChannelIndexMembrane'</em><a class="headerlink" href="#actk.constants.DatasetFields.ChannelIndexMembrane" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.ChannelIndexMembraneSegmentation">
+<code class="sig-name descname">ChannelIndexMembraneSegmentation</code><em class="property"> = 'ChannelIndexMembraneSegmentation'</em><a class="headerlink" href="#actk.constants.DatasetFields.ChannelIndexMembraneSegmentation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="actk.constants.DatasetFields.ChannelIndexNucleusSegmentation">
+<code class="sig-name descname">ChannelIndexNucleusSegmentation</code><em class="property"> = 'ChannelIndexNucleusSegmentation'</em><a class="headerlink" href="#actk.constants.DatasetFields.ChannelIndexNucleusSegmentation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
