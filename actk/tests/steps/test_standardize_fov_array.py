@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
-import pytest
 
 import dask.dataframe as dd
+import pytest
 
 from actk.constants import DatasetFields
 from actk.steps import StandardizeFOVArray
@@ -39,7 +39,6 @@ def test_run(data_dir):
 
 
 def test_catch_nonconstant_segs_per_fov(data_dir):
-
     # Initialize step
     step = StandardizeFOVArray()
 

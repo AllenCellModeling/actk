@@ -8,12 +8,11 @@ from typing import List, NamedTuple, Optional, Union
 
 import aicsimageio
 import dask.dataframe as dd
-import numpy as np
-import pandas as pd
+import matplotlib
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
-import matplotlib
-
+import numpy as np
+import pandas as pd
 from aics_dask_utils import DistributedHandler
 from datastep import Step, log_run_params
 
@@ -63,10 +62,12 @@ class MakeDiagnosticSheet(Step):
         self,
         direct_upstream_tasks: List["Step"] = [SingleCellImages],
         filepath_columns=[DatasetFields.DiagnosticSheetPath],
+        **kwargs,
     ):
         super().__init__(
             direct_upstream_tasks=direct_upstream_tasks,
             filepath_columns=filepath_columns,
+            **kwargs,
         )
 
     @staticmethod
@@ -315,7 +316,7 @@ class MakeDiagnosticSheet(Step):
         self,
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
         max_cells: int = 1000,
-        metadata: Optional[Union[list, str]] = None,
+        metadata: Optional[Union[list, str]] = DatasetFields.FOVId,
         feature: Optional[str] = None,
         fig_width: Optional[int] = None,
         fig_height: Optional[int] = None,
@@ -331,7 +332,7 @@ class MakeDiagnosticSheet(Step):
         Parameters
         ----------
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame]
-            The primary cell dataset to use for generating 
+            The primary cell dataset to use for generating
             diagnistic sheet for a group of cells.
 
             **Required dataset columns:** *["CellId", "CellImage2DAllProjectionsPath"]*
@@ -341,16 +342,18 @@ class MakeDiagnosticSheet(Step):
             Deafult: 1000
 
         metadata: Optional[Union[list, str]]
-            The metadata to group cells and generate a diagnostic sheet. 
+            The metadata to group cells and generate a diagnostic sheet.
             For example, "FOVId" or "["FOVId", "ProteinDisplayName"]"
+            Default: "FOVId"
 
         feature: Optional[str]
-            The name of the single cell feature to display. For example, "imsize_orig"
+            The name of the single cell feature to display. For example, "imsize_orig".
 
         fig_width: Optional[int]
-            Width of the diagnostic sheet figure      
+            Width of the diagnostic sheet figure.
+
         fig_height: Optional[int]
-            Height of the diagnostic sheet figure
+            Height of the diagnostic sheet figure.
 
         distributed_executor_address: Optional[str]
             An optional executor address to pass to some computation engine.

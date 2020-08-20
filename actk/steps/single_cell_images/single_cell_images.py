@@ -58,10 +58,12 @@ class SingleCellImages(Step):
             DatasetFields.CellImage2DAllProjectionsPath,
             DatasetFields.CellImage2DYXProjectionPath,
         ],
+        **kwargs,
     ):
         super().__init__(
             direct_upstream_tasks=direct_upstream_tasks,
             filepath_columns=filepath_columns,
+            **kwargs,
         )
 
     @staticmethod
@@ -277,7 +279,9 @@ class SingleCellImages(Step):
             Default: 95.0
 
         bbox: tuple, list, dict
-        Hard coded ZYX dimensions to set the bounding box. For example, (64, 168, 104)
+            Hard coded ZYX dimensions to set the bounding box.
+            Note: This overrides the `bounding_box_percentile` parameter.
+            Example: (64, 168, 104)
 
         projection_method: str
             The method to use for generating the flat projection.

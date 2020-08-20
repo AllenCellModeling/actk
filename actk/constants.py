@@ -30,6 +30,8 @@ class DatasetFields:
     ChannelIndexMembrane = "ChannelIndexMembrane"
     ChannelIndexStructure = "ChannelIndexStructure"
     ChannelIndexBrightfield = "ChannelIndexBrightfield"
+    ChannelIndexNucleusSegmentation = "ChannelIndexNucleusSegmentation"
+    ChannelIndexMembraneSegmentation = "ChannelIndexMembraneSegmentation"
     StandardizedFOVPath = "StandardizedFOVPath"
     CellFeaturesPath = "CellFeaturesPath"
     CellImage3DPath = "CellImage3DPath"
@@ -47,4 +49,6 @@ class DatasetFields:
         ChannelIndexMembrane,
         ChannelIndexStructure,
         ChannelIndexBrightfield,
+        ChannelIndexNucleusSegmentation,
+        ChannelIndexMembraneSegmentation,
     ]

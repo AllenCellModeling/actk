@@ -32,6 +32,8 @@ REQUIRED_DATASET_FIELDS = [
     DatasetFields.ChannelIndexMembrane,
     DatasetFields.ChannelIndexStructure,
     DatasetFields.ChannelIndexBrightfield,
+    DatasetFields.ChannelIndexNucleusSegmentation,
+    DatasetFields.ChannelIndexMembraneSegmentation,
 ]
 
 
@@ -49,8 +51,8 @@ class StandardizeFOVArrayError(NamedTuple):
 
 
 class StandardizeFOVArray(Step):
-    def __init__(self, filepath_columns=[DatasetFields.StandardizedFOVPath]):
-        super().__init__(filepath_columns=filepath_columns)
+    def __init__(self, filepath_columns=[DatasetFields.StandardizedFOVPath], **kwargs):
+        super().__init__(filepath_columns=filepath_columns, **kwargs)
 
     @staticmethod
     def _generate_standardized_fov_array(
@@ -86,6 +88,8 @@ class StandardizeFOVArray(Step):
                 membrane_channel_index=row.ChannelIndexMembrane,
                 structure_channel_index=row.ChannelIndexStructure,
                 brightfield_channel_index=row.ChannelIndexBrightfield,
+                nucleus_seg_channel_index=row.ChannelIndexNucleusSegmentation,
+                membrane_seg_channel_index=row.ChannelIndexMembraneSegmentation,
                 current_pixel_sizes=current_pixel_sizes,
                 desired_pixel_sizes=desired_pixel_sizes,
             )
@@ -174,13 +178,13 @@ class StandardizeFOVArray(Step):
         if isinstance(dataset, (str, Path)):
             dataset = Path(dataset).expanduser().resolve(strict=True)
 
-            # Check the dataset for the required columns
-            dataset_utils.check_required_fields(
-                dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
-            )
+            # Read dataset
+            dataset = pd.read_csv(dataset)
 
-        # Read dataset
-        dataset = pd.read_csv(dataset)
+        # Check the dataset for the required columns
+        dataset_utils.check_required_fields(
+            dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
+        )
 
         # Log original length of cell dataset
         log.info(f"Original dataset length: {len(dataset)}")

@@ -11,8 +11,8 @@ and configure their IO in the `run` function.
 import logging
 from datetime import datetime
 from pathlib import Path
+from typing import Optional
 
-import psutil
 from dask_jobqueue import SLURMCluster
 from distributed import LocalCluster
 from prefect import Flow
@@ -34,6 +34,7 @@ class All:
         This is only used for data logging operations, not computation purposes.
         """
         self.step_list = [
+            steps.Raw(),
             steps.StandardizeFOVArray(),
             steps.SingleCellFeatures(),
             steps.SingleCellImages(),
@@ -43,6 +44,8 @@ class All:
     def run(
         self,
         dataset: str,
+        include_raw: bool = False,
+        batch_size: Optional[int] = None,
         distributed: bool = False,
         n_workers: int = 10,
         worker_cpu: int = 8,
@@ -58,6 +61,15 @@ class All:
         ----------
         dataset: str
             The dataset to use for the pipeline.
+
+        include_raw: bool
+            A boolean option to determine if the raw data should be included in the
+            Quilt package.
+            Default: False (Do not include the raw data)
+
+        batch_size: Optional[int]
+            An optional batch size to provide to each step for processing their items.
+            Default: None (auto batch size depending on CPU / threads available)
 
         distributed: bool
             A boolean option to determine if the jobs should be distributed to a SLURM
@@ -88,16 +100,18 @@ class All:
             Default: False (Do not debug)
         """
         # Initalize steps
+        raw = steps.Raw()
         standardize_fov_array = steps.StandardizeFOVArray()
         single_cell_features = steps.SingleCellFeatures()
         single_cell_images = steps.SingleCellImages()
         make_diagnostic_sheet = steps.MakeDiagnosticSheet()
 
+        # Cluster / distributed defaults
+        distributed_executor_address = None
+
         # Choose executor
         if debug:
             exe = LocalExecutor()
-            distributed_executor_address = None
-            batch_size = None
             log.info("Debug flagged. Will use threads instead of Dask.")
         else:
             if distributed:
@@ -126,25 +140,22 @@ class All:
                 # Use the port from the created connector to set executor address
                 distributed_executor_address = cluster.scheduler_address
 
-                # Batch size is n_workers * worker_cpu * 0.75
-                # We could just do n_workers * worker_cpu but 3/4 of that is safer
-                batch_size = int(n_workers * worker_cpu * 0.75)
+                # Only auto batch size if it is not None
+                if batch_size is None:
+                    # Batch size is n_workers * worker_cpu * 0.75
+                    # We could just do n_workers * worker_cpu but 3/4 of that is safer
+                    batch_size = int(n_workers * worker_cpu * 0.75)
 
                 # Log dashboard URI
                 log.info(f"Dask dashboard available at: {cluster.dashboard_link}")
             else:
                 # Create local cluster
                 log.info("Creating LocalCluster")
-                current_mem_gb = psutil.virtual_memory().available / 2 ** 30
-                n_workers = int(current_mem_gb // 4)
-                cluster = LocalCluster(n_workers=n_workers)
+                cluster = LocalCluster()
                 log.info("Created LocalCluster")
 
                 # Set distributed_executor_address
                 distributed_executor_address = cluster.scheduler_address
-
-                # Batch size on local cluster
-                batch_size = int(psutil.cpu_count() // n_workers)
 
                 # Log dashboard URI
                 log.info(f"Dask dashboard available at: {cluster.dashboard_link}")
@@ -154,6 +165,9 @@ class All:
 
         # Configure your flow
         with Flow("actk") as flow:
+            if include_raw:
+                dataset = raw(dataset, **kwargs)
+
             standardized_fov_paths_dataset = standardize_fov_array(
                 dataset=dataset,
                 distributed_executor_address=distributed_executor_address,
