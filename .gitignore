@@ -120,3 +120,5 @@ ENV/
 # Project specific
 data/
 .dask_logs/
+workflow_config.json
+aics_ic_data.csv
