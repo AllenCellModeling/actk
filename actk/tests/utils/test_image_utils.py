@@ -21,6 +21,8 @@ from actk.utils import image_utils
     "membrane_channel_index, "
     "structure_channel_index, "
     "brightfield_channel_index, "
+    "nucleus_seg_channel_index, "
+    "membrane_seg_channel_index, "
     "current_pixel_sizes, "
     "desired_pixel_sizes, "
     "expected_image",
@@ -32,6 +34,8 @@ from actk.utils import image_utils
             3,
             2,
             1,
+            0,
+            0,
             0,
             None,
             # The most recently used desired pixel size from original repo
@@ -46,6 +50,8 @@ from actk.utils import image_utils
             0,
             1,
             3,
+            0,
+            0,
             None,
             # The most recently used desired pixel size from original repo
             (0.29, 0.29, 0.29),
@@ -62,6 +68,8 @@ def test_get_normed_image_array(
     membrane_channel_index,
     structure_channel_index,
     brightfield_channel_index,
+    nucleus_seg_channel_index,
+    membrane_seg_channel_index,
     current_pixel_sizes,
     desired_pixel_sizes,
     expected_image,
@@ -82,6 +90,8 @@ def test_get_normed_image_array(
         membrane_channel_index,
         structure_channel_index,
         brightfield_channel_index,
+        nucleus_seg_channel_index,
+        membrane_seg_channel_index,
         current_pixel_sizes,
         desired_pixel_sizes,
     )

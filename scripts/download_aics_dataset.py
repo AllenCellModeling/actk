@@ -125,6 +125,12 @@ def download_aics_dataset(args: Args):
                 "ChannelNumber638": DatasetFields.ChannelIndexMembrane,
                 "ChannelNumberStruct": DatasetFields.ChannelIndexStructure,
                 "ChannelNumberBrightfield": DatasetFields.ChannelIndexBrightfield,
+                "NucleusSegmentationChannelIndex": (
+                    DatasetFields.ChannelIndexNucleusSegmentation
+                ),
+                "MembraneSegmentationChannelIndex": (
+                    DatasetFields.ChannelIndexMembraneSegmentation
+                ),
             }
         )
 

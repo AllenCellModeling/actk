@@ -32,6 +32,8 @@ REQUIRED_DATASET_FIELDS = [
     DatasetFields.ChannelIndexMembrane,
     DatasetFields.ChannelIndexStructure,
     DatasetFields.ChannelIndexBrightfield,
+    DatasetFields.ChannelIndexNucleusSegmentation,
+    DatasetFields.ChannelIndexMembraneSegmentation,
 ]
 
 
@@ -86,6 +88,8 @@ class StandardizeFOVArray(Step):
                 membrane_channel_index=row.ChannelIndexMembrane,
                 structure_channel_index=row.ChannelIndexStructure,
                 brightfield_channel_index=row.ChannelIndexBrightfield,
+                nucleus_seg_channel_index=row.ChannelIndexNucleusSegmentation,
+                membrane_seg_channel_index=row.ChannelIndexMembraneSegmentation,
                 current_pixel_sizes=current_pixel_sizes,
                 desired_pixel_sizes=desired_pixel_sizes,
             )

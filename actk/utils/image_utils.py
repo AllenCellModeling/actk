@@ -24,6 +24,8 @@ def get_normed_image_array(
     membrane_channel_index: int,
     structure_channel_index: int,
     brightfield_channel_index: int,
+    nucleus_seg_channel_index: int,
+    membrane_seg_channel_index: int,
     current_pixel_sizes: Optional[Tuple[float]] = None,
     desired_pixel_sizes: Optional[Tuple[float]] = None,
 ) -> Tuple[np.ndarray, List[str], Tuple[float]]:
@@ -55,6 +57,14 @@ def get_normed_image_array(
     brightfield_channel_index: int
         The index in the channel dimension in the raw image that stores the brightfield
         data.
+
+    nucleus_seg_channel_index: int
+        The index in the channel dimension in the nucleus segmentation image that stores
+        the segmentation.
+
+    membrane_seg_channel_index: int
+        The index in the channel dimension in the membrane segmentation image that
+        stores the segmentation.
 
     current_pixel_sizes: Optioal[Tuple[float]]
         The current physical pixel sizes as a tuple of the raw image.
@@ -122,8 +132,8 @@ def get_normed_image_array(
         raw = np.stack([proc.resize(channel, scale_raw, "bilinear") for channel in raw])
 
     # Prep segmentations
-    nuc_seg = nuc_seg.get_image_data("YXZ", S=0, T=0, C=0)
-    memb_seg = memb_seg.get_image_data("YXZ", S=0, T=0, C=0)
+    nuc_seg = nuc_seg.get_image_data("YXZ", S=0, T=0, C=nucleus_seg_channel_index)
+    memb_seg = memb_seg.get_image_data("YXZ", S=0, T=0, C=membrane_seg_channel_index)
 
     # We do not assume that the segmentations are the same size as the raw
     # Resize the segmentations to match the raw
