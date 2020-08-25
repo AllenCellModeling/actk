@@ -71,31 +71,63 @@ class MakeDiagnosticSheet(Step):
 
     @staticmethod
     def _save_plot(
-        row_index: int,
-        row: pd.Series,
-        fig_axes: np.ndarray,
+        dataset: pd.DataFrame,
+        metadata: str,
+        metadata_value: str,
+        number_of_subplots: int,
         feature: Optional[str] = None,
+        fig_width: Optional[int] = None,
+        fig_height: Optional[int] = None,
     ):
 
-        this_axes = fig_axes.flatten()[row_index]
+        log.info(f"Beginning diagnostic sheet generation for" f" {metadata_value}")
 
-        # Load feature to plot if feature
-        if feature:
-            with open(row[DatasetFields.CellFeaturesPath]) as f:
-                cell_features = json.load(f)
-            title = "CellId: {0}, {1} {2}: {3}".format(
-                row[DatasetFields.CellId], "\n", feature, cell_features[feature],
-            )
-            this_axes.set_title(title)
-        else:
-            this_axes.set_title(f"CellID: {row[DatasetFields.CellId]}")
+        # Choose columns and rows
+        columns = int(np.sqrt(number_of_subplots) + 0.5)
+        rows = columns + 1
 
-        this_axes.axis("off")
+        # Set figure size
+        if not fig_width:
+            fig_width = columns * 7
+        if not fig_height:
+            fig_height = rows * 5
 
-        # Read AllProjections Image
-        img = mpimg.imread(row[DatasetFields.CellImage2DAllProjectionsPath])
-        this_axes.imshow(img)
-        this_axes.set_aspect(1)
+        # Set subplots
+        fig, ax_array = plt.subplots(
+            rows, columns, squeeze=False, figsize=(fig_height, fig_width),
+        )
+
+        for row_index, row in dataset.iterrows():
+            this_axes = ax_array.flatten()[row_index]
+
+            # Load feature to plot if feature
+            if feature:
+                with open(row[DatasetFields.CellFeaturesPath]) as f:
+                    cell_features = json.load(f)
+                title = "CellId: {0}, {1} {2}: {3}".format(
+                    row[DatasetFields.CellId], "\n", feature, cell_features[feature],
+                )
+                this_axes.set_title(title)
+            else:
+                this_axes.set_title(f"CellID: {row[DatasetFields.CellId]}")
+
+            # Read AllProjections Image
+            img = mpimg.imread(row[DatasetFields.CellImage2DAllProjectionsPath])
+            this_axes.imshow(img)
+            this_axes.set_aspect(1)
+
+        # Need to do this outside the loop because sometimes number
+        # of rows < number of axes subplots
+        [ax.axis("off") for ax in ax_array.flatten()]
+
+        # Save figure
+        ax_array.flatten()[0].get_figure().savefig(
+            dataset[DatasetFields.DiagnosticSheetPath + str(metadata)][0]
+        )
+
+        # Close figure, otherwise clogs memory
+        plt.close(fig)
+        log.info(f"Completed diagnostic sheet generation for" f"{metadata_value}")
 
     @staticmethod
     def _collect_group(
@@ -241,27 +273,51 @@ class MakeDiagnosticSheet(Step):
             # Make metadata a list
             metadata = metadata if isinstance(metadata, list) else [metadata]
 
+            # Make an empty list of grouped_datasets to collect and
+            # then distribute via Dask for plotting
+            all_grouped_datasets = []
+            all_metadata = []
+            all_metadata_values = []
+            all_subplot_numbers = []
+
             # Process each row
             for j, this_metadata in enumerate(metadata):
 
                 # Add some helper columns for subsequent analysis
+                helper_dataset = pd.DataFrame()
 
-                # "SubplotNumber" + str(this_metadata) + "/MaxCells" is a new column
-                # which will help iterate through subplots to add to a figure
-                dataset[
-                    "SubplotNumber" + str(this_metadata) + "/MaxCells"
-                ] = dataset.groupby(this_metadata)["CellId"].transform(
-                    lambda x: ((~x.duplicated()).cumsum() - 1) % max_cells
-                )
+                for unique_metadata_value in dataset[this_metadata].unique():
+                    dataset_subgroup = dataset.loc[
+                        dataset[this_metadata] == unique_metadata_value
+                    ]
+                    # "SubplotNumber" + str(this_metadata) + "/MaxCells" is a new column
+                    # which will help iterate through subplots to add to a figure
+                    dataset_subgroup.insert(
+                        2,
+                        "SubplotNumber" + str(this_metadata) + "/MaxCells",
+                        dataset_subgroup.groupby(this_metadata)["CellId"].transform(
+                            lambda x: ((~x.duplicated()).cumsum() - 1) % max_cells
+                        ),
+                        True,
+                    )
 
-                # "SubplotNumber" + str(this_metadata) is a new column
-                # which will help in the _collect group method to identify
-                # diagnostic sheet save paths per CellId
-                dataset["SubplotNumber" + str(this_metadata)] = dataset.groupby(
-                    this_metadata
-                )["CellId"].transform(lambda x: ((~x.duplicated()).cumsum() - 1))
+                    # "SubplotNumber" + str(this_metadata) is a new column
+                    # which will help in the _collect group method to identify
+                    # diagnostic sheet save paths per CellId
+                    dataset_subgroup.insert(
+                        2,
+                        "SubplotNumber" + str(this_metadata),
+                        dataset_subgroup.groupby(this_metadata)["CellId"].transform(
+                            lambda x: ((~x.duplicated()).cumsum() - 1)
+                        ),
+                        True,
+                    )
 
+                    helper_dataset = helper_dataset.append(dataset_subgroup)
+
+                dataset = helper_dataset
                 # Done creating helper columns
+
                 # Create empty diagnostic sheet result dataset and errors
                 diagnostic_sheet_result_dataset = []
                 errors = []
@@ -363,29 +419,8 @@ class MakeDiagnosticSheet(Step):
                     # Loop through metadata value and max number of subplots
                     for metadata_value, number_of_subplots in grouped_max.items():
 
-                        log.info(
-                            f"Beginning diagnostic sheet generation for"
-                            f" {metadata_value}"
-                        )
                         # Total num of subplots = subplots + 1
                         number_of_subplots = number_of_subplots + 1
-                        # Choose columns and rows
-                        columns = int(np.sqrt(number_of_subplots) + 0.5)
-                        rows = columns + 1
-
-                        # Set figure size
-                        if not fig_width:
-                            fig_width = columns * 7
-                        if not fig_height:
-                            fig_height = rows * 5
-
-                        # Set subplots
-                        fig, ax_array = plt.subplots(
-                            rows,
-                            columns,
-                            squeeze=False,
-                            figsize=(fig_height, fig_width),
-                        )
 
                         # Get this metadata group from the original dataset
                         this_metadata_value_dataset = grouped_dataset.get_group(
@@ -395,31 +430,32 @@ class MakeDiagnosticSheet(Step):
                         # reset index
                         this_metadata_value_dataset.reset_index(inplace=True)
 
-                        # Start processing. This will add subplots to the current fig
-                        # axes via dask
-                        handler.batched_map(
-                            self._save_plot,
-                            # Convert dataframe iterrows into two lists of items to
-                            # iterate. One list will be row index
-                            # One list will be the pandas series of every row
-                            *zip(*list(this_metadata_value_dataset.iterrows())),
-                            [ax_array for i in range(len(this_metadata_value_dataset))],
-                            [feature for i in range(len(this_metadata_value_dataset))],
-                        )
+                        # Append to related lists for Dask distributed plotting
+                        # of all groups
+                        all_grouped_datasets.append(this_metadata_value_dataset)
+                        all_metadata.append(this_metadata)
+                        all_metadata_values.append(metadata_value)
+                        all_subplot_numbers.append(number_of_subplots)
 
-                        # Save figure
-                        plt.axis("off")
-                        ax_array.flatten()[0].get_figure().savefig(
-                            this_metadata_value_dataset[
-                                DatasetFields.DiagnosticSheetPath + str(this_metadata)
-                            ][0]
-                        )
-                        log.info(
-                            f"Completed diagnostic sheet generation for"
-                            f"{metadata_value}"
-                        )
+            # Plot each diagnostic sheet
+            with DistributedHandler(distributed_executor_address) as handler:
+                # Start processing. This will add subplots to the current fig
+                # axes via dask
+                handler.batched_map(
+                    self._save_plot,
+                    # Convert dataframe iterrows into two lists of items to
+                    # iterate. One list will be row index
+                    # One list will be the pandas series of every row
+                    [dataset for dataset in all_grouped_datasets],
+                    [metadata for metadata in all_metadata],
+                    [metadata_value for metadata_value in all_metadata_values],
+                    [number_of_subplots for number_of_subplots in all_subplot_numbers],
+                    [feature for i in range(len(all_grouped_datasets))],
+                    [fig_width for i in range(len(all_grouped_datasets))],
+                    [fig_height for i in range(len(all_grouped_datasets))],
+                )
 
-                self.manifest = pd.DataFrame(manifest)
+            self.manifest = pd.DataFrame(manifest)
 
         else:
             # If no metadata, just return input manifest
