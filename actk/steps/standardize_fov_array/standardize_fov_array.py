@@ -183,7 +183,8 @@ class StandardizeFOVArray(Step):
 
         # Check the dataset for the required columns
         dataset_utils.check_required_fields(
-            dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
+            dataset=dataset,
+            required_fields=REQUIRED_DATASET_FIELDS,
         )
 
         # Log original length of cell dataset

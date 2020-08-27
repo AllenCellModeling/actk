@@ -126,7 +126,10 @@ def test_get_normed_image_array(
     ],
 )
 def test_select_and_adjust_segmentation_ceiling(
-    data_dir, image, cell_index, expected_image,
+    data_dir,
+    image,
+    cell_index,
+    expected_image,
 ):
     """
     The example data used to test this function was generated with the original function
@@ -263,7 +266,9 @@ def test_prepare_image_for_feature_extraction(
     ],
 )
 def test_get_features_from_image(
-    data_dir, image, expected_features,
+    data_dir,
+    image,
+    expected_features,
 ):
     """
     The example data used to test this function was generated with the original function

@@ -96,7 +96,8 @@ class SingleCellFeatures(Step):
 
             # Crop the FOV to the segmentation portions
             cropped = image_utils.crop_raw_channels_with_segmentation(
-                image=adjusted, channels=image.get_channel_names(),
+                image=adjusted,
+                channels=image.get_channel_names(),
             )
 
             # Generate features
@@ -169,7 +170,8 @@ class SingleCellFeatures(Step):
 
         # Check dataset and manifest have required fields
         dataset_utils.check_required_fields(
-            dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
+            dataset=dataset,
+            required_fields=REQUIRED_DATASET_FIELDS,
         )
 
         # Create features directory
