@@ -135,7 +135,9 @@ def download_aics_dataset(args: Args):
         )
 
         # Merge Aligned and Source read path columns
-        data[DatasetFields.SourceReadPath] = data["AlignedImageReadPath"].combine_first(data[DatasetFields.SourceReadPath])
+        data[DatasetFields.SourceReadPath] = data["AlignedImageReadPath"].combine_first(
+            data[DatasetFields.SourceReadPath]
+        )
 
         # Temporary drop because differing values
         data = data.drop(
