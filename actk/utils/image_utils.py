@@ -167,7 +167,7 @@ def get_normed_image_array(
 
 
 def select_and_adjust_segmentation_ceiling(
-    image: np.ndarray, cell_index: int, cell_ceiling_adjustment: int = 7
+    image: np.ndarray, cell_index: int, cell_ceiling_adjustment: int = 0
 ) -> np.ndarray:
     """
     Select and adjust the cell shape "ceiling" for a specific cell in the provided
@@ -184,7 +184,7 @@ def select_and_adjust_segmentation_ceiling(
     cell_ceiling_adjustment: int
         The adjust to use for raising the cell shape ceiling. If <= 0, this will be
         ignored and cell data will be selected but not adjusted.
-        Default: 7
+        Default: 0
 
     Returns
     -------
