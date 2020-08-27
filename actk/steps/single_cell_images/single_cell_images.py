@@ -317,7 +317,8 @@ class SingleCellImages(Step):
 
         # Check dataset and manifest have required fields
         dataset_utils.check_required_fields(
-            dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
+            dataset=dataset,
+            required_fields=REQUIRED_DATASET_FIELDS,
         )
 
         # Create save directories

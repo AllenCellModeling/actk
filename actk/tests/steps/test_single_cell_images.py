@@ -50,7 +50,8 @@ def test_run_bbox(data_dir):
 
     # Ensure that it still runs
     output_manifest = step.run(
-        data_dir / "example_single_cell_features_dataset.csv", bbox=(64, 168, 104),
+        data_dir / "example_single_cell_features_dataset.csv",
+        bbox=(64, 168, 104),
     )
     output_manifest = dd.read_csv(output_manifest)
 

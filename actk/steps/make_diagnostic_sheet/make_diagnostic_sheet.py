@@ -84,7 +84,10 @@ class MakeDiagnosticSheet(Step):
 
         # Set subplots
         fig, ax_array = plt.subplots(
-            rows, columns, squeeze=False, figsize=(fig_height, fig_width),
+            rows,
+            columns,
+            squeeze=False,
+            figsize=(fig_height, fig_width),
         )
 
         for row_index, row in dataset.iterrows():
@@ -95,7 +98,10 @@ class MakeDiagnosticSheet(Step):
                 with open(row[DatasetFields.CellFeaturesPath]) as f:
                     cell_features = json.load(f)
                 title = "CellId: {0}, {1} {2}: {3}".format(
-                    row[DatasetFields.CellId], "\n", feature, cell_features[feature],
+                    row[DatasetFields.CellId],
+                    "\n",
+                    feature,
+                    cell_features[feature],
                 )
                 this_axes.set_title(title)
             else:
@@ -246,7 +252,8 @@ class MakeDiagnosticSheet(Step):
 
         # Check dataset and manifest have required fields
         dataset_utils.check_required_fields(
-            dataset=dataset, required_fields=REQUIRED_DATASET_FIELDS,
+            dataset=dataset,
+            required_fields=REQUIRED_DATASET_FIELDS,
         )
 
         # Create save directories
@@ -366,7 +373,8 @@ class MakeDiagnosticSheet(Step):
 
                         # Join original dataset to the fov paths
                         dataset = dataset.merge(
-                            diagnostic_sheet_result_dataset, on=DatasetFields.CellId,
+                            diagnostic_sheet_result_dataset,
+                            on=DatasetFields.CellId,
                         )
 
                     # Reset index in dataset

@@ -71,7 +71,10 @@ extra_requirements = {
     "test": test_requirements,
     "dev": dev_requirements,
     "aics": aics_data_requirements,
-    "all": [*requirements, *dev_requirements,],
+    "all": [
+        *requirements,
+        *dev_requirements,
+    ],
 }
 
 setup(
