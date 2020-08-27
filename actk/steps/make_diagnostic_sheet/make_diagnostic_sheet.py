@@ -8,7 +8,6 @@ from typing import List, NamedTuple, Optional, Union
 
 import aicsimageio
 import dask.dataframe as dd
-import matplotlib
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
@@ -44,16 +43,6 @@ class DiagnosticSheetError(NamedTuple):
     error: str
 
 
-def flatten(x):
-    result = []
-    for el in x:
-        if hasattr(el, "__iter__") and not isinstance(el, str):
-            result.extend(flatten(el))
-        else:
-            result.append(el)
-    return result
-
-
 ###############################################################################
 
 
@@ -71,25 +60,21 @@ class MakeDiagnosticSheet(Step):
         )
 
     @staticmethod
-    def _save_single_figure(
+    def _save_plot(
         dataset: pd.DataFrame,
-        figure_number: Union[int, str],
+        metadata: str,
+        metadata_value: str,
         number_of_subplots: int,
-        index: int,
-        this_metadata: str,
-        metadata: Union[str, list],
-        multiple_paths: bool,
-        figure_path: Union[str, Path],
         feature: Optional[str] = None,
         fig_width: Optional[int] = None,
         fig_height: Optional[int] = None,
     ):
-        # Get rows and columns of figure
+
+        log.info(f"Beginning diagnostic sheet generation for" f" {metadata_value}")
+
+        # Choose columns and rows
         columns = int(np.sqrt(number_of_subplots) + 0.5)
-        if np.sqrt(number_of_subplots) != int(np.sqrt(number_of_subplots)):
-            rows = columns + 1
-        else:
-            rows = columns
+        rows = columns + 1
 
         # Set figure size
         if not fig_width:
@@ -99,171 +84,40 @@ class MakeDiagnosticSheet(Step):
 
         # Set subplots
         fig, ax_array = plt.subplots(
-            rows, columns, squeeze=False, figsize=(fig_height, fig_width)
+            rows, columns, squeeze=False, figsize=(fig_height, fig_width),
         )
 
-        # Set title
-        fig.suptitle(f"{this_metadata}:{figure_number}")
+        for row_index, row in dataset.iterrows():
+            this_axes = ax_array.flatten()[row_index]
 
-        # Second index to check subplots
-        index2 = 0
-
-        for k, ax_row in enumerate(ax_array):
-            for j, axes in enumerate(ax_row):
-                if index2 < number_of_subplots:
-                    # Load feature to plot if feature
-                    if feature:
-                        with open(dataset[DatasetFields.CellFeaturesPath][index]) as f:
-                            this_cell_features = json.load(f)
-                        title = "CellId: {0}, {1} {2}: {3}".format(
-                            dataset[DatasetFields.CellId][index],
-                            "\n",
-                            feature,
-                            this_cell_features[feature],
-                        )
-                        axes.set_title(title)
-                    else:
-                        axes.set_title(
-                            f"CellID: {dataset[DatasetFields.CellId][index]}"
-                        )
-                    axes.axis("off")
-                    # Read AllProjections Image
-                    img = mpimg.imread(
-                        dataset[DatasetFields.CellImage2DAllProjectionsPath][index]
-                    )
-                    axes.imshow(img)
-                    axes.set_aspect(1)
-
-                    # Update fig save path in dataset
-                    # If multiple paths, choose the correct index for
-                    # figure path
-                    if this_metadata != metadata and multiple_paths:
-                        dataset.loc[index, DatasetFields.DiagnosticSheetPath][
-                            metadata.index(this_metadata)
-                        ] = str(figure_path)
-                    else:
-                        dataset.loc[index, DatasetFields.DiagnosticSheetPath] = str(
-                            figure_path
-                        )
-
-                    index += 1
-                    index2 += 1
-                else:
-                    axes.axis("off")
-
-        # Savefig
-        fig.savefig(figure_path)
-
-        return index, dataset
-
-    def _make_group_plot(
-        self,
-        dataset: pd.DataFrame,
-        this_metadata: str,
-        metadata: Union[list, str],
-        max_cells: int = 1000,
-        feature: Optional[str] = None,
-        fig_width: Optional[int] = None,
-        fig_height: Optional[int] = None,
-    ):
-        # Get figure numbers, subplot numbers, and figure paths
-        # Number of unique metadata values
-        figure_numbers = dataset[this_metadata].value_counts().index.to_numpy()
-        # Number of cells that have each unique metadata value
-        subplot_numbers = dataset[this_metadata].value_counts().values
-        # Paths to save
-        figure_paths = []
-        for fig_num in figure_numbers:
-            figure_paths.append(
-                dataset.loc[dataset[this_metadata] == fig_num][
-                    DatasetFields.DiagnosticSheetPath
-                ].values
-            )
-
-        # Index to help loop through figure numbers
-        index = 0
-
-        # Set font size
-        font = {"weight": "bold", "size": 11}
-        matplotlib.rc("font", **font)
-
-        # Loop through figure numbers
-        for i in range(len(figure_numbers)):
-
-            this_figure_number = figure_numbers[i]
-            this_figure_subplots = subplot_numbers[i]
-            # figure_paths[i] is a list of fig paths for all cell IDs
-            # that share the same metadata value. Lets choose
-            # figure_paths[i][0] as one of those paths (all are same)
-            this_figure_path = figure_paths[i][0]
-
-            # Get correct figure path if multiple metadata, i.e.
-            # len(figure_paths[i][0]) > 1
-            if this_metadata != metadata:
-                if isinstance(this_figure_path, list) and len(this_figure_path) > 1:
-                    multiple_paths = True
-                    this_figure_path = this_figure_path[metadata.index(this_metadata)]
-                else:
-                    multiple_paths = False
-
-            if this_figure_subplots < max_cells:
-
-                index, dataset = self._save_single_figure(
-                    dataset,
-                    this_figure_number,
-                    this_figure_subplots,
-                    index,
-                    this_metadata,
-                    metadata,
-                    multiple_paths,
-                    this_figure_path,
-                    feature,
-                    fig_width,
-                    fig_height,
+            # Load feature to plot if feature
+            if feature:
+                with open(row[DatasetFields.CellFeaturesPath]) as f:
+                    cell_features = json.load(f)
+                title = "CellId: {0}, {1} {2}: {3}".format(
+                    row[DatasetFields.CellId], "\n", feature, cell_features[feature],
                 )
+                this_axes.set_title(title)
             else:
-                # If subplot numbers are more than a max cell number (1000),
-                # then make separate figures
-                subplot_split = [
-                    max_cells for i in range(int(this_figure_subplots / max_cells))
-                ] + [
-                    (
-                        this_figure_subplots
-                        - max_cells * int(this_figure_subplots / max_cells)
-                    )
-                ]
+                this_axes.set_title(f"CellID: {row[DatasetFields.CellId]}")
 
-                # pop last element if 0 (figure subplots =
-                # max_cells * int(subplots/max_cells))
-                if subplot_split[-1] == 0:
-                    subplot_split.pop()
+            # Read AllProjections Image
+            img = mpimg.imread(row[DatasetFields.CellImage2DAllProjectionsPath])
+            this_axes.imshow(img)
+            this_axes.set_aspect(1)
 
-                for j, sublot in enumerate(subplot_split):
-                    # If split, add a "_{number}" before ".png" in path
-                    split_fig_path = Path(
-                        str(this_figure_path)[:-4] + "_" + str(j) + ".png"
-                    )
-                    log.info(f"Splitting this figure and saving to: {split_fig_path}")
+        # Need to do this outside the loop because sometimes number
+        # of rows < number of axes subplots
+        [ax.axis("off") for ax in ax_array.flatten()]
 
-                    index, dataset = self._save_single_figure(
-                        dataset,
-                        this_figure_number,
-                        sublot,
-                        index,
-                        this_metadata,
-                        metadata,
-                        multiple_paths,
-                        split_fig_path,
-                        feature,
-                        fig_width,
-                        fig_height,
-                    )
+        # Save figure
+        ax_array.flatten()[0].get_figure().savefig(
+            dataset[DatasetFields.DiagnosticSheetPath + str(metadata)][0]
+        )
 
-            log.info(
-                f"Completed diagnostic sheet for: {this_metadata} {this_figure_number} "
-            )
-
-        return dataset
+        # Close figure, otherwise clogs memory
+        plt.close(fig)
+        log.info(f"Completed diagnostic sheet generation for" f"{metadata_value}")
 
     @staticmethod
     def _collect_group(
@@ -272,6 +126,7 @@ class MakeDiagnosticSheet(Step):
         diagnostic_sheet_dir: Path,
         overwrite: bool,
         metadata: str,
+        max_cells: int,
     ) -> Union[DiagnosticSheetResult, DiagnosticSheetError]:
         # Don't use dask for image reading
         aicsimageio.use_dask(False)
@@ -280,11 +135,21 @@ class MakeDiagnosticSheet(Step):
             # Get the ultimate end save paths for grouped plot
             if row[str(metadata)] or row[str(metadata)] == 0:
                 assert DatasetFields.CellImage2DAllProjectionsPath in row.index
-                save_path = (
-                    diagnostic_sheet_dir / f"{metadata}-{row[str(metadata)]}.png"
+                save_path_index = int(
+                    np.ceil((row["SubplotNumber" + str(metadata)] + 1) / max_cells)
                 )
+                # np ceil for 0 = 0
+                if save_path_index == 0:
+                    save_path_index = 1
+
+                save_path = (
+                    diagnostic_sheet_dir / f"{metadata}"
+                    f"-{row[str(metadata)]}"
+                    f"-{save_path_index}.png"
+                )
+
                 log.info(
-                    f"Generating diagnostic sheet path for cell ID: {row.CellId},"
+                    f"Collecting diagnostic sheet path for cell ID: {row.CellId},"
                     f"{metadata} {row[str(metadata)]}"
                 )
             else:
@@ -390,8 +255,6 @@ class MakeDiagnosticSheet(Step):
 
         # Create empty manifest
         manifest = {
-            "Metadata": [],
-            "MetadataValue": [],
             DatasetFields.DiagnosticSheetPath: [],
         }
 
@@ -400,15 +263,59 @@ class MakeDiagnosticSheet(Step):
             # Make metadata a list
             metadata = metadata if isinstance(metadata, list) else [metadata]
 
+            # Make an empty list of grouped_datasets to collect and
+            # then distribute via Dask for plotting
+            all_grouped_datasets = []
+            all_metadata = []
+            all_metadata_values = []
+            all_subplot_numbers = []
+
             # Process each row
             for j, this_metadata in enumerate(metadata):
+
+                # Add some helper columns for subsequent analysis
+                helper_dataset = pd.DataFrame()
+
+                for unique_metadata_value in dataset[this_metadata].unique():
+                    dataset_subgroup = dataset.loc[
+                        dataset[this_metadata] == unique_metadata_value
+                    ]
+                    # "SubplotNumber" + str(this_metadata) + "/MaxCells" is a new column
+                    # which will help iterate through subplots to add to a figure
+                    dataset_subgroup.insert(
+                        2,
+                        "SubplotNumber" + str(this_metadata) + "/MaxCells",
+                        dataset_subgroup.groupby(this_metadata)["CellId"].transform(
+                            lambda x: ((~x.duplicated()).cumsum() - 1) % max_cells
+                        ),
+                        True,
+                    )
+
+                    # "SubplotNumber" + str(this_metadata) is a new column
+                    # which will help in the _collect group method to identify
+                    # diagnostic sheet save paths per CellId
+                    dataset_subgroup.insert(
+                        2,
+                        "SubplotNumber" + str(this_metadata),
+                        dataset_subgroup.groupby(this_metadata)["CellId"].transform(
+                            lambda x: ((~x.duplicated()).cumsum() - 1)
+                        ),
+                        True,
+                    )
+
+                    helper_dataset = helper_dataset.append(dataset_subgroup)
+
+                dataset = helper_dataset
+                # Done creating helper columns
 
                 # Create empty diagnostic sheet result dataset and errors
                 diagnostic_sheet_result_dataset = []
                 errors = []
 
                 with DistributedHandler(distributed_executor_address) as handler:
-                    # Start processing
+                    # First, lets collect all the diagnostic sheet save paths
+                    # per CellId. These are collected based on this_metadata
+                    # and max_cells
                     diagnostic_sheet_result = handler.batched_map(
                         self._collect_group,
                         # Convert dataframe iterrows into two lists of items to iterate
@@ -418,98 +325,128 @@ class MakeDiagnosticSheet(Step):
                         [diagnostic_sheet_dir for i in range(len(dataset))],
                         [overwrite for i in range(len(dataset))],
                         [this_metadata for i in range(len(dataset))],
-                        batch_size=batch_size,
+                        [max_cells for i in range(len(dataset))],
                     )
-                # Generate diagnostic sheet dataset rows
-                for r in diagnostic_sheet_result:
-                    if isinstance(r, DiagnosticSheetResult):
-                        diagnostic_sheet_result_dataset.append(
-                            {
-                                DatasetFields.CellId: r.cell_id,
-                                DatasetFields.DiagnosticSheetPath: r.save_path,
-                            }
-                        )
-                    else:
-                        errors.append(
-                            {DatasetFields.CellId: r.cell_id, "Error": r.error}
-                        )
+                    # Generate diagnostic sheet dataset rows
+                    for r in diagnostic_sheet_result:
+                        if isinstance(r, DiagnosticSheetResult):
+                            diagnostic_sheet_result_dataset.append(
+                                {
+                                    DatasetFields.CellId: r.cell_id,
+                                    DatasetFields.DiagnosticSheetPath
+                                    + str(this_metadata): r.save_path,
+                                }
+                            )
+                        else:
+                            errors.append(
+                                {DatasetFields.CellId: r.cell_id, "Error": r.error}
+                            )
 
-                # Convert diagnostic sheet paths rows to dataframe
-                diagnostic_sheet_result_dataset = pd.DataFrame(
-                    diagnostic_sheet_result_dataset
-                )
-
-                # Drop the various diagnostic sheet columns if they already exist
-                # Check at j = 0 because the path will exist at j > 1 if
-                # multiple metadata
-                drop_columns = []
-                if DatasetFields.DiagnosticSheetPath in dataset.columns and j == 0:
-                    drop_columns.append(DatasetFields.DiagnosticSheetPath)
-
-                dataset = dataset.drop(columns=drop_columns)
-
-                # Update manifest with these paths if there is data
-                if len(diagnostic_sheet_result_dataset) > 0:
-
-                    # Join original dataset to the fov paths
-                    dataset = dataset.merge(
-                        diagnostic_sheet_result_dataset, on=DatasetFields.CellId
+                    # Convert diagnostic sheet paths rows to dataframe
+                    diagnostic_sheet_result_dataset = pd.DataFrame(
+                        diagnostic_sheet_result_dataset
                     )
 
-                    # If j > 0 (i.e. multiple metadata), we will append new paths
-                    # to the same DiagnosticSheetPath column
-                    if j > 0:
-                        path_list = dataset[
-                            [
-                                DatasetFields.DiagnosticSheetPath + "_x",
-                                DatasetFields.DiagnosticSheetPath + "_y",
-                            ]
-                        ].values.tolist()
+                    # Drop the various diagnostic sheet columns if they already exist
+                    # Check at j = 0 because the path will exist at j > 1 if
+                    # multiple metadata
+                    drop_columns = []
+                    if (
+                        DatasetFields.DiagnosticSheetPath + str(this_metadata)
+                        in dataset.columns
+                    ):
+                        drop_columns.append(
+                            DatasetFields.DiagnosticSheetPath + str(this_metadata)
+                        )
 
-                        # Flatten pathlist
-                        path_list = [
-                            list(flatten(this_path)) for this_path in path_list
+                    dataset = dataset.drop(columns=drop_columns)
+
+                    # Update manifest with these paths if there is data
+                    if len(diagnostic_sheet_result_dataset) > 0:
+
+                        # Join original dataset to the fov paths
+                        dataset = dataset.merge(
+                            diagnostic_sheet_result_dataset, on=DatasetFields.CellId,
+                        )
+
+                    # Reset index in dataset
+                    if j == 0:
+                        dataset.dropna().reset_index(inplace=True)
+
+                    # Update manifest with these saved paths
+                    this_metadata_paths = dataset[
+                        DatasetFields.DiagnosticSheetPath + str(this_metadata)
+                    ].unique()
+
+                    for this_path in this_metadata_paths:
+                        if this_path not in manifest[DatasetFields.DiagnosticSheetPath]:
+                            manifest[DatasetFields.DiagnosticSheetPath].append(
+                                this_path
+                            )
+
+                    # Save errored cells to JSON
+                    with open(
+                        self.step_local_staging_dir / "errors.json", "w"
+                    ) as write_out:
+                        json.dump(errors, write_out)
+
+                    # Group the dataset by this metadata and the saved
+                    # diagnostic sheet paths (there can be many different save paths)
+                    # per metadata value (if max_cells < number of items of
+                    # this_metadata)
+                    grouped_dataset = dataset.groupby(
+                        [
+                            str(this_metadata),
+                            DatasetFields.DiagnosticSheetPath + str(this_metadata),
                         ]
-                        dataset[DatasetFields.DiagnosticSheetPath] = path_list
+                    )["SubplotNumber" + str(this_metadata) + "/MaxCells"]
 
-                        # Delete the _x and _y columns that are auto generated
-                        del dataset[DatasetFields.DiagnosticSheetPath + "_x"]
-                        del dataset[DatasetFields.DiagnosticSheetPath + "_y"]
+                    # Get maximum values of the subplot numbers in this
+                    # grouped dataset. This will tell us the shape of the figure
+                    # to make
+                    grouped_max = grouped_dataset.max()
 
-                if j == 0:
-                    dataset.dropna().reset_index(inplace=True)
+                    # Loop through metadata value and max number of subplots
+                    for metadata_value, number_of_subplots in grouped_max.items():
 
-                # Call the group plotting function
-                dataset = self._make_group_plot(
-                    dataset,
-                    this_metadata,
-                    metadata,
-                    max_cells,
-                    feature,
-                    fig_width,
-                    fig_height,
+                        # Total num of subplots = subplots + 1
+                        number_of_subplots = number_of_subplots + 1
+
+                        # Get this metadata group from the original dataset
+                        this_metadata_value_dataset = grouped_dataset.get_group(
+                            metadata_value, dataset
+                        )
+
+                        # reset index
+                        this_metadata_value_dataset.reset_index(inplace=True)
+
+                        # Append to related lists for Dask distributed plotting
+                        # of all groups
+                        all_grouped_datasets.append(this_metadata_value_dataset)
+                        all_metadata.append(this_metadata)
+                        all_metadata_values.append(metadata_value)
+                        all_subplot_numbers.append(number_of_subplots)
+
+            # Plot each diagnostic sheet
+            with DistributedHandler(distributed_executor_address) as handler:
+                # Start processing. This will add subplots to the current fig
+                # axes via dask
+                handler.batched_map(
+                    self._save_plot,
+                    # Convert dataframe iterrows into two lists of items to
+                    # iterate. One list will be row index
+                    # One list will be the pandas series of every row
+                    [dataset for dataset in all_grouped_datasets],
+                    [metadata for metadata in all_metadata],
+                    [metadata_value for metadata_value in all_metadata_values],
+                    [number_of_subplots for number_of_subplots in all_subplot_numbers],
+                    [feature for i in range(len(all_grouped_datasets))],
+                    [fig_width for i in range(len(all_grouped_datasets))],
+                    [fig_height for i in range(len(all_grouped_datasets))],
                 )
-
-                for cell_index, row in dataset.iterrows():
-                    if j > 0:
-                        this_path = row[DatasetFields.DiagnosticSheetPath][
-                            metadata.index(this_metadata)
-                        ]
-                    else:
-                        this_path = row[DatasetFields.DiagnosticSheetPath]
-
-                    if this_path not in manifest[DatasetFields.DiagnosticSheetPath]:
-                        manifest["Metadata"].append(this_metadata)
-                        manifest["MetadataValue"].append(row[this_metadata])
-                        manifest[DatasetFields.DiagnosticSheetPath].append(this_path)
-
-                # Save errored cells to JSON
-                with open(
-                    self.step_local_staging_dir / "errors.json", "w"
-                ) as write_out:
-                    json.dump(errors, write_out)
 
             self.manifest = pd.DataFrame(manifest)
+
         else:
             # If no metadata, just return input manifest
             self.manifest = dataset
