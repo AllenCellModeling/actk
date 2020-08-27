@@ -299,7 +299,8 @@
 
             <span class="c1"># Crop the FOV to the segmentation portions</span>
             <span class="n">cropped</span> <span class="o">=</span> <span class="n">image_utils</span><span class="o">.</span><span class="n">crop_raw_channels_with_segmentation</span><span class="p">(</span>
-                <span class="n">image</span><span class="o">=</span><span class="n">adjusted</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">get_channel_names</span><span class="p">(),</span>
+                <span class="n">image</span><span class="o">=</span><span class="n">adjusted</span><span class="p">,</span>
+                <span class="n">channels</span><span class="o">=</span><span class="n">image</span><span class="o">.</span><span class="n">get_channel_names</span><span class="p">(),</span>
             <span class="p">)</span>
 
             <span class="c1"># Generate features</span>
@@ -372,7 +373,8 @@
 
         <span class="c1"># Check dataset and manifest have required fields</span>
         <span class="n">dataset_utils</span><span class="o">.</span><span class="n">check_required_fields</span><span class="p">(</span>
-            <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">required_fields</span><span class="o">=</span><span class="n">REQUIRED_DATASET_FIELDS</span><span class="p">,</span>
+            <span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+            <span class="n">required_fields</span><span class="o">=</span><span class="n">REQUIRED_DATASET_FIELDS</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Create features directory</span>
