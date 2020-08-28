@@ -63,7 +63,7 @@ requirements = [
 ]
 
 aics_data_requirements = [
-    "lkaccess",
+    "lkaccess>=1.4.19",
 ]
 
 extra_requirements = {
