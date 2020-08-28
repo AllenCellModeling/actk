@@ -106,21 +106,24 @@ def test_get_normed_image_array(
 
 
 @pytest.mark.parametrize(
-    "image, cell_index, expected_image",
+    "image, cell_index, cell_ceiling_adjustment, expected_image",
     [
         (
             "example_normed_image_array_0.ome.tiff",
             1,
+            7,
             "example_selected_and_adjusted_array_0_1.ome.tiff",
         ),
         (
             "example_normed_image_array_0.ome.tiff",
             2,
+            7,
             "example_selected_and_adjusted_array_0_2.ome.tiff",
         ),
         (
             "example_normed_image_array_0.ome.tiff",
             3,
+            7,
             "example_selected_and_adjusted_array_0_3.ome.tiff",
         ),
     ],
@@ -129,6 +132,7 @@ def test_select_and_adjust_segmentation_ceiling(
     data_dir,
     image,
     cell_index,
+    cell_ceiling_adjustment,
     expected_image,
 ):
     """
@@ -140,7 +144,9 @@ def test_select_and_adjust_segmentation_ceiling(
     """
     # Get actual
     image = AICSImage(data_dir / image).get_image_data("CYXZ", S=0, T=0)
-    actual_image = image_utils.select_and_adjust_segmentation_ceiling(image, cell_index)
+    actual_image = image_utils.select_and_adjust_segmentation_ceiling(
+        image, cell_index, cell_ceiling_adjustment=cell_ceiling_adjustment
+    )
 
     # Read expected
     expected_image = AICSImage(data_dir / expected_image)
