@@ -359,7 +359,7 @@ See <cite>get_features_from_image</cite> for reasoning.</p>
 
 <dl class="function">
 <dt id="actk.utils.image_utils.select_and_adjust_segmentation_ceiling">
-<code class="sig-prename descclassname">actk.utils.image_utils.</code><code class="sig-name descname">select_and_adjust_segmentation_ceiling</code><span class="sig-paren">(</span><em class="sig-param">image: numpy.ndarray</em>, <em class="sig-param">cell_index: int</em>, <em class="sig-param">cell_ceiling_adjustment: int = 7</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/actk/utils/image_utils.html#select_and_adjust_segmentation_ceiling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.utils.image_utils.select_and_adjust_segmentation_ceiling" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">actk.utils.image_utils.</code><code class="sig-name descname">select_and_adjust_segmentation_ceiling</code><span class="sig-paren">(</span><em class="sig-param">image: numpy.ndarray</em>, <em class="sig-param">cell_index: int</em>, <em class="sig-param">cell_ceiling_adjustment: int = 0</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/actk/utils/image_utils.html#select_and_adjust_segmentation_ceiling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.utils.image_utils.select_and_adjust_segmentation_ceiling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select and adjust the cell shape “ceiling” for a specific cell in the provided
 image.</p>
 <dl class="field-list simple">
@@ -369,7 +369,7 @@ image.</p>
 <li><p><strong>cell_index</strong> (<em>int</em>) – The integer index for the target cell.</p></li>
 <li><p><strong>cell_ceiling_adjustment</strong> (<em>int</em>) – The adjust to use for raising the cell shape ceiling. If &lt;= 0, this will be
 ignored and cell data will be selected but not adjusted.
-Default: 7</p></li>
+Default: 0</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

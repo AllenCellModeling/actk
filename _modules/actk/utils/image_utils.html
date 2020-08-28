@@ -370,7 +370,7 @@
 
 
 <div class="viewcode-block" id="select_and_adjust_segmentation_ceiling"><a class="viewcode-back" href="../../../actk.utils.html#actk.utils.image_utils.select_and_adjust_segmentation_ceiling">[docs]</a><span class="k">def</span> <span class="nf">select_and_adjust_segmentation_ceiling</span><span class="p">(</span>
-    <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">cell_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cell_ceiling_adjustment</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">cell_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cell_ceiling_adjustment</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Select and adjust the cell shape &quot;ceiling&quot; for a specific cell in the provided</span>
@@ -387,7 +387,7 @@
 <span class="sd">    cell_ceiling_adjustment: int</span>
 <span class="sd">        The adjust to use for raising the cell shape ceiling. If &lt;= 0, this will be</span>
 <span class="sd">        ignored and cell data will be selected but not adjusted.</span>
-<span class="sd">        Default: 7</span>
+<span class="sd">        Default: 0</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
