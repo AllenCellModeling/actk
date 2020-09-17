@@ -4,17 +4,17 @@
 from pathlib import Path
 
 import dask.dataframe as dd
+import pytest
 
 from actk.constants import DatasetFields
-from actk.steps import MakeDiagnosticSheet
-import pytest
+from actk.steps import DiagnosticSheets
 
 #######################################################################################
 
 
 def test_run(data_dir):
     # Initialize step
-    step = MakeDiagnosticSheet()
+    step = DiagnosticSheets()
 
     # Ensure that it still runs
     output_manifest = step.run(
@@ -42,7 +42,7 @@ def test_run(data_dir):
 def test_catch_no_all_proj_image_path(data_dir):
 
     # Initialize step
-    step = MakeDiagnosticSheet()
+    step = DiagnosticSheets()
 
     with pytest.raises(Exception):
         assert step.run(
@@ -53,7 +53,7 @@ def test_catch_no_all_proj_image_path(data_dir):
 def test_max_num_cells_per_sheet(data_dir):
 
     # Initialize step
-    step = MakeDiagnosticSheet()
+    step = DiagnosticSheets()
 
     # Ensure that it still runs
     output_manifest = step.run(
@@ -83,7 +83,7 @@ def test_max_num_cells_per_sheet(data_dir):
 def test_multiple_metadata_and_fig_size(data_dir):
 
     # Initialize step
-    step = MakeDiagnosticSheet()
+    step = DiagnosticSheets()
 
     # Ensure that it still runs
     output_manifest = step.run(

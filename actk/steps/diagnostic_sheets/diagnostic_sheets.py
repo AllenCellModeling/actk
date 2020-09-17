@@ -46,7 +46,7 @@ class DiagnosticSheetError(NamedTuple):
 ###############################################################################
 
 
-class MakeDiagnosticSheet(Step):
+class DiagnosticSheets(Step):
     def __init__(
         self,
         direct_upstream_tasks: List["Step"] = [SingleCellImages],
@@ -186,7 +186,7 @@ class MakeDiagnosticSheet(Step):
     def run(
         self,
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
-        max_cells: int = 1000,
+        max_cells: int = 200,
         metadata: Optional[Union[list, str]] = DatasetFields.FOVId,
         feature: Optional[str] = None,
         fig_width: Optional[int] = None,
@@ -210,7 +210,7 @@ class MakeDiagnosticSheet(Step):
 
         max_cells: int
             The maximum number of cells to display on a single diagnostic sheet.
-            Deafult: 1000
+            Deafult: 200
 
         metadata: Optional[Union[list, str]]
             The metadata to group cells and generate a diagnostic sheet.
@@ -257,7 +257,7 @@ class MakeDiagnosticSheet(Step):
         )
 
         # Create save directories
-        diagnostic_sheet_dir = self.step_local_staging_dir
+        diagnostic_sheet_dir = self.step_local_staging_dir / "diagnostic_sheets"
         diagnostic_sheet_dir.mkdir(exist_ok=True)
 
         # Create empty manifest

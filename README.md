@@ -95,7 +95,7 @@ ordered, and normalized FOV images as OME-Tiffs.
 file for each cell in the dataset.
 * `actk singlecellimages run --dataset {path to dataset}`, Generate bounded 3D images
 and 2D projections for each cell in the dataset.
-* `actk makediagnosticsheet run --dataset {path to dataset}`, Generate diagnostic sheets
+* `actk diagnosticsheets run --dataset {path to dataset}`, Generate diagnostic sheets
 for single cell images. Useful for quality control.
 
 ## Installation

@@ -38,7 +38,7 @@ class All:
             steps.StandardizeFOVArray(),
             steps.SingleCellFeatures(),
             steps.SingleCellImages(),
-            steps.MakeDiagnosticSheet(),
+            steps.DiagnosticSheets(),
         ]
 
     def run(
@@ -104,7 +104,7 @@ class All:
         standardize_fov_array = steps.StandardizeFOVArray()
         single_cell_features = steps.SingleCellFeatures()
         single_cell_images = steps.SingleCellImages()
-        make_diagnostic_sheet = steps.MakeDiagnosticSheet()
+        diagnostic_sheets = steps.DiagnosticSheets()
 
         # Cluster / distributed defaults
         distributed_executor_address = None
@@ -198,7 +198,7 @@ class All:
                 **kwargs,
             )
 
-            make_diagnostic_sheet(
+            diagnostic_sheets(
                 dataset=single_cell_images_dataset,
                 distributed_executor_address=distributed_executor_address,
                 overwrite=overwrite,

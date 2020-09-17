@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .make_diagnostic_sheet import MakeDiagnosticSheet
+from .diagnostic_sheets import DiagnosticSheets
 from .raw import Raw
 from .single_cell_features import SingleCellFeatures
 from .single_cell_images import SingleCellImages
@@ -11,5 +11,5 @@ __all__ = [
     "SingleCellFeatures",
     "StandardizeFOVArray",
     "SingleCellImages",
-    "MakeDiagnosticSheet",
+    "DiagnosticSheets",
 ]
