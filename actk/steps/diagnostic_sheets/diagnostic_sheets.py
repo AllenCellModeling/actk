@@ -149,7 +149,7 @@ class DiagnosticSheets(Step):
                     save_path_index = 1
 
                 # Clean metadata name of spaces
-                cleaned_metadata_name = str(metadata).replace(" ", "-")
+                cleaned_metadata_name = str(row[str(metadata)]).replace(" ", "-")
                 save_path = (
                     diagnostic_sheet_dir / f"{metadata}"
                     f"_{cleaned_metadata_name}"
