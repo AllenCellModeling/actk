@@ -70,7 +70,7 @@ class DiagnosticSheets(Step):
         fig_height: Optional[int] = None,
     ):
 
-        log.info(f"Beginning diagnostic sheet generation for" f" {metadata_value}")
+        log.info(f"Beginning diagnostic sheet generation for {metadata_value}")
 
         # Choose columns and rows
         columns = int(np.sqrt(number_of_subplots) + 0.5)
@@ -148,15 +148,17 @@ class DiagnosticSheets(Step):
                 if save_path_index == 0:
                     save_path_index = 1
 
+                # Clean metadata name of spaces
+                cleaned_metadata_name = str(metadata).replace(" ", "-")
                 save_path = (
                     diagnostic_sheet_dir / f"{metadata}"
-                    f"-{row[str(metadata)]}"
-                    f"-{save_path_index}.png"
+                    f"_{cleaned_metadata_name}"
+                    f"_{save_path_index}.png"
                 )
 
                 log.info(
-                    f"Collecting diagnostic sheet path for cell ID: {row.CellId},"
-                    f"{metadata} {row[str(metadata)]}"
+                    f"Collecting diagnostic sheet path for cell ID: {row.CellId}, "
+                    f"{metadata}: {row[str(metadata)]}"
                 )
             else:
                 # else no path to save
@@ -165,8 +167,8 @@ class DiagnosticSheets(Step):
             # Check skip
             if not overwrite and save_path.is_file():
                 log.info(
-                    f"Skipping diagnostic sheet path for cell ID: {row.CellId},"
-                    f"{metadata} {row[str(metadata)]}"
+                    f"Skipping diagnostic sheet path for cell ID: {row.CellId}, "
+                    f"{metadata}: {row[str(metadata)]}"
                 )
                 return DiagnosticSheetResult(row.CellId, None)
 
