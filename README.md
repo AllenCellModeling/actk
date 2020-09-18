@@ -132,14 +132,19 @@ or sampling 3 different areas of a colony (edge, ridge, center) using a photo
 protective cocktail (mode C). The images cataloged in this dataset come in several
 flavors:
 
-* Field of view (FOV) images *
-* Membrane contour images
-* Membrane segmentation images
-* DNA contour images
-* DNA segmentation images
+* Field of view (FOV) images with channels* :
+  * Brightfield
+  * EGFP
+  * DNA
+  * Cell Membrane
+* Segmentation files with channels:
+  * Nucleus Segmentation
+  * Nucleus Contour
+  * Membrane Segmentation
+  * Membrane Contour
 
 _* Some FOV images contain seven channels rather than four. The extra three channels
-are "dummy" channels added during acquisition._
+are "dummy" channels added during acquisition that can be ignored._
 
 The full details of the Allen Institute cell workflow are available on our website
 [here](https://www.allencell.org/methods-for-cells-in-the-lab.html).<br>
