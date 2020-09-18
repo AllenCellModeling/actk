@@ -93,6 +93,6 @@ Definitions, examples, and units for each field required for processing or produ
 * **Units:** None
 
 ### DiagnosticSheetPath
-* **Description:** The path to view a diagnostic or "contact" sheet of the cells produced by the pipeline grouped by metadata. Useful for quality control. This file is generated from the "MakeDiagnosticSheet" step.
+* **Description:** The path to view a diagnostic or "contact" sheet of the cells produced by the pipeline grouped by metadata. Useful for quality control. This file is generated from the "DiagnosticSheets" step.
 * **Example(s):** /allen/aics/modeling/jacksonb/data/example_fov_dianostics.png
 * **Units:** None
