@@ -36,7 +36,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="actk.steps.make_diagnostic_sheet package" href="actk.steps.make_diagnostic_sheet.html" />
+    <link rel="next" title="actk.steps.diagnostic_sheets package" href="actk.steps.diagnostic_sheets.html" />
     <link rel="prev" title="actk.bin package" href="actk.bin.html" /> 
 </head>
 
@@ -203,7 +203,7 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
-        <a href="actk.steps.make_diagnostic_sheet.html" class="btn btn-neutral float-right" title="actk.steps.make_diagnostic_sheet package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="actk.steps.diagnostic_sheets.html" class="btn btn-neutral float-right" title="actk.steps.diagnostic_sheets package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="actk.bin.html" class="btn btn-neutral float-left" title="actk.bin package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -221,10 +221,10 @@
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="actk.steps.make_diagnostic_sheet.html">actk.steps.make_diagnostic_sheet package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="actk.steps.make_diagnostic_sheet.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="actk.steps.make_diagnostic_sheet.html#module-actk.steps.make_diagnostic_sheet.make_diagnostic_sheet">actk.steps.make_diagnostic_sheet.make_diagnostic_sheet module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="actk.steps.make_diagnostic_sheet.html#module-actk.steps.make_diagnostic_sheet">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="actk.steps.diagnostic_sheets.html">actk.steps.diagnostic_sheets package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.diagnostic_sheets.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.diagnostic_sheets.html#module-actk.steps.diagnostic_sheets.diagnostic_sheets">actk.steps.diagnostic_sheets.diagnostic_sheets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="actk.steps.diagnostic_sheets.html#module-actk.steps.diagnostic_sheets">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="actk.steps.raw.html">actk.steps.raw package</a><ul>
@@ -423,12 +423,12 @@ Default: False (Do not overwrite or regenerate files)</p></li>
 </dd></dl>
 
 <dl class="class">
-<dt id="actk.steps.MakeDiagnosticSheet">
-<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">MakeDiagnosticSheet</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks: List[Step] = [&lt;class 'actk.steps.single_cell_images.single_cell_images.SingleCellImages'&gt;], filepath_columns=['DiagnosticSheetPath'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/make_diagnostic_sheet/make_diagnostic_sheet.html#MakeDiagnosticSheet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.MakeDiagnosticSheet" title="Permalink to this definition">¶</a></dt>
+<dt id="actk.steps.DiagnosticSheets">
+<em class="property">class </em><code class="sig-prename descclassname">actk.steps.</code><code class="sig-name descname">DiagnosticSheets</code><span class="sig-paren">(</span><em class="sig-param">direct_upstream_tasks: List[Step] = [&lt;class 'actk.steps.single_cell_images.single_cell_images.SingleCellImages'&gt;], filepath_columns=['DiagnosticSheetPath'], **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/diagnostic_sheets/diagnostic_sheets.html#DiagnosticSheets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.DiagnosticSheets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">datastep.step.Step</span></code></p>
 <dl class="method">
-<dt id="actk.steps.MakeDiagnosticSheet.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], max_cells: int = 1000, metadata: Union[list, str, None] = 'FOVId', feature: Optional[str] = None, fig_width: Optional[int] = None, fig_height: Optional[int] = None, distributed_executor_address: Optional[str] = None, batch_size: Optional[int] = None, overwrite: bool = False, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/make_diagnostic_sheet/make_diagnostic_sheet.html#MakeDiagnosticSheet.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.MakeDiagnosticSheet.run" title="Permalink to this definition">¶</a></dt>
+<dt id="actk.steps.DiagnosticSheets.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">dataset: Union[str, pathlib.Path, pandas.core.frame.DataFrame, dask.dataframe.core.DataFrame], max_cells: int = 200, metadata: Union[list, str, None] = 'FOVId', feature: Optional[str] = None, fig_width: Optional[int] = None, fig_height: Optional[int] = None, distributed_executor_address: Optional[str] = None, batch_size: Optional[int] = None, overwrite: bool = False, **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/actk/steps/diagnostic_sheets/diagnostic_sheets.html#DiagnosticSheets.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#actk.steps.DiagnosticSheets.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provided a dataset of single cell all projection images, generate a diagnostic
 sheet grouped by desired metadata and feature</p>
 <dl class="field-list">
@@ -439,7 +439,7 @@ diagnistic sheet for a group of cells.</p>
 <p><strong>Required dataset columns:</strong> <em>[“CellId”, “CellImage2DAllProjectionsPath”]</em></p>
 </li>
 <li><p><strong>max_cells</strong> (<em>int</em>) – The maximum number of cells to display on a single diagnostic sheet.
-Deafult: 1000</p></li>
+Deafult: 200</p></li>
 <li><p><strong>metadata</strong> (<em>Optional[Union[list, str]]</em>) – The metadata to group cells and generate a diagnostic sheet.
 For example, “FOVId” or “[“FOVId”, “ProteinDisplayName”]”
 Default: “FOVId”</p></li>

@@ -6,7 +6,7 @@ Subpackages
 
 .. toctree::
 
-   actk.steps.make_diagnostic_sheet
+   actk.steps.diagnostic_sheets
    actk.steps.raw
    actk.steps.single_cell_features
    actk.steps.single_cell_images
