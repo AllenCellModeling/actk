@@ -128,13 +128,13 @@ class All:
                     cores=worker_cpu,
                     memory=worker_mem,
                     queue="aics_cpu_general",
-                    walltime="10:00:00",
+                    walltime="9-23:00:00",
                     local_directory=str(log_dir),
                     log_directory=str(log_dir),
                 )
 
                 # Spawn workers
-                cluster.scale(n_workers)
+                cluster.scale(jobs=n_workers)
                 log.info("Created SLURMCluster")
 
                 # Use the port from the created connector to set executor address
