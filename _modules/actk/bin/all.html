@@ -331,13 +331,13 @@
                     <span class="n">cores</span><span class="o">=</span><span class="n">worker_cpu</span><span class="p">,</span>
                     <span class="n">memory</span><span class="o">=</span><span class="n">worker_mem</span><span class="p">,</span>
                     <span class="n">queue</span><span class="o">=</span><span class="s2">&quot;aics_cpu_general&quot;</span><span class="p">,</span>
-                    <span class="n">walltime</span><span class="o">=</span><span class="s2">&quot;10:00:00&quot;</span><span class="p">,</span>
+                    <span class="n">walltime</span><span class="o">=</span><span class="s2">&quot;9-23:00:00&quot;</span><span class="p">,</span>
                     <span class="n">local_directory</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">log_dir</span><span class="p">),</span>
                     <span class="n">log_directory</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">log_dir</span><span class="p">),</span>
                 <span class="p">)</span>
 
                 <span class="c1"># Spawn workers</span>
-                <span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">n_workers</span><span class="p">)</span>
+                <span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">jobs</span><span class="o">=</span><span class="n">n_workers</span><span class="p">)</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Created SLURMCluster&quot;</span><span class="p">)</span>
 
                 <span class="c1"># Use the port from the created connector to set executor address</span>
