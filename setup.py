@@ -40,7 +40,7 @@ dev_requirements = [
 step_workflow_requirements = [
     "aics_dask_utils>=0.2.0",
     "bokeh>=2.1.0",
-    "botocore==1.18",
+    "boto3==1.15",
     "dask[bag]>=2.19.0",
     "dask_jobqueue>=0.7.0",
     "datastep>=0.1.8",
