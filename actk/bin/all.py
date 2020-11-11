@@ -34,7 +34,6 @@ class All:
         This is only used for data logging operations, not computation purposes.
         """
         self.step_list = [
-            steps.Raw(),
             steps.StandardizeFOVArray(),
             steps.SingleCellFeatures(),
             steps.SingleCellImages(),
