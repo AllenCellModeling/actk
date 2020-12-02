@@ -247,7 +247,7 @@ class SingleCellImages(Step):
     def run(
         self,
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
-        cell_ceiling_adjustment: int = 7,
+        cell_ceiling_adjustment: int = 0,
         bounding_box_percentile: float = 95.0,
         projection_method: str = "max",
         distributed_executor_address: Optional[str] = None,
@@ -271,7 +271,7 @@ class SingleCellImages(Step):
         cell_ceiling_adjustment: int
             The adjust to use for raising the cell shape ceiling. If <= 0, this will be
             ignored and cell data will be selected but not adjusted.
-            Default: 7
+            Default: 0
 
         bounding_box_percentile: float
             A float used to generate the actual bounding box for all cells by finding
