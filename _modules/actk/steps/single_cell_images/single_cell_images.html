@@ -450,7 +450,7 @@
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">dataset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">dd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span>
-        <span class="n">cell_ceiling_adjustment</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span>
+        <span class="n">cell_ceiling_adjustment</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">bounding_box_percentile</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">95.0</span><span class="p">,</span>
         <span class="n">projection_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span>
         <span class="n">distributed_executor_address</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -474,7 +474,7 @@
 <span class="sd">        cell_ceiling_adjustment: int</span>
 <span class="sd">            The adjust to use for raising the cell shape ceiling. If &lt;= 0, this will be</span>
 <span class="sd">            ignored and cell data will be selected but not adjusted.</span>
-<span class="sd">            Default: 7</span>
+<span class="sd">            Default: 0</span>
 
 <span class="sd">        bounding_box_percentile: float</span>
 <span class="sd">            A float used to generate the actual bounding box for all cells by finding</span>
