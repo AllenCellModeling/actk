@@ -121,7 +121,7 @@ class SingleCellFeatures(Step):
     def run(
         self,
         dataset: Union[str, Path, pd.DataFrame, dd.DataFrame],
-        cell_ceiling_adjustment: int = 7,
+        cell_ceiling_adjustment: int = 0,
         distributed_executor_address: Optional[str] = None,
         batch_size: Optional[int] = None,
         overwrite: bool = False,
@@ -141,7 +141,7 @@ class SingleCellFeatures(Step):
         cell_ceiling_adjustment: int
             The adjust to use for raising the cell shape ceiling. If <= 0, this will be
             ignored and cell data will be selected but not adjusted.
-            Default: 7
+            Default: 0
 
         distributed_executor_address: Optional[str]
             An optional executor address to pass to some computation engine.
