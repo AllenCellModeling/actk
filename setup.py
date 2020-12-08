@@ -75,8 +75,8 @@ extra_requirements = {
 }
 
 setup(
-    author="Jackson Maxfield Brown",
-    author_email="jacksonb@alleninstitute.org",
+    author="Jackson Maxfield Brown, Rory Donovan-Maiye",
+    author_email="jmaxfieldbrown@gmail.com, rorym@alleninstitute.org",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
