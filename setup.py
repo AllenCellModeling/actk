@@ -38,7 +38,7 @@ dev_requirements = [
 ]
 
 step_workflow_requirements = [
-    "aics_dask_utils>=0.2.0",
+    "aics_dask_utils>=0.2.1",
     "bokeh>=2.1.0",
     "dask[bag]>=2.19.0",
     "dask_jobqueue>=0.7.0",
@@ -104,6 +104,6 @@ setup(
     url="https://github.com/AllenCellModeling/actk",
     # Do not edit this string manually, always use bumpversion
     # Details in CONTRIBUTING.rst
-    version="0.2.0",
+    version="0.2.1",
     zip_safe=False,
 )
