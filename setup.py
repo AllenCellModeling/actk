@@ -29,7 +29,7 @@ dev_requirements = [
     "bumpversion>=0.6.0",
     "coverage>=5.1",
     "ipython>=7.15.0",
-    "m2r>=0.2.2",
+    "m2r>=0.2.1",
     "Sphinx>=2.0.0b1,<3",
     "sphinx_rtd_theme>=0.4.3",
     "tox>=3.15.2",
@@ -51,7 +51,7 @@ step_workflow_requirements = [
 requirements = [
     *step_workflow_requirements,
     # project requires
-    "aicsfeature>=0.2.2",
+    "aicsfeature>=0.2.1",
     "aicsimageio>=3.2.3",
     "aicsimageprocessing>=0.7.4",
     "matplotlib>=3.2.0",
