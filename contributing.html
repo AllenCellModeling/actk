@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Contributing &mdash; actk 0.2.0 documentation</title>
+  <title>Contributing &mdash; actk 0.2.1 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.2.0
+                0.2.1
               </div>
             
           
@@ -258,9 +258,13 @@ git push origin <span class="o">{</span>your_development_type<span class="o">}</
 <p>A reminder for the maintainers on how to deploy.
 Make sure all your changes are committed.
 Then run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bumpversion patch <span class="c1"># possible: major / minor / patch</span>
-$ git push
-$ git push --tags
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bumpversion patch <span class="c1"># possible: major / minor / patch</span>
+</pre></div>
+</div>
+<p>Now <em>check to see if bumpversions primitive string matching set any dependencies to the wrong version</em>.
+Then:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git push
+git push --tags
 git branch -D stable
 git checkout -b stable
 git push --set-upstream origin stable -f
