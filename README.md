@@ -8,8 +8,12 @@
 Automated Cell Toolkit
 
 A pipeline to process field-of-view (FOV) microscopy images and generate data and
-render-ready products for the cells in each field. Of note, the data produced by this
-pipeline is used for the [Cell Feature Explorer](https://cfe.allencell.org/).
+render-ready products for the cells in each field. This pipeline uses
+accepted best practices (documentation, unit testing, and continuous integration).
+The code here produces
+data that can and has been consumed by both the
+[Integrated Cell](https://www.allencell.org/allen-integrated-cell.html) and the
+[Cell Feature Explorer](https://cfe.allencell.org/).
 
 ![workflow as an image](./images/header.png)
 
