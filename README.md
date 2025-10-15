@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> We are no longer actively maintaining this repository. All active work by the Allen Institute for Cell Science is located under the **[AllenCell](https://github.com/AllenCell)** organization.
+
 # actk
 
 [![Build Status](https://github.com/AllenCellModeling/actk/workflows/Build%20Master/badge.svg)](https://github.com/AllenCellModeling/actk/actions)
